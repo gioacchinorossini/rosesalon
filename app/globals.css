@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #C38370;
+  --color-primary-hover: #A56453;
+  --color-primary-container: #F7E5E2;
+  --color-on-primary-container: #662D20;
+  
+  --color-secondary: #C5A059;
+  --color-secondary-container: #F6ECD7;
+  --color-on-secondary-container: #5C4314;
+
+  --color-background: #FAF8F6;
+  --color-surface: #FFFFFF;
+  --color-surface-container-low: #F5EFEB;
+  --color-surface-container: #EFE6E0;
+  --color-surface-container-high: #E5D6CD;
+  
+  --color-on-surface: #2D2624;
+  --color-on-surface-variant: #6E615E;
+  --color-outline: rgba(110, 97, 94, 0.12);
+  --color-outline-focus: #C38370;
+  
+  --font-sans: "Plus Jakarta Sans", "Roboto", "Segoe UI", sans-serif;
+  --font-roboto: "Roboto", sans-serif;
+
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-2xl: 28px;
+}
+
+:root {
+  --background: #F8F9FA;
+  --foreground: #202124;
+}
+
+/* Custom scrollbar matching M3 look */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #DADCE0;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #BDC1C6;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: "Plus Jakarta Sans", "Roboto", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Print Styles for payslips */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  .print-area {
+    display: block !important;
+    width: 100% !important;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: white;
+    color: black;
+  }
+}
