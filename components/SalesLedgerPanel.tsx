@@ -261,7 +261,8 @@ export const SalesLedgerPanel: React.FC<SalesLedgerPanelProps> = ({
               : "text-on-surface-variant hover:bg-surface-container/40 hover:text-on-surface"
           }`}
         >
-          👤 Staff Performance View
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
+          <span>Staff Performance View</span>
         </button>
         <button
           onClick={() => setViewMode("date")}
@@ -271,7 +272,8 @@ export const SalesLedgerPanel: React.FC<SalesLedgerPanelProps> = ({
               : "text-on-surface-variant hover:bg-surface-container/40 hover:text-on-surface"
           }`}
         >
-          📅 Daily Salon Ledger
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
+          <span>Daily Salon Ledger</span>
         </button>
       </div>
 
@@ -281,10 +283,10 @@ export const SalesLedgerPanel: React.FC<SalesLedgerPanelProps> = ({
           <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">
             Active Month: {activeMonthData?.monthName} 2026 ({viewMode === "staff" ? "By Staff Row" : "By Date Row"})
           </span>
-          <span className="text-[10px] text-primary font-bold bg-primary-container/30 px-3 py-1.5 rounded-lg border border-primary/10 self-start">
+          <span className="text-[10px] text-primary font-bold bg-primary-container/30 px-3 py-1.5 rounded-lg border border-primary/10 self-start flex items-center gap-1">
             {viewMode === "staff" 
-              ? "💡 Click on any stylist's row to expand and view their individual daily contributions." 
-              : "📝 Tip: Click the Edit button on any row to update financials securely."}
+              ? "Click on any stylist's row to expand and view their individual daily contributions." 
+              : "Tip: Click the Edit button on any row to update financials securely."}
           </span>
         </div>
 
@@ -353,8 +355,9 @@ export const SalesLedgerPanel: React.FC<SalesLedgerPanelProps> = ({
                           <td colSpan={9} className="bg-surface-container-low/40 p-4 border-t border-b border-outline/25">
                             <div className="rounded-xl border border-outline bg-white overflow-hidden shadow-inner max-w-4xl mx-auto my-1">
                               <div className="p-3 bg-surface-container-low border-b border-outline flex justify-between items-center">
-                                <span className="text-[10px] font-bold text-primary uppercase tracking-wider">
-                                  📅 Daily Performance Breakdown for {st.name} ({st.code})
+                                <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
+                                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
+                                  <span>Daily Performance Breakdown for {st.name} ({st.code})</span>
                                 </span>
                               </div>
                               {st.dailyLogs.length === 0 ? (
@@ -422,7 +425,7 @@ export const SalesLedgerPanel: React.FC<SalesLedgerPanelProps> = ({
                   <tr className="bg-surface-container-low/25 text-on-surface font-medium border-t border-outline">
                     <td className="p-3"></td>
                     <td className="p-3">
-                      <div className="font-bold text-on-surface">🛍️ Other / Shop Sales</div>
+                      <div className="font-bold text-on-surface flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg><span>Other / Shop Sales</span></div>
                       <div className="text-[10px] text-on-surface-variant font-semibold uppercase">Product or Non-Stylist Revenue</div>
                     </td>
                     <td className="p-3 text-center font-mono">-</td>

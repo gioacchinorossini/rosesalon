@@ -1,6 +1,6 @@
 import React from "react";
 
-type ActivePanel = 'dashboard' | 'salesLedger' | 'pos' | 'services' | 'payslips' | 'payments' | 'bookings' | 'supplies' | 'staffs';
+type ActivePanel = 'dashboard' | 'salesLedger' | 'pos' | 'services' | 'payslips' | 'payments' | 'bookings' | 'supplies' | 'staffs' | 'servicesLog' | 'queue' | 'stocks';
 
 interface DashboardPanelProps {
   dashboardStats: { gross: number; expenses: number; commissions: number; net: number; roseShare: number };
@@ -12,6 +12,7 @@ interface DashboardPanelProps {
   customerPamper: Array<{ name: string; pamperChoose: string; date: string }>;
   suppliesRequest: Array<{ description: string; po: string; reqBy: string; status: string }>;
   setActivePanel: (panel: ActivePanel) => void;
+  stocks: Array<{ id: string; name: string; sku: string; category: string; onHand: number; minThreshold: number; salesPrice?: number; supplier?: string }>;
 }
 
 export const DashboardPanel: React.FC<DashboardPanelProps> = ({
@@ -24,7 +25,10 @@ export const DashboardPanel: React.FC<DashboardPanelProps> = ({
   customerPamper,
   suppliesRequest,
   setActivePanel,
+  stocks,
 }) => {
+  const lowStockItems = stocks.filter(item => item.onHand <= item.minThreshold);
+
   return (
     <div className="flex flex-col gap-6 animate-fadeIn">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -36,6 +40,32 @@ export const DashboardPanel: React.FC<DashboardPanelProps> = ({
           System Date: July 11, 2026
         </div>
       </div>
+
+      {/* Low Stock Warning Banner */}
+      {lowStockItems.length > 0 && (
+        <div className="bg-amber-50 border border-amber-250 p-4 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-amber-900 shadow-xs animate-fadeIn">
+          <div className="flex items-start gap-3">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-amber-700 mt-0.5 shrink-0">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+            <div>
+              <h4 className="font-bold text-xs">Low Stock Warning</h4>
+              <p className="text-[11px] text-amber-800 mt-0.5">
+                The following {lowStockItems.length === 1 ? 'item is' : 'items are'} running low on stock: {' '}
+                <span className="font-bold">{lowStockItems.slice(0, 3).map(i => `${i.name} (${i.onHand} left)`).join(', ')}</span>
+                {lowStockItems.length > 3 ? `, and ${lowStockItems.length - 3} more` : ''}.
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => setActivePanel('stocks')}
+            className="bg-amber-650 hover:bg-amber-700 text-white font-bold text-[10px] px-3.5 py-2 rounded-xl transition self-start sm:self-center cursor-pointer shrink-0"
+          >
+            Review Stocks
+          </button>
+        </div>
+      )}
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

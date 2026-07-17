@@ -9,6 +9,16 @@ export interface CustomerPamper {
   date: string;
 }
 
+export interface ServiceLog {
+  id: string;
+  customerName: string;
+  serviceName: string;
+  staffName: string;
+  price: number;
+  date: string;
+}
+
+
 export interface PaymentTransaction {
   id: string;
   date: string;
@@ -114,6 +124,3249 @@ export const customerPamperSeed: CustomerPamper[] = [
     "mobile": "09203334455",
     "pamperChoose": "Facial Waxing & Haircut",
     "date": "2026-07-11"
+  }
+];
+
+export const servicesLogSeed: ServiceLog[] = [
+  {
+    "id": "1",
+    "customerName": "Elena Cruz",
+    "serviceName": "Keratin Treatment",
+    "staffName": "ETET",
+    "price": 1000,
+    "date": "2025-12-01"
+  },
+  {
+    "id": "2",
+    "customerName": "Christina Reyes",
+    "serviceName": "Haircut",
+    "staffName": "ETET",
+    "price": 540,
+    "date": "2025-12-01"
+  },
+  {
+    "id": "3",
+    "customerName": "Jodi Sta. Maria",
+    "serviceName": "Haircut",
+    "staffName": "JEPOY",
+    "price": 1720,
+    "date": "2025-12-01"
+  },
+  {
+    "id": "4",
+    "customerName": "Maria Clara",
+    "serviceName": "Eyelash Extension",
+    "staffName": "SHA",
+    "price": 2280,
+    "date": "2025-12-01"
+  },
+  {
+    "id": "5",
+    "customerName": "Andrea Brillantes",
+    "serviceName": "Gel Manicure",
+    "staffName": "ZYKA",
+    "price": 944,
+    "date": "2025-12-01"
+  },
+  {
+    "id": "6",
+    "customerName": "Gabriela Silang",
+    "serviceName": "Gel Manicure",
+    "staffName": "JESS",
+    "price": 830,
+    "date": "2025-12-01"
+  },
+  {
+    "id": "7",
+    "customerName": "Coleen Garcia",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AGNES",
+    "price": 1098,
+    "date": "2025-12-01"
+  },
+  {
+    "id": "8",
+    "customerName": "Anne Curtis",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "JANE",
+    "price": 270,
+    "date": "2025-12-01"
+  },
+  {
+    "id": "9",
+    "customerName": "Kyline Alcantara",
+    "serviceName": "Gel Manicure",
+    "staffName": "MICH",
+    "price": 800,
+    "date": "2025-12-01"
+  },
+  {
+    "id": "10",
+    "customerName": "Lovi Poe",
+    "serviceName": "Gel Manicure",
+    "staffName": "CYRIL",
+    "price": 674,
+    "date": "2025-12-01"
+  },
+  {
+    "id": "11",
+    "customerName": "Jane Smith",
+    "serviceName": "Haircut",
+    "staffName": "ETET",
+    "price": 150,
+    "date": "2025-12-02"
+  },
+  {
+    "id": "12",
+    "customerName": "Yassi Pressman",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "ALBERT",
+    "price": 2500,
+    "date": "2025-12-02"
+  },
+  {
+    "id": "13",
+    "customerName": "Kylie Verzosa",
+    "serviceName": "Haircut",
+    "staffName": "ALBERT",
+    "price": 580,
+    "date": "2025-12-02"
+  },
+  {
+    "id": "14",
+    "customerName": "Gabriela Silang",
+    "serviceName": "Eyelash Extension",
+    "staffName": "SHA",
+    "price": 2035,
+    "date": "2025-12-02"
+  },
+  {
+    "id": "15",
+    "customerName": "Megan Young",
+    "serviceName": "Eyelash Extension",
+    "staffName": "VIC",
+    "price": 2235,
+    "date": "2025-12-02"
+  },
+  {
+    "id": "16",
+    "customerName": "Julie Anne San Jose",
+    "serviceName": "Gel Manicure",
+    "staffName": "AMY",
+    "price": 610,
+    "date": "2025-12-02"
+  },
+  {
+    "id": "17",
+    "customerName": "Patricia Lim",
+    "serviceName": "Gel Manicure",
+    "staffName": "JESS",
+    "price": 655,
+    "date": "2025-12-02"
+  },
+  {
+    "id": "18",
+    "customerName": "Janine Gutierrez",
+    "serviceName": "Gel Manicure",
+    "staffName": "AGNES",
+    "price": 790,
+    "date": "2025-12-02"
+  },
+  {
+    "id": "19",
+    "customerName": "Kathryn Bernardo",
+    "serviceName": "Eyelash Extension",
+    "staffName": "JANE",
+    "price": 1364,
+    "date": "2025-12-02"
+  },
+  {
+    "id": "20",
+    "customerName": "Grace Poe",
+    "serviceName": "Gel Manicure",
+    "staffName": "IKA",
+    "price": 998,
+    "date": "2025-12-02"
+  },
+  {
+    "id": "21",
+    "customerName": "Solenn Heussaff",
+    "serviceName": "Eyelash Extension",
+    "staffName": "CYRIL",
+    "price": 1613,
+    "date": "2025-12-02"
+  },
+  {
+    "id": "22",
+    "customerName": "Pia Wurtzbach",
+    "serviceName": "Gel Manicure",
+    "staffName": "RONA",
+    "price": 615,
+    "date": "2025-12-02"
+  },
+  {
+    "id": "23",
+    "customerName": "Megan Young",
+    "serviceName": "Keratin Treatment",
+    "staffName": "ALBERT",
+    "price": 600,
+    "date": "2025-12-03"
+  },
+  {
+    "id": "24",
+    "customerName": "Janella Salvador",
+    "serviceName": "Haircut",
+    "staffName": "ALBERT",
+    "price": 1250,
+    "date": "2025-12-03"
+  },
+  {
+    "id": "25",
+    "customerName": "Toni Gonzaga",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "JEPOY",
+    "price": 5300,
+    "date": "2025-12-03"
+  },
+  {
+    "id": "26",
+    "customerName": "Alex Gonzaga",
+    "serviceName": "Haircut",
+    "staffName": "JEPOY",
+    "price": 600,
+    "date": "2025-12-03"
+  },
+  {
+    "id": "27",
+    "customerName": "Janella Salvador",
+    "serviceName": "Eyelash Extension",
+    "staffName": "VIC",
+    "price": 2109,
+    "date": "2025-12-03"
+  },
+  {
+    "id": "28",
+    "customerName": "Gina Lopez",
+    "serviceName": "Gel Manicure",
+    "staffName": "AMY",
+    "price": 133,
+    "date": "2025-12-03"
+  },
+  {
+    "id": "29",
+    "customerName": "Maria Clara",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "AMY",
+    "price": 1440,
+    "date": "2025-12-03"
+  },
+  {
+    "id": "30",
+    "customerName": "Belle Mariano",
+    "serviceName": "Eyelash Extension",
+    "staffName": "ZYKA",
+    "price": 1919,
+    "date": "2025-12-03"
+  },
+  {
+    "id": "31",
+    "customerName": "Sophia Castillo",
+    "serviceName": "Eyelash Extension",
+    "staffName": "JESS",
+    "price": 2084,
+    "date": "2025-12-03"
+  },
+  {
+    "id": "32",
+    "customerName": "Nadine Lustre",
+    "serviceName": "Eyelash Extension",
+    "staffName": "JANE",
+    "price": 1085,
+    "date": "2025-12-03"
+  },
+  {
+    "id": "33",
+    "customerName": "Liza Soberano",
+    "serviceName": "Gel Manicure",
+    "staffName": "IKA",
+    "price": 730,
+    "date": "2025-12-03"
+  },
+  {
+    "id": "34",
+    "customerName": "Catriona Gray",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "IKA",
+    "price": 1440,
+    "date": "2025-12-03"
+  },
+  {
+    "id": "35",
+    "customerName": "Marian Rivera",
+    "serviceName": "Eyelash Extension",
+    "staffName": "RONA",
+    "price": 1963,
+    "date": "2025-12-03"
+  },
+  {
+    "id": "36",
+    "customerName": "Kim Chiu",
+    "serviceName": "Eyelash Extension",
+    "staffName": "INA",
+    "price": 1030,
+    "date": "2025-12-03"
+  },
+  {
+    "id": "37",
+    "customerName": "Clara Bella",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "ETET",
+    "price": 4700,
+    "date": "2025-12-04"
+  },
+  {
+    "id": "38",
+    "customerName": "Grace Poe",
+    "serviceName": "Haircut",
+    "staffName": "ETET",
+    "price": 300,
+    "date": "2025-12-04"
+  },
+  {
+    "id": "39",
+    "customerName": "Andrea Brillantes",
+    "serviceName": "Keratin Treatment",
+    "staffName": "ALBERT",
+    "price": 2000,
+    "date": "2025-12-04"
+  },
+  {
+    "id": "40",
+    "customerName": "Belle Mariano",
+    "serviceName": "Haircut",
+    "staffName": "ALBERT",
+    "price": 750,
+    "date": "2025-12-04"
+  },
+  {
+    "id": "41",
+    "customerName": "Jennylyn Mercado",
+    "serviceName": "Keratin Treatment",
+    "staffName": "JEPOY",
+    "price": 2300,
+    "date": "2025-12-04"
+  },
+  {
+    "id": "42",
+    "customerName": "Lovi Poe",
+    "serviceName": "Haircut",
+    "staffName": "JEPOY",
+    "price": 950,
+    "date": "2025-12-04"
+  },
+  {
+    "id": "43",
+    "customerName": "Patricia Lim",
+    "serviceName": "Eyelash Extension",
+    "staffName": "SHA",
+    "price": 2359,
+    "date": "2025-12-04"
+  },
+  {
+    "id": "44",
+    "customerName": "Andrea Brillantes",
+    "serviceName": "Eyelash Extension",
+    "staffName": "VIC",
+    "price": 1735,
+    "date": "2025-12-04"
+  },
+  {
+    "id": "45",
+    "customerName": "Alexa Ilacad",
+    "serviceName": "Eyelash Extension",
+    "staffName": "ZYKA",
+    "price": 1419,
+    "date": "2025-12-04"
+  },
+  {
+    "id": "46",
+    "customerName": "Yassi Pressman",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AGNES",
+    "price": 1680,
+    "date": "2025-12-04"
+  },
+  {
+    "id": "47",
+    "customerName": "Pia Wurtzbach",
+    "serviceName": "Eyelash Extension",
+    "staffName": "IKA",
+    "price": 1610,
+    "date": "2025-12-04"
+  },
+  {
+    "id": "48",
+    "customerName": "Isabelle Daza",
+    "serviceName": "Eyelash Extension",
+    "staffName": "CYRIL",
+    "price": 1065,
+    "date": "2025-12-04"
+  },
+  {
+    "id": "49",
+    "customerName": "Angel Locsin",
+    "serviceName": "Gel Manicure",
+    "staffName": "RONA",
+    "price": 800,
+    "date": "2025-12-04"
+  },
+  {
+    "id": "50",
+    "customerName": "Maja Salvador",
+    "serviceName": "Gel Manicure",
+    "staffName": "INA",
+    "price": 245,
+    "date": "2025-12-04"
+  },
+  {
+    "id": "51",
+    "customerName": "Liza Soberano",
+    "serviceName": "Keratin Treatment",
+    "staffName": "ETET",
+    "price": 300,
+    "date": "2025-12-05"
+  },
+  {
+    "id": "52",
+    "customerName": "Catriona Gray",
+    "serviceName": "Haircut",
+    "staffName": "ETET",
+    "price": 520,
+    "date": "2025-12-05"
+  },
+  {
+    "id": "53",
+    "customerName": "Solenn Heussaff",
+    "serviceName": "Haircut",
+    "staffName": "JEPOY",
+    "price": 430,
+    "date": "2025-12-05"
+  },
+  {
+    "id": "54",
+    "customerName": "Sophia Castillo",
+    "serviceName": "Eyelash Extension",
+    "staffName": "SHA",
+    "price": 3350,
+    "date": "2025-12-05"
+  },
+  {
+    "id": "55",
+    "customerName": "Gabriela Silang",
+    "serviceName": "Gel Manicure",
+    "staffName": "AMY",
+    "price": 479,
+    "date": "2025-12-05"
+  },
+  {
+    "id": "56",
+    "customerName": "Patricia Lim",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "AMY",
+    "price": 5555,
+    "date": "2025-12-05"
+  },
+  {
+    "id": "57",
+    "customerName": "Kyline Alcantara",
+    "serviceName": "Eyelash Extension",
+    "staffName": "ZYKA",
+    "price": 1768,
+    "date": "2025-12-05"
+  },
+  {
+    "id": "58",
+    "customerName": "Kylie Verzosa",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AGNES",
+    "price": 2203,
+    "date": "2025-12-05"
+  },
+  {
+    "id": "59",
+    "customerName": "Julie Anne San Jose",
+    "serviceName": "Eyelash Extension",
+    "staffName": "JANE",
+    "price": 1010,
+    "date": "2025-12-05"
+  },
+  {
+    "id": "60",
+    "customerName": "Gina Lopez",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "JANE",
+    "price": 1145,
+    "date": "2025-12-05"
+  },
+  {
+    "id": "61",
+    "customerName": "Marian Rivera",
+    "serviceName": "Gel Manicure",
+    "staffName": "IKA",
+    "price": 894,
+    "date": "2025-12-05"
+  },
+  {
+    "id": "62",
+    "customerName": "Angel Locsin",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "IKA",
+    "price": 1045,
+    "date": "2025-12-05"
+  },
+  {
+    "id": "63",
+    "customerName": "Georgina Wilson",
+    "serviceName": "Eyelash Extension",
+    "staffName": "CYRIL",
+    "price": 2074,
+    "date": "2025-12-05"
+  },
+  {
+    "id": "64",
+    "customerName": "Sarah Geronimo",
+    "serviceName": "Eyelash Extension",
+    "staffName": "RONA",
+    "price": 1484,
+    "date": "2025-12-05"
+  },
+  {
+    "id": "65",
+    "customerName": "Jodi Sta. Maria",
+    "serviceName": "Gel Manicure",
+    "staffName": "INA",
+    "price": 570,
+    "date": "2025-12-05"
+  },
+  {
+    "id": "66",
+    "customerName": "Toni Gonzaga",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "INA",
+    "price": 349,
+    "date": "2025-12-05"
+  },
+  {
+    "id": "67",
+    "customerName": "Pia Wurtzbach",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "ETET",
+    "price": 3700,
+    "date": "2025-12-06"
+  },
+  {
+    "id": "68",
+    "customerName": "Marian Rivera",
+    "serviceName": "Haircut",
+    "staffName": "ETET",
+    "price": 560,
+    "date": "2025-12-06"
+  },
+  {
+    "id": "69",
+    "customerName": "Alexa Ilacad",
+    "serviceName": "Keratin Treatment",
+    "staffName": "ALBERT",
+    "price": 600,
+    "date": "2025-12-06"
+  },
+  {
+    "id": "70",
+    "customerName": "Kyline Alcantara",
+    "serviceName": "Haircut",
+    "staffName": "ALBERT",
+    "price": 1250,
+    "date": "2025-12-06"
+  },
+  {
+    "id": "71",
+    "customerName": "Isabelle Daza",
+    "serviceName": "Haircut",
+    "staffName": "JEPOY",
+    "price": 1590,
+    "date": "2025-12-06"
+  },
+  {
+    "id": "72",
+    "customerName": "Angela Del Rosario",
+    "serviceName": "Eyelash Extension",
+    "staffName": "SHA",
+    "price": 2188,
+    "date": "2025-12-06"
+  },
+  {
+    "id": "73",
+    "customerName": "Sophia Castillo",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AMY",
+    "price": 1403,
+    "date": "2025-12-06"
+  },
+  {
+    "id": "74",
+    "customerName": "Maria Santos",
+    "serviceName": "Eyelash Extension",
+    "staffName": "ZYKA",
+    "price": 1914,
+    "date": "2025-12-06"
+  },
+  {
+    "id": "75",
+    "customerName": "Megan Young",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AGNES",
+    "price": 1919,
+    "date": "2025-12-06"
+  },
+  {
+    "id": "76",
+    "customerName": "Maria Clara",
+    "serviceName": "Eyelash Extension",
+    "staffName": "JANE",
+    "price": 1559,
+    "date": "2025-12-06"
+  },
+  {
+    "id": "77",
+    "customerName": "Maria Santos",
+    "serviceName": "Gel Manicure",
+    "staffName": "MICH",
+    "price": 175,
+    "date": "2025-12-06"
+  },
+  {
+    "id": "78",
+    "customerName": "Sarah Geronimo",
+    "serviceName": "Gel Manicure",
+    "staffName": "IKA",
+    "price": 545,
+    "date": "2025-12-06"
+  },
+  {
+    "id": "79",
+    "customerName": "Anne Curtis",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "IKA",
+    "price": 644,
+    "date": "2025-12-06"
+  },
+  {
+    "id": "80",
+    "customerName": "Coleen Garcia",
+    "serviceName": "Eyelash Extension",
+    "staffName": "CYRIL",
+    "price": 1718,
+    "date": "2025-12-06"
+  },
+  {
+    "id": "81",
+    "customerName": "Anne Curtis",
+    "serviceName": "Eyelash Extension",
+    "staffName": "RONA",
+    "price": 1774,
+    "date": "2025-12-06"
+  },
+  {
+    "id": "82",
+    "customerName": "Alex Gonzaga",
+    "serviceName": "Gel Manicure",
+    "staffName": "INA",
+    "price": 285,
+    "date": "2025-12-06"
+  },
+  {
+    "id": "83",
+    "customerName": "Jennylyn Mercado",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "INA",
+    "price": 798,
+    "date": "2025-12-06"
+  },
+  {
+    "id": "84",
+    "customerName": "Angel Locsin",
+    "serviceName": "Keratin Treatment",
+    "staffName": "ETET",
+    "price": 1300,
+    "date": "2025-12-07"
+  },
+  {
+    "id": "85",
+    "customerName": "Sarah Geronimo",
+    "serviceName": "Haircut",
+    "staffName": "ETET",
+    "price": 880,
+    "date": "2025-12-07"
+  },
+  {
+    "id": "86",
+    "customerName": "Maria Santos",
+    "serviceName": "Keratin Treatment",
+    "staffName": "ALBERT",
+    "price": 2000,
+    "date": "2025-12-07"
+  },
+  {
+    "id": "87",
+    "customerName": "Ana Gonzales",
+    "serviceName": "Haircut",
+    "staffName": "ALBERT",
+    "price": 750,
+    "date": "2025-12-07"
+  },
+  {
+    "id": "88",
+    "customerName": "Georgina Wilson",
+    "serviceName": "Keratin Treatment",
+    "staffName": "JEPOY",
+    "price": 100,
+    "date": "2025-12-07"
+  },
+  {
+    "id": "89",
+    "customerName": "Coleen Garcia",
+    "serviceName": "Haircut",
+    "staffName": "JEPOY",
+    "price": 1160,
+    "date": "2025-12-07"
+  },
+  {
+    "id": "90",
+    "customerName": "Roxanne Aquino",
+    "serviceName": "Eyelash Extension",
+    "staffName": "SHA",
+    "price": 2032,
+    "date": "2025-12-07"
+  },
+  {
+    "id": "91",
+    "customerName": "Belle Mariano",
+    "serviceName": "Eyelash Extension",
+    "staffName": "VIC",
+    "price": 2285,
+    "date": "2025-12-07"
+  },
+  {
+    "id": "92",
+    "customerName": "Angela Del Rosario",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AMY",
+    "price": 1973,
+    "date": "2025-12-07"
+  },
+  {
+    "id": "93",
+    "customerName": "Roxanne Aquino",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "AMY",
+    "price": 395,
+    "date": "2025-12-07"
+  },
+  {
+    "id": "94",
+    "customerName": "Ana Gonzales",
+    "serviceName": "Eyelash Extension",
+    "staffName": "ZYKA",
+    "price": 2841,
+    "date": "2025-12-07"
+  },
+  {
+    "id": "95",
+    "customerName": "Janella Salvador",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AGNES",
+    "price": 2363,
+    "date": "2025-12-07"
+  },
+  {
+    "id": "96",
+    "customerName": "Gabriela Silang",
+    "serviceName": "Eyelash Extension",
+    "staffName": "JANE",
+    "price": 1899,
+    "date": "2025-12-07"
+  },
+  {
+    "id": "97",
+    "customerName": "Ana Gonzales",
+    "serviceName": "Gel Manicure",
+    "staffName": "MICH",
+    "price": 225,
+    "date": "2025-12-07"
+  },
+  {
+    "id": "98",
+    "customerName": "Kathryn Bernardo",
+    "serviceName": "Eyelash Extension",
+    "staffName": "IKA",
+    "price": 1204,
+    "date": "2025-12-07"
+  },
+  {
+    "id": "99",
+    "customerName": "Nadine Lustre",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "IKA",
+    "price": 395,
+    "date": "2025-12-07"
+  },
+  {
+    "id": "100",
+    "customerName": "Janine Gutierrez",
+    "serviceName": "Eyelash Extension",
+    "staffName": "CYRIL",
+    "price": 1609,
+    "date": "2025-12-07"
+  },
+  {
+    "id": "101",
+    "customerName": "Kathryn Bernardo",
+    "serviceName": "Eyelash Extension",
+    "staffName": "RONA",
+    "price": 1724,
+    "date": "2025-12-07"
+  },
+  {
+    "id": "102",
+    "customerName": "Lovi Poe",
+    "serviceName": "Gel Manicure",
+    "staffName": "INA",
+    "price": 995,
+    "date": "2025-12-07"
+  },
+  {
+    "id": "103",
+    "customerName": "Solenn Heussaff",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "INA",
+    "price": 449,
+    "date": "2025-12-07"
+  },
+  {
+    "id": "104",
+    "customerName": "Anne Curtis",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "ETET",
+    "price": 7250,
+    "date": "2025-12-08"
+  },
+  {
+    "id": "105",
+    "customerName": "Kathryn Bernardo",
+    "serviceName": "Haircut",
+    "staffName": "ETET",
+    "price": 300,
+    "date": "2025-12-08"
+  },
+  {
+    "id": "106",
+    "customerName": "Janine Gutierrez",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "JEPOY",
+    "price": 6250,
+    "date": "2025-12-08"
+  },
+  {
+    "id": "107",
+    "customerName": "Yassi Pressman",
+    "serviceName": "Haircut",
+    "staffName": "JEPOY",
+    "price": 990,
+    "date": "2025-12-08"
+  },
+  {
+    "id": "108",
+    "customerName": "Camille Francisco",
+    "serviceName": "Eyelash Extension",
+    "staffName": "SHA",
+    "price": 2539,
+    "date": "2025-12-08"
+  },
+  {
+    "id": "109",
+    "customerName": "Alexa Ilacad",
+    "serviceName": "Eyelash Extension",
+    "staffName": "VIC",
+    "price": 2910,
+    "date": "2025-12-08"
+  },
+  {
+    "id": "110",
+    "customerName": "Camille Francisco",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AMY",
+    "price": 1783,
+    "date": "2025-12-08"
+  },
+  {
+    "id": "111",
+    "customerName": "Jessica Sanchez",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "AMY",
+    "price": 1895,
+    "date": "2025-12-08"
+  },
+  {
+    "id": "112",
+    "customerName": "Elena Cruz",
+    "serviceName": "Eyelash Extension",
+    "staffName": "ZYKA",
+    "price": 1845,
+    "date": "2025-12-08"
+  },
+  {
+    "id": "113",
+    "customerName": "Angela Del Rosario",
+    "serviceName": "Eyelash Extension",
+    "staffName": "JESS",
+    "price": 1935,
+    "date": "2025-12-08"
+  },
+  {
+    "id": "114",
+    "customerName": "Andrea Brillantes",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AGNES",
+    "price": 1458,
+    "date": "2025-12-08"
+  },
+  {
+    "id": "115",
+    "customerName": "Patricia Lim",
+    "serviceName": "Gel Manicure",
+    "staffName": "JANE",
+    "price": 745,
+    "date": "2025-12-08"
+  },
+  {
+    "id": "116",
+    "customerName": "Sophia Castillo",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "JANE",
+    "price": 1500,
+    "date": "2025-12-08"
+  },
+  {
+    "id": "117",
+    "customerName": "Elena Cruz",
+    "serviceName": "Gel Manicure",
+    "staffName": "MICH",
+    "price": 175,
+    "date": "2025-12-08"
+  },
+  {
+    "id": "118",
+    "customerName": "Yassi Pressman",
+    "serviceName": "Gel Manicure",
+    "staffName": "CYRIL",
+    "price": 250,
+    "date": "2025-12-08"
+  },
+  {
+    "id": "119",
+    "customerName": "Nadine Lustre",
+    "serviceName": "Eyelash Extension",
+    "staffName": "RONA",
+    "price": 2434,
+    "date": "2025-12-08"
+  },
+  {
+    "id": "120",
+    "customerName": "Elena Cruz",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "ALBERT",
+    "price": 8700,
+    "date": "2025-12-09"
+  },
+  {
+    "id": "121",
+    "customerName": "Christina Reyes",
+    "serviceName": "Haircut",
+    "staffName": "ALBERT",
+    "price": 600,
+    "date": "2025-12-09"
+  },
+  {
+    "id": "122",
+    "customerName": "Jessica Sanchez",
+    "serviceName": "Eyelash Extension",
+    "staffName": "SHA",
+    "price": 1444,
+    "date": "2025-12-09"
+  },
+  {
+    "id": "123",
+    "customerName": "Isabella Cruz",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "SHA",
+    "price": 900,
+    "date": "2025-12-09"
+  },
+  {
+    "id": "124",
+    "customerName": "Kyline Alcantara",
+    "serviceName": "Eyelash Extension",
+    "staffName": "VIC",
+    "price": 1130,
+    "date": "2025-12-09"
+  },
+  {
+    "id": "125",
+    "customerName": "Christina Reyes",
+    "serviceName": "Gel Manicure",
+    "staffName": "ZYKA",
+    "price": 620,
+    "date": "2025-12-09"
+  },
+  {
+    "id": "126",
+    "customerName": "Roxanne Aquino",
+    "serviceName": "Gel Manicure",
+    "staffName": "JESS",
+    "price": 700,
+    "date": "2025-12-09"
+  },
+  {
+    "id": "127",
+    "customerName": "Belle Mariano",
+    "serviceName": "Gel Manicure",
+    "staffName": "AGNES",
+    "price": 795,
+    "date": "2025-12-09"
+  },
+  {
+    "id": "128",
+    "customerName": "Angela Del Rosario",
+    "serviceName": "Gel Manicure",
+    "staffName": "JANE",
+    "price": 175,
+    "date": "2025-12-09"
+  },
+  {
+    "id": "129",
+    "customerName": "Julie Anne San Jose",
+    "serviceName": "Gel Manicure",
+    "staffName": "IKA",
+    "price": 510,
+    "date": "2025-12-09"
+  },
+  {
+    "id": "130",
+    "customerName": "Gina Lopez",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "IKA",
+    "price": 550,
+    "date": "2025-12-09"
+  },
+  {
+    "id": "131",
+    "customerName": "Isabelle Daza",
+    "serviceName": "Gel Manicure",
+    "staffName": "INA",
+    "price": 535,
+    "date": "2025-12-09"
+  },
+  {
+    "id": "132",
+    "customerName": "Georgina Wilson",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "INA",
+    "price": 200,
+    "date": "2025-12-09"
+  },
+  {
+    "id": "133",
+    "customerName": "Nadine Lustre",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "ETET",
+    "price": 3800,
+    "date": "2025-12-10"
+  },
+  {
+    "id": "134",
+    "customerName": "Julie Anne San Jose",
+    "serviceName": "Haircut",
+    "staffName": "ETET",
+    "price": 1590,
+    "date": "2025-12-10"
+  },
+  {
+    "id": "135",
+    "customerName": "Jane Smith",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "ALBERT",
+    "price": 3000,
+    "date": "2025-12-10"
+  },
+  {
+    "id": "136",
+    "customerName": "Clara Bella",
+    "serviceName": "Haircut",
+    "staffName": "ALBERT",
+    "price": 260,
+    "date": "2025-12-10"
+  },
+  {
+    "id": "137",
+    "customerName": "Kylie Verzosa",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "JEPOY",
+    "price": 3000,
+    "date": "2025-12-10"
+  },
+  {
+    "id": "138",
+    "customerName": "Megan Young",
+    "serviceName": "Haircut",
+    "staffName": "JEPOY",
+    "price": 580,
+    "date": "2025-12-10"
+  },
+  {
+    "id": "139",
+    "customerName": "Bianca Gonzales",
+    "serviceName": "Eyelash Extension",
+    "staffName": "SHA",
+    "price": 2654,
+    "date": "2025-12-10"
+  },
+  {
+    "id": "140",
+    "customerName": "Maria Santos",
+    "serviceName": "Eyelash Extension",
+    "staffName": "VIC",
+    "price": 1685,
+    "date": "2025-12-10"
+  },
+  {
+    "id": "141",
+    "customerName": "Jane Smith",
+    "serviceName": "Eyelash Extension",
+    "staffName": "ZYKA",
+    "price": 1164,
+    "date": "2025-12-10"
+  },
+  {
+    "id": "142",
+    "customerName": "Camille Francisco",
+    "serviceName": "Eyelash Extension",
+    "staffName": "JESS",
+    "price": 1064,
+    "date": "2025-12-10"
+  },
+  {
+    "id": "143",
+    "customerName": "Alexa Ilacad",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AGNES",
+    "price": 1615,
+    "date": "2025-12-10"
+  },
+  {
+    "id": "144",
+    "customerName": "Roxanne Aquino",
+    "serviceName": "Gel Manicure",
+    "staffName": "JANE",
+    "price": 889,
+    "date": "2025-12-10"
+  },
+  {
+    "id": "145",
+    "customerName": "Camille Francisco",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "JANE",
+    "price": 395,
+    "date": "2025-12-10"
+  },
+  {
+    "id": "146",
+    "customerName": "Christina Reyes",
+    "serviceName": "Gel Manicure",
+    "staffName": "MICH",
+    "price": 120,
+    "date": "2025-12-10"
+  },
+  {
+    "id": "147",
+    "customerName": "Maria Clara",
+    "serviceName": "Eyelash Extension",
+    "staffName": "IKA",
+    "price": 1039,
+    "date": "2025-12-10"
+  },
+  {
+    "id": "148",
+    "customerName": "Kylie Verzosa",
+    "serviceName": "Gel Manicure",
+    "staffName": "CYRIL",
+    "price": 849,
+    "date": "2025-12-10"
+  },
+  {
+    "id": "149",
+    "customerName": "Julie Anne San Jose",
+    "serviceName": "Gel Manicure",
+    "staffName": "RONA",
+    "price": 910,
+    "date": "2025-12-10"
+  },
+  {
+    "id": "150",
+    "customerName": "Gina Lopez",
+    "serviceName": "Keratin Treatment",
+    "staffName": "ETET",
+    "price": 1500,
+    "date": "2025-12-11"
+  },
+  {
+    "id": "151",
+    "customerName": "Maria Clara",
+    "serviceName": "Haircut",
+    "staffName": "ETET",
+    "price": 640,
+    "date": "2025-12-11"
+  },
+  {
+    "id": "152",
+    "customerName": "Grace Poe",
+    "serviceName": "Keratin Treatment",
+    "staffName": "ALBERT",
+    "price": 2000,
+    "date": "2025-12-11"
+  },
+  {
+    "id": "153",
+    "customerName": "Liza Soberano",
+    "serviceName": "Haircut",
+    "staffName": "ALBERT",
+    "price": 300,
+    "date": "2025-12-11"
+  },
+  {
+    "id": "154",
+    "customerName": "Janella Salvador",
+    "serviceName": "Haircut",
+    "staffName": "JEPOY",
+    "price": 1160,
+    "date": "2025-12-11"
+  },
+  {
+    "id": "155",
+    "customerName": "Carla Abellana",
+    "serviceName": "Eyelash Extension",
+    "staffName": "SHA",
+    "price": 2655,
+    "date": "2025-12-11"
+  },
+  {
+    "id": "156",
+    "customerName": "Ana Gonzales",
+    "serviceName": "Eyelash Extension",
+    "staffName": "VIC",
+    "price": 1540,
+    "date": "2025-12-11"
+  },
+  {
+    "id": "157",
+    "customerName": "Isabella Cruz",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AMY",
+    "price": 1535,
+    "date": "2025-12-11"
+  },
+  {
+    "id": "158",
+    "customerName": "Clara Bella",
+    "serviceName": "Eyelash Extension",
+    "staffName": "ZYKA",
+    "price": 2300,
+    "date": "2025-12-11"
+  },
+  {
+    "id": "159",
+    "customerName": "Jessica Sanchez",
+    "serviceName": "Eyelash Extension",
+    "staffName": "JESS",
+    "price": 1445,
+    "date": "2025-12-11"
+  },
+  {
+    "id": "160",
+    "customerName": "Isabella Cruz",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "JESS",
+    "price": 550,
+    "date": "2025-12-11"
+  },
+  {
+    "id": "161",
+    "customerName": "Kyline Alcantara",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AGNES",
+    "price": 2470,
+    "date": "2025-12-11"
+  },
+  {
+    "id": "162",
+    "customerName": "Jessica Sanchez",
+    "serviceName": "Gel Manicure",
+    "staffName": "JANE",
+    "price": 297,
+    "date": "2025-12-11"
+  },
+  {
+    "id": "163",
+    "customerName": "Isabella Cruz",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "JANE",
+    "price": 2748,
+    "date": "2025-12-11"
+  },
+  {
+    "id": "164",
+    "customerName": "Jane Smith",
+    "serviceName": "Gel Manicure",
+    "staffName": "MICH",
+    "price": 175,
+    "date": "2025-12-11"
+  },
+  {
+    "id": "165",
+    "customerName": "Gabriela Silang",
+    "serviceName": "Eyelash Extension",
+    "staffName": "IKA",
+    "price": 1100,
+    "date": "2025-12-11"
+  },
+  {
+    "id": "166",
+    "customerName": "Megan Young",
+    "serviceName": "Eyelash Extension",
+    "staffName": "CYRIL",
+    "price": 1485,
+    "date": "2025-12-11"
+  },
+  {
+    "id": "167",
+    "customerName": "Gina Lopez",
+    "serviceName": "Eyelash Extension",
+    "staffName": "RONA",
+    "price": 1042,
+    "date": "2025-12-11"
+  },
+  {
+    "id": "168",
+    "customerName": "Coleen Garcia",
+    "serviceName": "Eyelash Extension",
+    "staffName": "INA",
+    "price": 1035,
+    "date": "2025-12-11"
+  },
+  {
+    "id": "169",
+    "customerName": "Janine Gutierrez",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "INA",
+    "price": 200,
+    "date": "2025-12-11"
+  },
+  {
+    "id": "170",
+    "customerName": "Gabriela Silang",
+    "serviceName": "Keratin Treatment",
+    "staffName": "ETET",
+    "price": 2100,
+    "date": "2025-12-12"
+  },
+  {
+    "id": "171",
+    "customerName": "Patricia Lim",
+    "serviceName": "Haircut",
+    "staffName": "ETET",
+    "price": 970,
+    "date": "2025-12-12"
+  },
+  {
+    "id": "172",
+    "customerName": "Catriona Gray",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "ALBERT",
+    "price": 6000,
+    "date": "2025-12-12"
+  },
+  {
+    "id": "173",
+    "customerName": "Andrea Brillantes",
+    "serviceName": "Keratin Treatment",
+    "staffName": "JEPOY",
+    "price": 2100,
+    "date": "2025-12-12"
+  },
+  {
+    "id": "174",
+    "customerName": "Belle Mariano",
+    "serviceName": "Haircut",
+    "staffName": "JEPOY",
+    "price": 1010,
+    "date": "2025-12-12"
+  },
+  {
+    "id": "175",
+    "customerName": "Heart Evangelista",
+    "serviceName": "Eyelash Extension",
+    "staffName": "SHA",
+    "price": 3715,
+    "date": "2025-12-12"
+  },
+  {
+    "id": "176",
+    "customerName": "Elena Cruz",
+    "serviceName": "Eyelash Extension",
+    "staffName": "VIC",
+    "price": 1990,
+    "date": "2025-12-12"
+  },
+  {
+    "id": "177",
+    "customerName": "Bianca Gonzales",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "AMY",
+    "price": 3195,
+    "date": "2025-12-12"
+  },
+  {
+    "id": "178",
+    "customerName": "Grace Poe",
+    "serviceName": "Eyelash Extension",
+    "staffName": "ZYKA",
+    "price": 1870,
+    "date": "2025-12-12"
+  },
+  {
+    "id": "179",
+    "customerName": "Bianca Gonzales",
+    "serviceName": "Eyelash Extension",
+    "staffName": "JESS",
+    "price": 2070,
+    "date": "2025-12-12"
+  },
+  {
+    "id": "180",
+    "customerName": "Carla Abellana",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "JESS",
+    "price": 449,
+    "date": "2025-12-12"
+  },
+  {
+    "id": "181",
+    "customerName": "Maria Santos",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AGNES",
+    "price": 2620,
+    "date": "2025-12-12"
+  },
+  {
+    "id": "182",
+    "customerName": "Patricia Lim",
+    "serviceName": "Gel Manicure",
+    "staffName": "IKA",
+    "price": 175,
+    "date": "2025-12-12"
+  },
+  {
+    "id": "183",
+    "customerName": "Sophia Castillo",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "IKA",
+    "price": 1149,
+    "date": "2025-12-12"
+  },
+  {
+    "id": "184",
+    "customerName": "Janella Salvador",
+    "serviceName": "Eyelash Extension",
+    "staffName": "CYRIL",
+    "price": 1383,
+    "date": "2025-12-12"
+  },
+  {
+    "id": "185",
+    "customerName": "Maria Clara",
+    "serviceName": "Eyelash Extension",
+    "staffName": "RONA",
+    "price": 1870,
+    "date": "2025-12-12"
+  },
+  {
+    "id": "186",
+    "customerName": "Yassi Pressman",
+    "serviceName": "Gel Manicure",
+    "staffName": "INA",
+    "price": 617,
+    "date": "2025-12-12"
+  },
+  {
+    "id": "187",
+    "customerName": "Sophia Castillo",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "ETET",
+    "price": 7000,
+    "date": "2025-12-13"
+  },
+  {
+    "id": "188",
+    "customerName": "Angela Del Rosario",
+    "serviceName": "Haircut",
+    "staffName": "ETET",
+    "price": 230,
+    "date": "2025-12-13"
+  },
+  {
+    "id": "189",
+    "customerName": "Pia Wurtzbach",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "ALBERT",
+    "price": 4100,
+    "date": "2025-12-13"
+  },
+  {
+    "id": "190",
+    "customerName": "Marian Rivera",
+    "serviceName": "Haircut",
+    "staffName": "ALBERT",
+    "price": 410,
+    "date": "2025-12-13"
+  },
+  {
+    "id": "191",
+    "customerName": "Alexa Ilacad",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "JEPOY",
+    "price": 5850,
+    "date": "2025-12-13"
+  },
+  {
+    "id": "192",
+    "customerName": "Kyline Alcantara",
+    "serviceName": "Haircut",
+    "staffName": "JEPOY",
+    "price": 970,
+    "date": "2025-12-13"
+  },
+  {
+    "id": "193",
+    "customerName": "Kim Chiu",
+    "serviceName": "Eyelash Extension",
+    "staffName": "SHA",
+    "price": 2580,
+    "date": "2025-12-13"
+  },
+  {
+    "id": "194",
+    "customerName": "Christina Reyes",
+    "serviceName": "Eyelash Extension",
+    "staffName": "VIC",
+    "price": 2565,
+    "date": "2025-12-13"
+  },
+  {
+    "id": "195",
+    "customerName": "Carla Abellana",
+    "serviceName": "Gel Manicure",
+    "staffName": "AMY",
+    "price": 495,
+    "date": "2025-12-13"
+  },
+  {
+    "id": "196",
+    "customerName": "Heart Evangelista",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "AMY",
+    "price": 2695,
+    "date": "2025-12-13"
+  },
+  {
+    "id": "197",
+    "customerName": "Liza Soberano",
+    "serviceName": "Eyelash Extension",
+    "staffName": "ZYKA",
+    "price": 1791,
+    "date": "2025-12-13"
+  },
+  {
+    "id": "198",
+    "customerName": "Heart Evangelista",
+    "serviceName": "Eyelash Extension",
+    "staffName": "JESS",
+    "price": 2969,
+    "date": "2025-12-13"
+  },
+  {
+    "id": "199",
+    "customerName": "Ana Gonzales",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AGNES",
+    "price": 2125,
+    "date": "2025-12-13"
+  },
+  {
+    "id": "200",
+    "customerName": "Bianca Gonzales",
+    "serviceName": "Gel Manicure",
+    "staffName": "JANE",
+    "price": 903,
+    "date": "2025-12-13"
+  },
+  {
+    "id": "201",
+    "customerName": "Carla Abellana",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "JANE",
+    "price": 1345,
+    "date": "2025-12-13"
+  },
+  {
+    "id": "202",
+    "customerName": "Angela Del Rosario",
+    "serviceName": "Eyelash Extension",
+    "staffName": "IKA",
+    "price": 1665,
+    "date": "2025-12-13"
+  },
+  {
+    "id": "203",
+    "customerName": "Andrea Brillantes",
+    "serviceName": "Eyelash Extension",
+    "staffName": "CYRIL",
+    "price": 1603,
+    "date": "2025-12-13"
+  },
+  {
+    "id": "204",
+    "customerName": "Gabriela Silang",
+    "serviceName": "Eyelash Extension",
+    "staffName": "RONA",
+    "price": 1520,
+    "date": "2025-12-13"
+  },
+  {
+    "id": "205",
+    "customerName": "Kylie Verzosa",
+    "serviceName": "Eyelash Extension",
+    "staffName": "INA",
+    "price": 1465,
+    "date": "2025-12-13"
+  },
+  {
+    "id": "206",
+    "customerName": "Roxanne Aquino",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "ETET",
+    "price": 5560,
+    "date": "2025-12-14"
+  },
+  {
+    "id": "207",
+    "customerName": "Camille Francisco",
+    "serviceName": "Haircut",
+    "staffName": "ETET",
+    "price": 280,
+    "date": "2025-12-14"
+  },
+  {
+    "id": "208",
+    "customerName": "Angel Locsin",
+    "serviceName": "Keratin Treatment",
+    "staffName": "ALBERT",
+    "price": 2000,
+    "date": "2025-12-14"
+  },
+  {
+    "id": "209",
+    "customerName": "Sarah Geronimo",
+    "serviceName": "Haircut",
+    "staffName": "ALBERT",
+    "price": 430,
+    "date": "2025-12-14"
+  },
+  {
+    "id": "210",
+    "customerName": "Maria Santos",
+    "serviceName": "Keratin Treatment",
+    "staffName": "JEPOY",
+    "price": 1800,
+    "date": "2025-12-14"
+  },
+  {
+    "id": "211",
+    "customerName": "Ana Gonzales",
+    "serviceName": "Haircut",
+    "staffName": "JEPOY",
+    "price": 820,
+    "date": "2025-12-14"
+  },
+  {
+    "id": "212",
+    "customerName": "Maja Salvador",
+    "serviceName": "Eyelash Extension",
+    "staffName": "SHA",
+    "price": 2160,
+    "date": "2025-12-14"
+  },
+  {
+    "id": "213",
+    "customerName": "Jane Smith",
+    "serviceName": "Eyelash Extension",
+    "staffName": "VIC",
+    "price": 1920,
+    "date": "2025-12-14"
+  },
+  {
+    "id": "214",
+    "customerName": "Catriona Gray",
+    "serviceName": "Eyelash Extension",
+    "staffName": "ZYKA",
+    "price": 1102,
+    "date": "2025-12-14"
+  },
+  {
+    "id": "215",
+    "customerName": "Kim Chiu",
+    "serviceName": "Eyelash Extension",
+    "staffName": "JESS",
+    "price": 1248,
+    "date": "2025-12-14"
+  },
+  {
+    "id": "216",
+    "customerName": "Elena Cruz",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AGNES",
+    "price": 1820,
+    "date": "2025-12-14"
+  },
+  {
+    "id": "217",
+    "customerName": "Heart Evangelista",
+    "serviceName": "Eyelash Extension",
+    "staffName": "JANE",
+    "price": 1478,
+    "date": "2025-12-14"
+  },
+  {
+    "id": "218",
+    "customerName": "Roxanne Aquino",
+    "serviceName": "Eyelash Extension",
+    "staffName": "IKA",
+    "price": 1210,
+    "date": "2025-12-14"
+  },
+  {
+    "id": "219",
+    "customerName": "Belle Mariano",
+    "serviceName": "Eyelash Extension",
+    "staffName": "CYRIL",
+    "price": 1117,
+    "date": "2025-12-14"
+  },
+  {
+    "id": "220",
+    "customerName": "Patricia Lim",
+    "serviceName": "Gel Manicure",
+    "staffName": "RONA",
+    "price": 855,
+    "date": "2025-12-14"
+  },
+  {
+    "id": "221",
+    "customerName": "Megan Young",
+    "serviceName": "Gel Manicure",
+    "staffName": "INA",
+    "price": 545,
+    "date": "2025-12-14"
+  },
+  {
+    "id": "222",
+    "customerName": "Janella Salvador",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "INA",
+    "price": 200,
+    "date": "2025-12-14"
+  },
+  {
+    "id": "223",
+    "customerName": "Jessica Sanchez",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "ETET",
+    "price": 6000,
+    "date": "2025-12-15"
+  },
+  {
+    "id": "224",
+    "customerName": "Isabella Cruz",
+    "serviceName": "Haircut",
+    "staffName": "ETET",
+    "price": 1140,
+    "date": "2025-12-15"
+  },
+  {
+    "id": "225",
+    "customerName": "Jodi Sta. Maria",
+    "serviceName": "Eyelash Extension",
+    "staffName": "SHA",
+    "price": 1290,
+    "date": "2025-12-15"
+  },
+  {
+    "id": "226",
+    "customerName": "Clara Bella",
+    "serviceName": "Eyelash Extension",
+    "staffName": "VIC",
+    "price": 1645,
+    "date": "2025-12-15"
+  },
+  {
+    "id": "227",
+    "customerName": "Pia Wurtzbach",
+    "serviceName": "Gel Manicure",
+    "staffName": "ZYKA",
+    "price": 940,
+    "date": "2025-12-15"
+  },
+  {
+    "id": "228",
+    "customerName": "Maja Salvador",
+    "serviceName": "Eyelash Extension",
+    "staffName": "JESS",
+    "price": 1058,
+    "date": "2025-12-15"
+  },
+  {
+    "id": "229",
+    "customerName": "Christina Reyes",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AGNES",
+    "price": 1620,
+    "date": "2025-12-15"
+  },
+  {
+    "id": "230",
+    "customerName": "Kim Chiu",
+    "serviceName": "Gel Manicure",
+    "staffName": "JANE",
+    "price": 980,
+    "date": "2025-12-15"
+  },
+  {
+    "id": "231",
+    "customerName": "Alexa Ilacad",
+    "serviceName": "Gel Manicure",
+    "staffName": "CYRIL",
+    "price": 700,
+    "date": "2025-12-15"
+  },
+  {
+    "id": "232",
+    "customerName": "Sophia Castillo",
+    "serviceName": "Eyelash Extension",
+    "staffName": "RONA",
+    "price": 1060,
+    "date": "2025-12-15"
+  },
+  {
+    "id": "233",
+    "customerName": "Andrea Brillantes",
+    "serviceName": "Gel Manicure",
+    "staffName": "INA",
+    "price": 459,
+    "date": "2025-12-15"
+  },
+  {
+    "id": "234",
+    "customerName": "Bianca Gonzales",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "ETET",
+    "price": 2850,
+    "date": "2025-12-16"
+  },
+  {
+    "id": "235",
+    "customerName": "Carla Abellana",
+    "serviceName": "Haircut",
+    "staffName": "ETET",
+    "price": 860,
+    "date": "2025-12-16"
+  },
+  {
+    "id": "236",
+    "customerName": "Anne Curtis",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "ALBERT",
+    "price": 6650,
+    "date": "2025-12-16"
+  },
+  {
+    "id": "237",
+    "customerName": "Kathryn Bernardo",
+    "serviceName": "Haircut",
+    "staffName": "ALBERT",
+    "price": 300,
+    "date": "2025-12-16"
+  },
+  {
+    "id": "238",
+    "customerName": "Toni Gonzaga",
+    "serviceName": "Eyelash Extension",
+    "staffName": "SHA",
+    "price": 2635,
+    "date": "2025-12-16"
+  },
+  {
+    "id": "239",
+    "customerName": "Grace Poe",
+    "serviceName": "Eyelash Extension",
+    "staffName": "VIC",
+    "price": 1974,
+    "date": "2025-12-16"
+  },
+  {
+    "id": "240",
+    "customerName": "Kim Chiu",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AMY",
+    "price": 1313,
+    "date": "2025-12-16"
+  },
+  {
+    "id": "241",
+    "customerName": "Maja Salvador",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "AMY",
+    "price": 1000,
+    "date": "2025-12-16"
+  },
+  {
+    "id": "242",
+    "customerName": "Jodi Sta. Maria",
+    "serviceName": "Eyelash Extension",
+    "staffName": "JESS",
+    "price": 2290,
+    "date": "2025-12-16"
+  },
+  {
+    "id": "243",
+    "customerName": "Jane Smith",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AGNES",
+    "price": 2290,
+    "date": "2025-12-16"
+  },
+  {
+    "id": "244",
+    "customerName": "Maja Salvador",
+    "serviceName": "Eyelash Extension",
+    "staffName": "JANE",
+    "price": 1180,
+    "date": "2025-12-16"
+  },
+  {
+    "id": "245",
+    "customerName": "Jodi Sta. Maria",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "JANE",
+    "price": 1500,
+    "date": "2025-12-16"
+  },
+  {
+    "id": "246",
+    "customerName": "Camille Francisco",
+    "serviceName": "Eyelash Extension",
+    "staffName": "IKA",
+    "price": 1320,
+    "date": "2025-12-16"
+  },
+  {
+    "id": "247",
+    "customerName": "Kyline Alcantara",
+    "serviceName": "Eyelash Extension",
+    "staffName": "CYRIL",
+    "price": 1000,
+    "date": "2025-12-16"
+  },
+  {
+    "id": "248",
+    "customerName": "Nadine Lustre",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "ALBERT",
+    "price": 3750,
+    "date": "2025-12-17"
+  },
+  {
+    "id": "249",
+    "customerName": "Julie Anne San Jose",
+    "serviceName": "Haircut",
+    "staffName": "ALBERT",
+    "price": 950,
+    "date": "2025-12-17"
+  },
+  {
+    "id": "250",
+    "customerName": "Elena Cruz",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "JEPOY",
+    "price": 3960,
+    "date": "2025-12-17"
+  },
+  {
+    "id": "251",
+    "customerName": "Christina Reyes",
+    "serviceName": "Haircut",
+    "staffName": "JEPOY",
+    "price": 1940,
+    "date": "2025-12-17"
+  },
+  {
+    "id": "252",
+    "customerName": "Alex Gonzaga",
+    "serviceName": "Eyelash Extension",
+    "staffName": "SHA",
+    "price": 3265,
+    "date": "2025-12-17"
+  },
+  {
+    "id": "253",
+    "customerName": "Liza Soberano",
+    "serviceName": "Eyelash Extension",
+    "staffName": "VIC",
+    "price": 2045,
+    "date": "2025-12-17"
+  },
+  {
+    "id": "254",
+    "customerName": "Jodi Sta. Maria",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AMY",
+    "price": 1830,
+    "date": "2025-12-17"
+  },
+  {
+    "id": "255",
+    "customerName": "Marian Rivera",
+    "serviceName": "Eyelash Extension",
+    "staffName": "ZYKA",
+    "price": 1815,
+    "date": "2025-12-17"
+  },
+  {
+    "id": "256",
+    "customerName": "Toni Gonzaga",
+    "serviceName": "Eyelash Extension",
+    "staffName": "JESS",
+    "price": 2655,
+    "date": "2025-12-17"
+  },
+  {
+    "id": "257",
+    "customerName": "Toni Gonzaga",
+    "serviceName": "Eyelash Extension",
+    "staffName": "JANE",
+    "price": 1716,
+    "date": "2025-12-17"
+  },
+  {
+    "id": "258",
+    "customerName": "Jessica Sanchez",
+    "serviceName": "Eyelash Extension",
+    "staffName": "IKA",
+    "price": 1180,
+    "date": "2025-12-17"
+  },
+  {
+    "id": "259",
+    "customerName": "Maria Santos",
+    "serviceName": "Eyelash Extension",
+    "staffName": "CYRIL",
+    "price": 1775,
+    "date": "2025-12-17"
+  },
+  {
+    "id": "260",
+    "customerName": "Angela Del Rosario",
+    "serviceName": "Eyelash Extension",
+    "staffName": "RONA",
+    "price": 1685,
+    "date": "2025-12-17"
+  },
+  {
+    "id": "261",
+    "customerName": "Belle Mariano",
+    "serviceName": "Eyelash Extension",
+    "staffName": "INA",
+    "price": 1210,
+    "date": "2025-12-17"
+  },
+  {
+    "id": "262",
+    "customerName": "Heart Evangelista",
+    "serviceName": "Haircut",
+    "staffName": "ETET",
+    "price": 150,
+    "date": "2025-12-18"
+  },
+  {
+    "id": "263",
+    "customerName": "Gina Lopez",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "ALBERT",
+    "price": 3500,
+    "date": "2025-12-18"
+  },
+  {
+    "id": "264",
+    "customerName": "Maria Clara",
+    "serviceName": "Haircut",
+    "staffName": "ALBERT",
+    "price": 430,
+    "date": "2025-12-18"
+  },
+  {
+    "id": "265",
+    "customerName": "Jane Smith",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "JEPOY",
+    "price": 2700,
+    "date": "2025-12-18"
+  },
+  {
+    "id": "266",
+    "customerName": "Clara Bella",
+    "serviceName": "Haircut",
+    "staffName": "JEPOY",
+    "price": 990,
+    "date": "2025-12-18"
+  },
+  {
+    "id": "267",
+    "customerName": "Jennylyn Mercado",
+    "serviceName": "Eyelash Extension",
+    "staffName": "SHA",
+    "price": 2695,
+    "date": "2025-12-18"
+  },
+  {
+    "id": "268",
+    "customerName": "Toni Gonzaga",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AMY",
+    "price": 1350,
+    "date": "2025-12-18"
+  },
+  {
+    "id": "269",
+    "customerName": "Alex Gonzaga",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "AMY",
+    "price": 2250,
+    "date": "2025-12-18"
+  },
+  {
+    "id": "270",
+    "customerName": "Angel Locsin",
+    "serviceName": "Eyelash Extension",
+    "staffName": "ZYKA",
+    "price": 1605,
+    "date": "2025-12-18"
+  },
+  {
+    "id": "271",
+    "customerName": "Clara Bella",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AGNES",
+    "price": 2350,
+    "date": "2025-12-18"
+  },
+  {
+    "id": "272",
+    "customerName": "Alex Gonzaga",
+    "serviceName": "Eyelash Extension",
+    "staffName": "JANE",
+    "price": 1419,
+    "date": "2025-12-18"
+  },
+  {
+    "id": "273",
+    "customerName": "Jennylyn Mercado",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "JANE",
+    "price": 993,
+    "date": "2025-12-18"
+  },
+  {
+    "id": "274",
+    "customerName": "Clara Bella",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "MICH",
+    "price": 1300,
+    "date": "2025-12-18"
+  },
+  {
+    "id": "275",
+    "customerName": "Isabella Cruz",
+    "serviceName": "Eyelash Extension",
+    "staffName": "IKA",
+    "price": 1397,
+    "date": "2025-12-18"
+  },
+  {
+    "id": "276",
+    "customerName": "Bianca Gonzales",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "IKA",
+    "price": 1200,
+    "date": "2025-12-18"
+  },
+  {
+    "id": "277",
+    "customerName": "Ana Gonzales",
+    "serviceName": "Eyelash Extension",
+    "staffName": "CYRIL",
+    "price": 2029,
+    "date": "2025-12-18"
+  },
+  {
+    "id": "278",
+    "customerName": "Roxanne Aquino",
+    "serviceName": "Eyelash Extension",
+    "staffName": "RONA",
+    "price": 2330,
+    "date": "2025-12-18"
+  },
+  {
+    "id": "279",
+    "customerName": "Alexa Ilacad",
+    "serviceName": "Eyelash Extension",
+    "staffName": "INA",
+    "price": 1610,
+    "date": "2025-12-18"
+  },
+  {
+    "id": "280",
+    "customerName": "Kim Chiu",
+    "serviceName": "Keratin Treatment",
+    "staffName": "ETET",
+    "price": 800,
+    "date": "2025-12-19"
+  },
+  {
+    "id": "281",
+    "customerName": "Maja Salvador",
+    "serviceName": "Haircut",
+    "staffName": "ETET",
+    "price": 1420,
+    "date": "2025-12-19"
+  },
+  {
+    "id": "282",
+    "customerName": "Gabriela Silang",
+    "serviceName": "Keratin Treatment",
+    "staffName": "ALBERT",
+    "price": 1000,
+    "date": "2025-12-19"
+  },
+  {
+    "id": "283",
+    "customerName": "Patricia Lim",
+    "serviceName": "Haircut",
+    "staffName": "ALBERT",
+    "price": 1010,
+    "date": "2025-12-19"
+  },
+  {
+    "id": "284",
+    "customerName": "Grace Poe",
+    "serviceName": "Keratin Treatment",
+    "staffName": "JEPOY",
+    "price": 1500,
+    "date": "2025-12-19"
+  },
+  {
+    "id": "285",
+    "customerName": "Liza Soberano",
+    "serviceName": "Haircut",
+    "staffName": "JEPOY",
+    "price": 860,
+    "date": "2025-12-19"
+  },
+  {
+    "id": "286",
+    "customerName": "Lovi Poe",
+    "serviceName": "Eyelash Extension",
+    "staffName": "SHA",
+    "price": 1973,
+    "date": "2025-12-19"
+  },
+  {
+    "id": "287",
+    "customerName": "Catriona Gray",
+    "serviceName": "Eyelash Extension",
+    "staffName": "VIC",
+    "price": 1450,
+    "date": "2025-12-19"
+  },
+  {
+    "id": "288",
+    "customerName": "Jennylyn Mercado",
+    "serviceName": "Gel Manicure",
+    "staffName": "AMY",
+    "price": 950,
+    "date": "2025-12-19"
+  },
+  {
+    "id": "289",
+    "customerName": "Lovi Poe",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "AMY",
+    "price": 3045,
+    "date": "2025-12-19"
+  },
+  {
+    "id": "290",
+    "customerName": "Sarah Geronimo",
+    "serviceName": "Eyelash Extension",
+    "staffName": "ZYKA",
+    "price": 1588,
+    "date": "2025-12-19"
+  },
+  {
+    "id": "291",
+    "customerName": "Alex Gonzaga",
+    "serviceName": "Eyelash Extension",
+    "staffName": "JESS",
+    "price": 1850,
+    "date": "2025-12-19"
+  },
+  {
+    "id": "292",
+    "customerName": "Grace Poe",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AGNES",
+    "price": 2083,
+    "date": "2025-12-19"
+  },
+  {
+    "id": "293",
+    "customerName": "Lovi Poe",
+    "serviceName": "Eyelash Extension",
+    "staffName": "JANE",
+    "price": 1588,
+    "date": "2025-12-19"
+  },
+  {
+    "id": "294",
+    "customerName": "Carla Abellana",
+    "serviceName": "Gel Manicure",
+    "staffName": "IKA",
+    "price": 734,
+    "date": "2025-12-19"
+  },
+  {
+    "id": "295",
+    "customerName": "Heart Evangelista",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "IKA",
+    "price": 999,
+    "date": "2025-12-19"
+  },
+  {
+    "id": "296",
+    "customerName": "Elena Cruz",
+    "serviceName": "Eyelash Extension",
+    "staffName": "CYRIL",
+    "price": 1450,
+    "date": "2025-12-19"
+  },
+  {
+    "id": "297",
+    "customerName": "Camille Francisco",
+    "serviceName": "Eyelash Extension",
+    "staffName": "RONA",
+    "price": 2230,
+    "date": "2025-12-19"
+  },
+  {
+    "id": "298",
+    "customerName": "Kyline Alcantara",
+    "serviceName": "Gel Manicure",
+    "staffName": "INA",
+    "price": 249,
+    "date": "2025-12-19"
+  },
+  {
+    "id": "299",
+    "customerName": "Maria Santos",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "INA",
+    "price": 150,
+    "date": "2025-12-19"
+  },
+  {
+    "id": "300",
+    "customerName": "Jodi Sta. Maria",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "ETET",
+    "price": 10200,
+    "date": "2025-12-20"
+  },
+  {
+    "id": "301",
+    "customerName": "Sophia Castillo",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "ALBERT",
+    "price": 7000,
+    "date": "2025-12-20"
+  },
+  {
+    "id": "302",
+    "customerName": "Angela Del Rosario",
+    "serviceName": "Haircut",
+    "staffName": "ALBERT",
+    "price": 280,
+    "date": "2025-12-20"
+  },
+  {
+    "id": "303",
+    "customerName": "Catriona Gray",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "JEPOY",
+    "price": 6500,
+    "date": "2025-12-20"
+  },
+  {
+    "id": "304",
+    "customerName": "Pia Wurtzbach",
+    "serviceName": "Haircut",
+    "staffName": "JEPOY",
+    "price": 430,
+    "date": "2025-12-20"
+  },
+  {
+    "id": "305",
+    "customerName": "Solenn Heussaff",
+    "serviceName": "Eyelash Extension",
+    "staffName": "SHA",
+    "price": 2574,
+    "date": "2025-12-20"
+  },
+  {
+    "id": "306",
+    "customerName": "Pia Wurtzbach",
+    "serviceName": "Eyelash Extension",
+    "staffName": "VIC",
+    "price": 3080,
+    "date": "2025-12-20"
+  },
+  {
+    "id": "307",
+    "customerName": "Solenn Heussaff",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AMY",
+    "price": 1989,
+    "date": "2025-12-20"
+  },
+  {
+    "id": "308",
+    "customerName": "Isabelle Daza",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "AMY",
+    "price": 950,
+    "date": "2025-12-20"
+  },
+  {
+    "id": "309",
+    "customerName": "Anne Curtis",
+    "serviceName": "Eyelash Extension",
+    "staffName": "ZYKA",
+    "price": 2833,
+    "date": "2025-12-20"
+  },
+  {
+    "id": "310",
+    "customerName": "Jennylyn Mercado",
+    "serviceName": "Eyelash Extension",
+    "staffName": "JESS",
+    "price": 2411,
+    "date": "2025-12-20"
+  },
+  {
+    "id": "311",
+    "customerName": "Liza Soberano",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AGNES",
+    "price": 2680,
+    "date": "2025-12-20"
+  },
+  {
+    "id": "312",
+    "customerName": "Solenn Heussaff",
+    "serviceName": "Eyelash Extension",
+    "staffName": "JANE",
+    "price": 1945,
+    "date": "2025-12-20"
+  },
+  {
+    "id": "313",
+    "customerName": "Isabelle Daza",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "JANE",
+    "price": 399,
+    "date": "2025-12-20"
+  },
+  {
+    "id": "314",
+    "customerName": "Kim Chiu",
+    "serviceName": "Eyelash Extension",
+    "staffName": "IKA",
+    "price": 1545,
+    "date": "2025-12-20"
+  },
+  {
+    "id": "315",
+    "customerName": "Maja Salvador",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "IKA",
+    "price": 950,
+    "date": "2025-12-20"
+  },
+  {
+    "id": "316",
+    "customerName": "Jessica Sanchez",
+    "serviceName": "Eyelash Extension",
+    "staffName": "RONA",
+    "price": 2390,
+    "date": "2025-12-20"
+  },
+  {
+    "id": "317",
+    "customerName": "Ana Gonzales",
+    "serviceName": "Eyelash Extension",
+    "staffName": "INA",
+    "price": 1604,
+    "date": "2025-12-20"
+  },
+  {
+    "id": "318",
+    "customerName": "Toni Gonzaga",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "ETET",
+    "price": 3700,
+    "date": "2025-12-21"
+  },
+  {
+    "id": "319",
+    "customerName": "Alex Gonzaga",
+    "serviceName": "Haircut",
+    "staffName": "ETET",
+    "price": 990,
+    "date": "2025-12-21"
+  },
+  {
+    "id": "320",
+    "customerName": "Roxanne Aquino",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "ALBERT",
+    "price": 4700,
+    "date": "2025-12-21"
+  },
+  {
+    "id": "321",
+    "customerName": "Camille Francisco",
+    "serviceName": "Haircut",
+    "staffName": "ALBERT",
+    "price": 150,
+    "date": "2025-12-21"
+  },
+  {
+    "id": "322",
+    "customerName": "Marian Rivera",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "JEPOY",
+    "price": 3500,
+    "date": "2025-12-21"
+  },
+  {
+    "id": "323",
+    "customerName": "Angel Locsin",
+    "serviceName": "Haircut",
+    "staffName": "JEPOY",
+    "price": 1230,
+    "date": "2025-12-21"
+  },
+  {
+    "id": "324",
+    "customerName": "Isabelle Daza",
+    "serviceName": "Eyelash Extension",
+    "staffName": "SHA",
+    "price": 3395,
+    "date": "2025-12-21"
+  },
+  {
+    "id": "325",
+    "customerName": "Marian Rivera",
+    "serviceName": "Eyelash Extension",
+    "staffName": "VIC",
+    "price": 2465,
+    "date": "2025-12-21"
+  },
+  {
+    "id": "326",
+    "customerName": "Georgina Wilson",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AMY",
+    "price": 2555,
+    "date": "2025-12-21"
+  },
+  {
+    "id": "327",
+    "customerName": "Coleen Garcia",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "AMY",
+    "price": 950,
+    "date": "2025-12-21"
+  },
+  {
+    "id": "328",
+    "customerName": "Kathryn Bernardo",
+    "serviceName": "Eyelash Extension",
+    "staffName": "ZYKA",
+    "price": 2814,
+    "date": "2025-12-21"
+  },
+  {
+    "id": "329",
+    "customerName": "Catriona Gray",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AGNES",
+    "price": 3479,
+    "date": "2025-12-21"
+  },
+  {
+    "id": "330",
+    "customerName": "Georgina Wilson",
+    "serviceName": "Eyelash Extension",
+    "staffName": "JANE",
+    "price": 2178,
+    "date": "2025-12-21"
+  },
+  {
+    "id": "331",
+    "customerName": "Christina Reyes",
+    "serviceName": "Eyelash Extension",
+    "staffName": "CYRIL",
+    "price": 2187,
+    "date": "2025-12-21"
+  },
+  {
+    "id": "332",
+    "customerName": "Isabella Cruz",
+    "serviceName": "Eyelash Extension",
+    "staffName": "RONA",
+    "price": 3185,
+    "date": "2025-12-21"
+  },
+  {
+    "id": "333",
+    "customerName": "Elena Cruz",
+    "serviceName": "Eyelash Extension",
+    "staffName": "INA",
+    "price": 1287,
+    "date": "2025-12-21"
+  },
+  {
+    "id": "334",
+    "customerName": "Jennylyn Mercado",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "ETET",
+    "price": 4300,
+    "date": "2025-12-22"
+  },
+  {
+    "id": "335",
+    "customerName": "Lovi Poe",
+    "serviceName": "Haircut",
+    "staffName": "ETET",
+    "price": 1910,
+    "date": "2025-12-22"
+  },
+  {
+    "id": "336",
+    "customerName": "Georgina Wilson",
+    "serviceName": "Eyelash Extension",
+    "staffName": "SHA",
+    "price": 4267,
+    "date": "2025-12-22"
+  },
+  {
+    "id": "337",
+    "customerName": "Angel Locsin",
+    "serviceName": "Eyelash Extension",
+    "staffName": "VIC",
+    "price": 2439,
+    "date": "2025-12-22"
+  },
+  {
+    "id": "338",
+    "customerName": "Janine Gutierrez",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AMY",
+    "price": 1103,
+    "date": "2025-12-22"
+  },
+  {
+    "id": "339",
+    "customerName": "Yassi Pressman",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "AMY",
+    "price": 2225,
+    "date": "2025-12-22"
+  },
+  {
+    "id": "340",
+    "customerName": "Nadine Lustre",
+    "serviceName": "Eyelash Extension",
+    "staffName": "ZYKA",
+    "price": 2176,
+    "date": "2025-12-22"
+  },
+  {
+    "id": "341",
+    "customerName": "Pia Wurtzbach",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AGNES",
+    "price": 2445,
+    "date": "2025-12-22"
+  },
+  {
+    "id": "342",
+    "customerName": "Coleen Garcia",
+    "serviceName": "Gel Manicure",
+    "staffName": "JANE",
+    "price": 480,
+    "date": "2025-12-22"
+  },
+  {
+    "id": "343",
+    "customerName": "Janine Gutierrez",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "JANE",
+    "price": 2195,
+    "date": "2025-12-22"
+  },
+  {
+    "id": "344",
+    "customerName": "Jodi Sta. Maria",
+    "serviceName": "Eyelash Extension",
+    "staffName": "IKA",
+    "price": 1665,
+    "date": "2025-12-22"
+  },
+  {
+    "id": "345",
+    "customerName": "Jane Smith",
+    "serviceName": "Eyelash Extension",
+    "staffName": "CYRIL",
+    "price": 1346,
+    "date": "2025-12-22"
+  },
+  {
+    "id": "346",
+    "customerName": "Bianca Gonzales",
+    "serviceName": "Eyelash Extension",
+    "staffName": "RONA",
+    "price": 2050,
+    "date": "2025-12-22"
+  },
+  {
+    "id": "347",
+    "customerName": "Christina Reyes",
+    "serviceName": "Eyelash Extension",
+    "staffName": "INA",
+    "price": 1955,
+    "date": "2025-12-22"
+  },
+  {
+    "id": "348",
+    "customerName": "Solenn Heussaff",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "ETET",
+    "price": 10700,
+    "date": "2025-12-23"
+  },
+  {
+    "id": "349",
+    "customerName": "Jessica Sanchez",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "ALBERT",
+    "price": 11000,
+    "date": "2025-12-23"
+  },
+  {
+    "id": "350",
+    "customerName": "Sarah Geronimo",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "JEPOY",
+    "price": 10500,
+    "date": "2025-12-23"
+  },
+  {
+    "id": "351",
+    "customerName": "Anne Curtis",
+    "serviceName": "Haircut",
+    "staffName": "JEPOY",
+    "price": 280,
+    "date": "2025-12-23"
+  },
+  {
+    "id": "352",
+    "customerName": "Coleen Garcia",
+    "serviceName": "Eyelash Extension",
+    "staffName": "SHA",
+    "price": 3410,
+    "date": "2025-12-23"
+  },
+  {
+    "id": "353",
+    "customerName": "Sarah Geronimo",
+    "serviceName": "Eyelash Extension",
+    "staffName": "VIC",
+    "price": 1540,
+    "date": "2025-12-23"
+  },
+  {
+    "id": "354",
+    "customerName": "Julie Anne San Jose",
+    "serviceName": "Eyelash Extension",
+    "staffName": "ZYKA",
+    "price": 2043,
+    "date": "2025-12-23"
+  },
+  {
+    "id": "355",
+    "customerName": "Lovi Poe",
+    "serviceName": "Eyelash Extension",
+    "staffName": "JESS",
+    "price": 2185,
+    "date": "2025-12-23"
+  },
+  {
+    "id": "356",
+    "customerName": "Marian Rivera",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AGNES",
+    "price": 2455,
+    "date": "2025-12-23"
+  },
+  {
+    "id": "357",
+    "customerName": "Yassi Pressman",
+    "serviceName": "Eyelash Extension",
+    "staffName": "JANE",
+    "price": 1430,
+    "date": "2025-12-23"
+  },
+  {
+    "id": "358",
+    "customerName": "Kylie Verzosa",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "JANE",
+    "price": 1995,
+    "date": "2025-12-23"
+  },
+  {
+    "id": "359",
+    "customerName": "Toni Gonzaga",
+    "serviceName": "Eyelash Extension",
+    "staffName": "IKA",
+    "price": 2245,
+    "date": "2025-12-23"
+  },
+  {
+    "id": "360",
+    "customerName": "Clara Bella",
+    "serviceName": "Eyelash Extension",
+    "staffName": "CYRIL",
+    "price": 1915,
+    "date": "2025-12-23"
+  },
+  {
+    "id": "361",
+    "customerName": "Carla Abellana",
+    "serviceName": "Eyelash Extension",
+    "staffName": "RONA",
+    "price": 1559,
+    "date": "2025-12-23"
+  },
+  {
+    "id": "362",
+    "customerName": "Jane Smith",
+    "serviceName": "Eyelash Extension",
+    "staffName": "INA",
+    "price": 1050,
+    "date": "2025-12-23"
+  },
+  {
+    "id": "363",
+    "customerName": "Isabelle Daza",
+    "serviceName": "Keratin Treatment",
+    "staffName": "ETET",
+    "price": 1500,
+    "date": "2025-12-24"
+  },
+  {
+    "id": "364",
+    "customerName": "Georgina Wilson",
+    "serviceName": "Haircut",
+    "staffName": "ETET",
+    "price": 820,
+    "date": "2025-12-24"
+  },
+  {
+    "id": "365",
+    "customerName": "Isabella Cruz",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "ALBERT",
+    "price": 5500,
+    "date": "2025-12-24"
+  },
+  {
+    "id": "366",
+    "customerName": "Bianca Gonzales",
+    "serviceName": "Haircut",
+    "staffName": "ALBERT",
+    "price": 150,
+    "date": "2025-12-24"
+  },
+  {
+    "id": "367",
+    "customerName": "Kathryn Bernardo",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "JEPOY",
+    "price": 3500,
+    "date": "2025-12-24"
+  },
+  {
+    "id": "368",
+    "customerName": "Nadine Lustre",
+    "serviceName": "Haircut",
+    "staffName": "JEPOY",
+    "price": 840,
+    "date": "2025-12-24"
+  },
+  {
+    "id": "369",
+    "customerName": "Janine Gutierrez",
+    "serviceName": "Eyelash Extension",
+    "staffName": "SHA",
+    "price": 2660,
+    "date": "2025-12-24"
+  },
+  {
+    "id": "370",
+    "customerName": "Anne Curtis",
+    "serviceName": "Eyelash Extension",
+    "staffName": "VIC",
+    "price": 2252,
+    "date": "2025-12-24"
+  },
+  {
+    "id": "371",
+    "customerName": "Kylie Verzosa",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AMY",
+    "price": 1823,
+    "date": "2025-12-24"
+  },
+  {
+    "id": "372",
+    "customerName": "Gina Lopez",
+    "serviceName": "Eyelash Extension",
+    "staffName": "ZYKA",
+    "price": 1420,
+    "date": "2025-12-24"
+  },
+  {
+    "id": "373",
+    "customerName": "Solenn Heussaff",
+    "serviceName": "Eyelash Extension",
+    "staffName": "JESS",
+    "price": 1845,
+    "date": "2025-12-24"
+  },
+  {
+    "id": "374",
+    "customerName": "Angel Locsin",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AGNES",
+    "price": 1220,
+    "date": "2025-12-24"
+  },
+  {
+    "id": "375",
+    "customerName": "Megan Young",
+    "serviceName": "Eyelash Extension",
+    "staffName": "JANE",
+    "price": 1470,
+    "date": "2025-12-24"
+  },
+  {
+    "id": "376",
+    "customerName": "Alex Gonzaga",
+    "serviceName": "Gel Manicure",
+    "staffName": "IKA",
+    "price": 383,
+    "date": "2025-12-24"
+  },
+  {
+    "id": "377",
+    "customerName": "Jennylyn Mercado",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "IKA",
+    "price": 550,
+    "date": "2025-12-24"
+  },
+  {
+    "id": "378",
+    "customerName": "Grace Poe",
+    "serviceName": "Eyelash Extension",
+    "staffName": "CYRIL",
+    "price": 1445,
+    "date": "2025-12-24"
+  },
+  {
+    "id": "379",
+    "customerName": "Heart Evangelista",
+    "serviceName": "Eyelash Extension",
+    "staffName": "RONA",
+    "price": 1145,
+    "date": "2025-12-24"
+  },
+  {
+    "id": "380",
+    "customerName": "Clara Bella",
+    "serviceName": "Gel Manicure",
+    "staffName": "INA",
+    "price": 779,
+    "date": "2025-12-24"
+  },
+  {
+    "id": "381",
+    "customerName": "Carla Abellana",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "ALBERT",
+    "price": 7300,
+    "date": "2025-12-25"
+  },
+  {
+    "id": "382",
+    "customerName": "Heart Evangelista",
+    "serviceName": "Haircut",
+    "staffName": "ALBERT",
+    "price": 300,
+    "date": "2025-12-25"
+  },
+  {
+    "id": "383",
+    "customerName": "Yassi Pressman",
+    "serviceName": "Eyelash Extension",
+    "staffName": "SHA",
+    "price": 2320,
+    "date": "2025-12-25"
+  },
+  {
+    "id": "384",
+    "customerName": "Kathryn Bernardo",
+    "serviceName": "Eyelash Extension",
+    "staffName": "VIC",
+    "price": 1950,
+    "date": "2025-12-25"
+  },
+  {
+    "id": "385",
+    "customerName": "Megan Young",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AMY",
+    "price": 1280,
+    "date": "2025-12-25"
+  },
+  {
+    "id": "386",
+    "customerName": "Janella Salvador",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "AMY",
+    "price": 1695,
+    "date": "2025-12-25"
+  },
+  {
+    "id": "387",
+    "customerName": "Isabelle Daza",
+    "serviceName": "Eyelash Extension",
+    "staffName": "JESS",
+    "price": 1495,
+    "date": "2025-12-25"
+  },
+  {
+    "id": "388",
+    "customerName": "Janella Salvador",
+    "serviceName": "Eyelash Extension",
+    "staffName": "JANE",
+    "price": 1645,
+    "date": "2025-12-25"
+  },
+  {
+    "id": "389",
+    "customerName": "Andrea Brillantes",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "JANE",
+    "price": 250,
+    "date": "2025-12-25"
+  },
+  {
+    "id": "390",
+    "customerName": "Liza Soberano",
+    "serviceName": "Eyelash Extension",
+    "staffName": "CYRIL",
+    "price": 1490,
+    "date": "2025-12-25"
+  },
+  {
+    "id": "391",
+    "customerName": "Coleen Garcia",
+    "serviceName": "Keratin Treatment",
+    "staffName": "ETET",
+    "price": 2300,
+    "date": "2025-12-26"
+  },
+  {
+    "id": "392",
+    "customerName": "Janine Gutierrez",
+    "serviceName": "Haircut",
+    "staffName": "ETET",
+    "price": 1440,
+    "date": "2025-12-26"
+  },
+  {
+    "id": "393",
+    "customerName": "Kim Chiu",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "ALBERT",
+    "price": 2500,
+    "date": "2025-12-26"
+  },
+  {
+    "id": "394",
+    "customerName": "Maja Salvador",
+    "serviceName": "Haircut",
+    "staffName": "ALBERT",
+    "price": 1010,
+    "date": "2025-12-26"
+  },
+  {
+    "id": "395",
+    "customerName": "Julie Anne San Jose",
+    "serviceName": "Balayage Hair Color",
+    "staffName": "JEPOY",
+    "price": 2500,
+    "date": "2025-12-26"
+  },
+  {
+    "id": "396",
+    "customerName": "Gina Lopez",
+    "serviceName": "Haircut",
+    "staffName": "JEPOY",
+    "price": 1380,
+    "date": "2025-12-26"
+  },
+  {
+    "id": "397",
+    "customerName": "Kylie Verzosa",
+    "serviceName": "Eyelash Extension",
+    "staffName": "SHA",
+    "price": 3049,
+    "date": "2025-12-26"
+  },
+  {
+    "id": "398",
+    "customerName": "Nadine Lustre",
+    "serviceName": "Eyelash Extension",
+    "staffName": "VIC",
+    "price": 3487,
+    "date": "2025-12-26"
+  },
+  {
+    "id": "399",
+    "customerName": "Maria Clara",
+    "serviceName": "Eyelash Extension",
+    "staffName": "ZYKA",
+    "price": 1760,
+    "date": "2025-12-26"
+  },
+  {
+    "id": "400",
+    "customerName": "Georgina Wilson",
+    "serviceName": "Eyelash Extension",
+    "staffName": "JESS",
+    "price": 1869,
+    "date": "2025-12-26"
+  },
+  {
+    "id": "401",
+    "customerName": "Sarah Geronimo",
+    "serviceName": "Eyelash Extension",
+    "staffName": "AGNES",
+    "price": 2680,
+    "date": "2025-12-26"
+  },
+  {
+    "id": "402",
+    "customerName": "Belle Mariano",
+    "serviceName": "Eyelash Extension",
+    "staffName": "JANE",
+    "price": 1528,
+    "date": "2025-12-26"
+  },
+  {
+    "id": "403",
+    "customerName": "Alexa Ilacad",
+    "serviceName": "Facial Care & Treatment",
+    "staffName": "JANE",
+    "price": 498,
+    "date": "2025-12-26"
+  },
+  {
+    "id": "404",
+    "customerName": "Catriona Gray",
+    "serviceName": "Eyelash Extension",
+    "staffName": "CYRIL",
+    "price": 1195,
+    "date": "2025-12-26"
+  },
+  {
+    "id": "405",
+    "customerName": "Grace Poe",
+    "serviceName": "Eyelash Extension",
+    "staffName": "INA",
+    "price": 2130,
+    "date": "2025-12-26"
   }
 ];
 
@@ -224,76 +3477,184 @@ export const suppliesRequestSeed: SuppliesRequest[] = [
 
 export const staffSeed: StaffMember[] = [
   {
-    id: "1",
-    code: "ETET",
-    name: "Genesis Dequito",
-    role: "Hair Specialist",
-    mobile: "0917-111-2222",
-    dailyRate: 200,
-    commissionRate: 0.27,
-    status: "Active",
-    hireDate: "2024-05-12",
-    notes: "Senior hair stylist, balanced service metrics"
+    "id": "1",
+    "code": "ETET",
+    "name": "Genesis Dequito",
+    "role": "Hair Specialist",
+    "mobile": "0917-111-2222",
+    "dailyRate": 200,
+    "commissionRate": 0.27,
+    "status": "Active",
+    "hireDate": "2024-05-12",
+    "notes": "Senior hair stylist, balanced service metrics"
   },
   {
-    id: "2",
-    code: "ALBERT",
-    name: "Albert",
-    role: "Hair Specialist",
-    mobile: "0918-222-3333",
-    dailyRate: 200,
-    commissionRate: 0.27,
-    status: "Active",
-    hireDate: "2024-06-15",
-    notes: "Specializes in balayage and color correction"
+    "id": "2",
+    "code": "ALBERT",
+    "name": "Albert",
+    "role": "Hair Specialist",
+    "mobile": "0918-222-3333",
+    "dailyRate": 200,
+    "commissionRate": 0.27,
+    "status": "Active",
+    "hireDate": "2024-06-15",
+    "notes": "Specializes in balayage and color correction"
   },
   {
-    id: "3",
-    code: "SHA",
-    name: "Salimar (Sha)",
-    role: "Nails & Lashes Specialist",
-    mobile: "0919-333-4444",
-    dailyRate: 200,
-    commissionRate: 0.27,
-    status: "Active",
-    hireDate: "2024-08-20",
-    notes: "Expert lash technician and nail art master"
+    "id": "3",
+    "code": "SHA",
+    "name": "Salimar (Sha)",
+    "role": "Nails & Lashes Specialist",
+    "mobile": "0919-333-4444",
+    "dailyRate": 200,
+    "commissionRate": 0.27,
+    "status": "Active",
+    "hireDate": "2024-08-20",
+    "notes": "Expert lash technician and nail art master"
   },
   {
-    id: "4",
-    code: "JEPOY",
-    name: "Jepoy",
-    role: "Hair Specialist",
-    mobile: "0920-444-5555",
-    dailyRate: 200,
-    commissionRate: 0.27,
-    status: "Active",
-    hireDate: "2024-10-01",
-    notes: "Keratin treatment expert, high customer return rate"
+    "id": "4",
+    "code": "JEPOY",
+    "name": "Jepoy",
+    "role": "Hair Specialist",
+    "mobile": "0920-444-5555",
+    "dailyRate": 200,
+    "commissionRate": 0.27,
+    "status": "Active",
+    "hireDate": "2024-10-01",
+    "notes": "Keratin treatment expert, high customer return rate"
   },
   {
-    id: "5",
-    code: "AMY",
-    name: "Amy",
-    role: "Nails & Lashes Specialist",
-    mobile: "0921-555-6666",
-    dailyRate: 200,
-    commissionRate: 0.27,
-    status: "Active",
-    hireDate: "2024-11-15",
-    notes: "Manicures and pedicures specialist"
+    "id": "5",
+    "code": "AMY",
+    "name": "Amy",
+    "role": "Nails & Lashes Specialist",
+    "mobile": "0921-555-6666",
+    "dailyRate": 250,
+    "commissionRate": 0.27,
+    "status": "Active",
+    "hireDate": "2024-11-15",
+    "notes": "Manicures and pedicures specialist"
   },
   {
-    id: "6",
-    code: "ZYKA",
-    name: "Zyka",
-    role: "Nails & Lashes Specialist",
-    mobile: "0922-666-7777",
-    dailyRate: 200,
-    commissionRate: 0.27,
-    status: "Active",
-    hireDate: "2025-01-10",
-    notes: "General salon services and lash styling"
+    "id": "6",
+    "code": "ZYKA",
+    "name": "Zyka",
+    "role": "Nails & Lashes Specialist",
+    "mobile": "0922-666-7777",
+    "dailyRate": 200,
+    "commissionRate": 0.27,
+    "status": "Active",
+    "hireDate": "2025-01-10",
+    "notes": "General salon services and lash styling"
+  },
+  {
+    "id": "7",
+    "code": "VIC",
+    "name": "Victoria (Vic)",
+    "role": "Nails & Lashes Specialist",
+    "mobile": "0923-777-8888",
+    "dailyRate": 200,
+    "commissionRate": 0.27,
+    "status": "Active",
+    "hireDate": "2025-02-12",
+    "notes": "Lashes and brow lamination expert"
+  },
+  {
+    "id": "8",
+    "code": "JESS",
+    "name": "Jessica (Jess)",
+    "role": "Nails & Lashes Specialist",
+    "mobile": "0924-888-9999",
+    "dailyRate": 200,
+    "commissionRate": 0.27,
+    "status": "Active",
+    "hireDate": "2025-03-10",
+    "notes": "Gel extension and acrylic overlay"
+  },
+  {
+    "id": "9",
+    "code": "AGNES",
+    "name": "Agnes",
+    "role": "Nails & Lashes Specialist",
+    "mobile": "0925-999-0000",
+    "dailyRate": 200,
+    "commissionRate": 0.27,
+    "status": "Active",
+    "hireDate": "2025-04-15",
+    "notes": "Nail polish and spa therapist"
+  },
+  {
+    "id": "10",
+    "code": "JANE",
+    "name": "Jane",
+    "role": "Nails & Lashes Specialist",
+    "mobile": "0926-000-1111",
+    "dailyRate": 200,
+    "commissionRate": 0.09,
+    "status": "Active",
+    "hireDate": "2025-05-20",
+    "notes": "Junior technician"
+  },
+  {
+    "id": "11",
+    "code": "MICH",
+    "name": "Michelle (Mich)",
+    "role": "Nails & Lashes Specialist",
+    "mobile": "0927-111-2222",
+    "dailyRate": 500,
+    "commissionRate": 0.09,
+    "status": "Active",
+    "hireDate": "2025-06-01",
+    "notes": "Experienced nail technician and supervisor"
+  },
+  {
+    "id": "12",
+    "code": "IKA",
+    "name": "Ika",
+    "role": "Nails & Lashes Specialist",
+    "mobile": "0928-222-3333",
+    "dailyRate": 350,
+    "commissionRate": 0.08,
+    "status": "Active",
+    "hireDate": "2025-06-15",
+    "notes": "Facial and waxing therapist"
+  },
+  {
+    "id": "13",
+    "code": "CYRIL",
+    "name": "Cyril",
+    "role": "Nails & Lashes Specialist",
+    "mobile": "0929-333-4444",
+    "dailyRate": 350,
+    "commissionRate": 0.08,
+    "status": "Active",
+    "hireDate": "2025-07-01",
+    "notes": "Manicure and pedicure expert"
+  },
+  {
+    "id": "14",
+    "code": "RONA",
+    "name": "Rona",
+    "role": "Nails & Lashes Specialist",
+    "mobile": "0930-444-5555",
+    "dailyRate": 350,
+    "commissionRate": 0.09,
+    "status": "Active",
+    "hireDate": "2025-07-15",
+    "notes": "Senior lash stylist"
+  },
+  {
+    "id": "15",
+    "code": "INA",
+    "name": "Ina",
+    "role": "Nails & Lashes Specialist",
+    "mobile": "0931-555-6666",
+    "dailyRate": 200,
+    "commissionRate": 0.09,
+    "status": "Active",
+    "hireDate": "2025-08-01",
+    "notes": "Aesthetic treatment and skin therapist"
   }
 ];
 
@@ -15932,3 +19293,12 @@ export const salesSummarySeed: { [monthKey: string]: MonthlySalesSummary } = {
     }
   }
 };
+
+export const defaultServices: ServiceItem[] = [
+  { id: "1", name: "Balayage Hair Color", category: "Hair", price: 3500, commissionRate: 0.27 },
+  { id: "2", name: "Keratin Treatment", category: "Hair", price: 1200, commissionRate: 0.27 },
+  { id: "3", name: "Haircut", category: "Hair", price: 500, commissionRate: 0.36 },
+  { id: "4", name: "Gel Manicure", category: "Nails", price: 600, commissionRate: 0.27 },
+  { id: "5", name: "Eyelash Extension", category: "Aesthetic", price: 1500, commissionRate: 0.16 },
+  { id: "6", name: "Facial Care & Treatment", category: "Aesthetic", price: 1000, commissionRate: 0.16 }
+];

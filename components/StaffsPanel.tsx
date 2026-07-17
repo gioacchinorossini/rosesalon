@@ -61,17 +61,17 @@ export const StaffsPanel: React.FC<StaffsPanelProps> = ({
       updated = staffs.map(s =>
         s.id === editingStaffId
           ? {
-              ...s,
-              code: upperCode,
-              name: newStaffName.trim(),
-              role: newStaffRole,
-              mobile: newStaffMobile.trim(),
-              dailyRate: Number(newStaffDailyRate),
-              commissionRate: Number(newStaffCommRate),
-              status: newStaffStatus,
-              hireDate: newStaffHireDate,
-              notes: newStaffNotes.trim(),
-            }
+            ...s,
+            code: upperCode,
+            name: newStaffName.trim(),
+            role: newStaffRole,
+            mobile: newStaffMobile.trim(),
+            dailyRate: Number(newStaffDailyRate),
+            commissionRate: Number(newStaffCommRate),
+            status: newStaffStatus,
+            hireDate: newStaffHireDate,
+            notes: newStaffNotes.trim(),
+          }
           : s
       );
       setEditingStaffId(null);
@@ -114,7 +114,7 @@ export const StaffsPanel: React.FC<StaffsPanelProps> = ({
     <div className="flex flex-col gap-6 animate-fadeIn">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-on-surface">Staff & Stylist Directory</h2>
+          <h2 className="text-xl font-bold text-on-surface">All Staffs</h2>
           <p className="text-xs text-on-surface-variant">Register and manage salon stylists, commission settings, and roster status</p>
         </div>
         <button

@@ -9,6 +9,8 @@ import {
   staffPayslipsSeed,
   salesSummarySeed,
   staffSeed,
+  servicesLogSeed,
+  defaultServices,
   CustomerPamper,
   PaymentTransaction,
   SuppliesMonitoringLog,
@@ -17,6 +19,7 @@ import {
   MonthlySalesSummary,
   StaffMember,
   ServiceItem,
+  ServiceLog,
 } from "./data/initialData";
 
 import { Sidebar } from "../components/Sidebar";
@@ -29,20 +32,44 @@ import { PayslipsPanel } from "../components/PayslipsPanel";
 import { PaymentsPanel } from "../components/PaymentsPanel";
 import { SuppliesPanel } from "../components/SuppliesPanel";
 import { ServicesPanel } from "../components/ServicesPanel";
+import { ServicesLogPanel } from "../components/ServicesLogPanel";
+import { QueuePanel } from "../components/QueuePanel";
+import { StocksPanel, StockItem, StockLog } from "../components/StocksPanel";
 
-const defaultServices: ServiceItem[] = [
-  { id: "1", name: "Balayage Hair Color", category: "Hair", price: 3500, commissionRate: 0.27 },
-  { id: "2", name: "Keratin Treatment", category: "Hair", price: 1200, commissionRate: 0.27 },
-  { id: "3", name: "Haircut", category: "Hair", price: 500, commissionRate: 0.36 },
-  { id: "4", name: "Gel Manicure", category: "Nails", price: 600, commissionRate: 0.27 },
-  { id: "5", name: "Eyelash Extension", category: "Aesthetic", price: 1500, commissionRate: 0.16 },
-  { id: "6", name: "Facial Care & Treatment", category: "Aesthetic", price: 1000, commissionRate: 0.16 }
+type ActivePanel = 'dashboard' | 'salesLedger' | 'pos' | 'services' | 'payslips' | 'payments' | 'bookings' | 'supplies' | 'staffs' | 'servicesLog' | 'queue' | 'stocks';
+
+const defaultStockItems: StockItem[] = [
+  { id: "st-1", name: "Premium Keratin Shampoo 500ml", sku: "SH-KER-500", category: "Retail Product", onHand: 15, minThreshold: 5, costPrice: 450.00, salesPrice: 850.00, supplier: "L'Oreal Corp" },
+  { id: "st-2", name: "Moroccan Argan Oil 100ml", sku: "OIL-ARG-100", category: "Retail Product", onHand: 8, minThreshold: 3, costPrice: 600.00, salesPrice: 1200.00, supplier: "Argan Co" },
+  { id: "st-3", name: "Gel Top Coat Extra Shine", sku: "NLT-GEL-TS", category: "Consumable", onHand: 6, minThreshold: 2, costPrice: 180.00, supplier: "NailArt Supply" },
+  { id: "st-4", name: "Developer 20 Volume 1L", sku: "DEV-20V-1L", category: "Consumable", onHand: 12, minThreshold: 4, costPrice: 250.00, supplier: "L'Oreal Corp" },
+  { id: "st-5", name: "Bleaching Powder Violet 500g", sku: "BL-POW-VIO", category: "Consumable", onHand: 4, minThreshold: 3, costPrice: 380.00, supplier: "L'Oreal Corp" },
+  { id: "st-6", name: "Ultra Lash Glue 5ml", sku: "AES-LSH-GL", category: "Consumable", onHand: 2, minThreshold: 3, costPrice: 320.00, supplier: "Aesthetic Hub" }
 ];
 
-type ActivePanel = 'dashboard' | 'salesLedger' | 'pos' | 'services' | 'payslips' | 'payments' | 'bookings' | 'supplies' | 'staffs';
+const defaultStockLogs: StockLog[] = [
+  { id: "sl-1", date: "2026-07-12", itemId: "st-1", itemName: "Premium Keratin Shampoo 500ml", type: "IN", qty: 10, remarks: "Restock delivery", staff: "MANAGER" },
+  { id: "sl-2", date: "2026-07-13", itemId: "st-3", itemName: "Gel Top Coat Extra Shine", type: "OUT", qty: 1, remarks: "Station replenishment", staff: "SHA" },
+  { id: "sl-3", date: "2026-07-14", itemId: "st-2", itemName: "Moroccan Argan Oil 100ml", type: "OUT", qty: 2, remarks: "Customer retail purchase", staff: "VIC" }
+];
 
 export default function Home() {
   const [activePanel, setActivePanel] = useState<ActivePanel>('dashboard');
+  const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("rose_sidebarCollapsed");
+      return saved === "true";
+    }
+    return false;
+  });
+
+  const toggleSidebar = () => {
+    setSidebarCollapsed(prev => {
+      const next = !prev;
+      localStorage.setItem("rose_sidebarCollapsed", String(next));
+      return next;
+    });
+  };
 
   // Auth State
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
@@ -53,6 +80,7 @@ export default function Home() {
 
   // App State - Seeding from initialData
   const [customerPamper, setCustomerPamper] = useState<CustomerPamper[]>([]);
+  const [servicesLog, setServicesLog] = useState<ServiceLog[]>([]);
   const [paymentTransactions, setPaymentTransactions] = useState<PaymentTransaction[]>([]);
   const [suppliesMonitoring, setSuppliesMonitoring] = useState<SuppliesMonitoringLog[]>([]);
   const [suppliesRequest, setSuppliesRequest] = useState<SuppliesRequest[]>([]);
@@ -60,6 +88,37 @@ export default function Home() {
   const [salesSummary, setSalesSummary] = useState<{ [monthKey: string]: MonthlySalesSummary }>({});
   const [staffs, setStaffs] = useState<StaffMember[]>([]);
   const [services, setServices] = useState<ServiceItem[]>([]);
+  const [stocks, setStocks] = useState<StockItem[]>([]);
+  const [stockLogs, setStockLogs] = useState<StockLog[]>([]);
+
+  // Ongoing treatments queue (synced with localStorage)
+  const [ongoingServices, setOngoingServices] = useState<Array<{
+    id: string;
+    customerName: string;
+    services: Array<{ id: string; service: string; price: number; commissionRate?: number }>;
+    staffCode: string;
+    startTime: string; // ISO string
+    date: string;
+  }>>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("rose_ongoingServices");
+      if (saved) return JSON.parse(saved);
+    }
+    return [
+      {
+        id: "demo-ongoing-1",
+        customerName: "Patricia Lopez",
+        services: [
+          { id: "s-1", service: "Keratin Treatment & Trim", price: 1200, commissionRate: 0.27 }
+        ],
+        staffCode: "ETET",
+        startTime: new Date(Date.now() - 35 * 60000).toISOString(), // 35m ago
+        date: new Date().toISOString().split("T")[0]
+      }
+    ];
+  });
+
+  const [activeOngoingId, setActiveOngoingId] = useState<string | null>(null);
 
   // Active state indicators
   const [activeMonthKey, setActiveMonthKey] = useState<string>('APR');
@@ -76,79 +135,234 @@ export default function Home() {
         setIsAuthenticated(false);
       });
 
-    try {
-      const storedCust = localStorage.getItem("rose_customerPamper");
-      const storedPay = localStorage.getItem("rose_paymentTransactions");
-      const storedSuppMon = localStorage.getItem("rose_suppliesMonitoring");
-      const storedSuppReq = localStorage.getItem("rose_suppliesRequest");
-      const storedPayslips = localStorage.getItem("rose_staffPayslips");
-      const storedSales = localStorage.getItem("rose_salesSummary");
-      const storedServices = localStorage.getItem("rose_services");
-      const storedStaffs = localStorage.getItem("rose_staffs");
+    const loadInitialData = async () => {
+      try {
+        const response = await fetch('/api/db/load');
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success && result.data) {
+            const d = result.data;
+            setCustomerPamper(d.customerPamper);
+            setServicesLog(d.servicesLog);
+            setPaymentTransactions(d.paymentTransactions);
+            setSuppliesMonitoring(d.suppliesMonitoring);
+            setSuppliesRequest(d.suppliesRequest);
+             setServices(d.services);
+            setStaffs(d.staffs);
+            setSalesSummary(d.salesSummary);
+            setStaffPayslips(d.staffPayslips);
+            if (d.stocks) setStocks(d.stocks);
+            if (d.stockLogs) setStockLogs(d.stockLogs);
+            if (d.ongoingServices) setOngoingServices(d.ongoingServices);
 
-      if (storedCust) setCustomerPamper(JSON.parse(storedCust));
-      else setCustomerPamper(customerPamperSeed);
+            // Sync to local storage for caching/fallback
+            localStorage.setItem("rose_customerPamper", JSON.stringify(d.customerPamper));
+            localStorage.setItem("rose_servicesLog", JSON.stringify(d.servicesLog));
+            localStorage.setItem("rose_paymentTransactions", JSON.stringify(d.paymentTransactions));
+            localStorage.setItem("rose_suppliesMonitoring", JSON.stringify(d.suppliesMonitoring));
+            localStorage.setItem("rose_suppliesRequest", JSON.stringify(d.suppliesRequest));
+            localStorage.setItem("rose_services", JSON.stringify(d.services));
+            localStorage.setItem("rose_staffs", JSON.stringify(d.staffs));
+            localStorage.setItem("rose_salesSummary", JSON.stringify(d.salesSummary));
+            localStorage.setItem("rose_staffPayslips", JSON.stringify(d.staffPayslips));
+            if (d.stocks) localStorage.setItem("rose_stocks", JSON.stringify(d.stocks));
+            if (d.stockLogs) localStorage.setItem("rose_stockLogs", JSON.stringify(d.stockLogs));
+            localStorage.setItem("rose_ongoingServices", JSON.stringify(d.ongoingServices || []));
 
-      if (storedPay) setPaymentTransactions(JSON.parse(storedPay));
-      else setPaymentTransactions(paymentMonitoringSeed);
-
-      if (storedSuppMon) setSuppliesMonitoring(JSON.parse(storedSuppMon));
-      else setSuppliesMonitoring(suppliesMonitoringSeed);
-
-      if (storedSuppReq) setSuppliesRequest(JSON.parse(storedSuppReq));
-      else setSuppliesRequest(suppliesRequestSeed);
-
-      if (storedPayslips) setStaffPayslips(JSON.parse(storedPayslips));
-      else setStaffPayslips(staffPayslipsSeed);
-
-      if (storedSales) setSalesSummary(JSON.parse(storedSales));
-      else setSalesSummary(salesSummarySeed);
-
-      if (storedServices) setServices(JSON.parse(storedServices));
-      else {
-        setServices(defaultServices);
-        localStorage.setItem("rose_services", JSON.stringify(defaultServices));
-      }
-
-      if (storedStaffs) {
-        const parsed = JSON.parse(storedStaffs);
-        setStaffs(parsed);
-        if (parsed.length > 0 && !parsed.some((s: any) => s.code === activeStaffName)) {
-          setActiveStaffName(parsed[0].code);
+            if (d.staffs.length > 0 && !d.staffs.some((s: any) => s.code === activeStaffName)) {
+              setActiveStaffName(d.staffs[0].code);
+            }
+            return;
+          }
         }
-      } else {
-        setStaffs(staffSeed);
-        localStorage.setItem("rose_staffs", JSON.stringify(staffSeed));
+      } catch (err) {
+        console.warn("Database connection failed, falling back to local storage:", err);
       }
-    } catch (e) {
-      console.error("Failed to load local storage", e);
-      setCustomerPamper(customerPamperSeed);
-      setPaymentTransactions(paymentMonitoringSeed);
-      setSuppliesMonitoring(suppliesMonitoringSeed);
-      setSuppliesRequest(suppliesRequestSeed);
-      setStaffPayslips(staffPayslipsSeed);
-      setSalesSummary(salesSummarySeed);
-      setServices(defaultServices);
-      setStaffs(staffSeed);
-    }
+
+      // Fallback local storage logic
+      try {
+        const storedCust = localStorage.getItem("rose_customerPamper");
+        const storedLog = localStorage.getItem("rose_servicesLog");
+        const storedPay = localStorage.getItem("rose_paymentTransactions");
+        const storedSuppMon = localStorage.getItem("rose_suppliesMonitoring");
+        const storedSuppReq = localStorage.getItem("rose_suppliesRequest");
+        const storedPayslips = localStorage.getItem("rose_staffPayslips");
+        const storedSales = localStorage.getItem("rose_salesSummary");
+        const storedServices = localStorage.getItem("rose_services");
+        const storedStaffs = localStorage.getItem("rose_staffs");
+        const storedOngoing = localStorage.getItem("rose_ongoingServices");
+        const storedStocks = localStorage.getItem("rose_stocks");
+        const storedStockLogs = localStorage.getItem("rose_stockLogs");
+
+        if (storedCust) setCustomerPamper(JSON.parse(storedCust));
+        else setCustomerPamper(customerPamperSeed);
+
+        if (storedOngoing) setOngoingServices(JSON.parse(storedOngoing));
+
+        if (storedLog) {
+          const parsedLog = JSON.parse(storedLog);
+          if (parsedLog.length <= 6) {
+            setServicesLog(servicesLogSeed);
+            localStorage.setItem("rose_servicesLog", JSON.stringify(servicesLogSeed));
+          } else {
+            setServicesLog(parsedLog);
+          }
+        } else {
+          setServicesLog(servicesLogSeed);
+          localStorage.setItem("rose_servicesLog", JSON.stringify(servicesLogSeed));
+        }
+
+        if (storedPay) setPaymentTransactions(JSON.parse(storedPay));
+        else setPaymentTransactions(paymentMonitoringSeed);
+
+        if (storedSuppMon) setSuppliesMonitoring(JSON.parse(storedSuppMon));
+        else setSuppliesMonitoring(suppliesMonitoringSeed);
+
+        if (storedSuppReq) setSuppliesRequest(JSON.parse(storedSuppReq));
+        else setSuppliesRequest(suppliesRequestSeed);
+
+        if (storedPayslips) setStaffPayslips(JSON.parse(storedPayslips));
+        else setStaffPayslips(staffPayslipsSeed);
+
+        if (storedSales) setSalesSummary(JSON.parse(storedSales));
+        else setSalesSummary(salesSummarySeed);
+
+        if (storedServices) setServices(JSON.parse(storedServices));
+        else {
+          setServices(defaultServices);
+          localStorage.setItem("rose_services", JSON.stringify(defaultServices));
+        }
+
+        if (storedStocks) setStocks(JSON.parse(storedStocks));
+        else {
+          setStocks(defaultStockItems);
+          localStorage.setItem("rose_stocks", JSON.stringify(defaultStockItems));
+        }
+
+        if (storedStockLogs) setStockLogs(JSON.parse(storedStockLogs));
+        else {
+          setStockLogs(defaultStockLogs);
+          localStorage.setItem("rose_stockLogs", JSON.stringify(defaultStockLogs));
+        }
+
+        if (storedStaffs) {
+          const parsedStaffs = JSON.parse(storedStaffs);
+          if (parsedStaffs.length <= 6) {
+            setStaffs(staffSeed);
+            localStorage.setItem("rose_staffs", JSON.stringify(staffSeed));
+            if (staffSeed.length > 0 && !staffSeed.some((s: any) => s.code === activeStaffName)) {
+              setActiveStaffName(staffSeed[0].code);
+            }
+          } else {
+            setStaffs(parsedStaffs);
+            if (parsedStaffs.length > 0 && !parsedStaffs.some((s: any) => s.code === activeStaffName)) {
+              setActiveStaffName(parsedStaffs[0].code);
+            }
+          }
+        } else {
+          setStaffs(staffSeed);
+          localStorage.setItem("rose_staffs", JSON.stringify(staffSeed));
+          if (staffSeed.length > 0 && !staffSeed.some((s: any) => s.code === activeStaffName)) {
+            setActiveStaffName(staffSeed[0].code);
+          }
+        }
+      } catch (e) {
+        console.error("Failed to load local storage", e);
+        setCustomerPamper(customerPamperSeed);
+        setServicesLog(servicesLogSeed);
+        setPaymentTransactions(paymentMonitoringSeed);
+        setSuppliesMonitoring(suppliesMonitoringSeed);
+        setSuppliesRequest(suppliesRequestSeed);
+        setStaffPayslips(staffPayslipsSeed);
+        setSalesSummary(salesSummarySeed);
+        setServices(defaultServices);
+        setStaffs(staffSeed);
+        setStocks(defaultStockItems);
+        setStockLogs(defaultStockLogs);
+        setOngoingServices([
+          {
+            id: "demo-ongoing-1",
+            customerName: "Patricia Lopez",
+            services: [
+              { id: "s-1", service: "Keratin Treatment & Trim", price: 1200, commissionRate: 0.27 }
+            ],
+            staffCode: "ETET",
+            startTime: new Date(Date.now() - 35 * 60000).toISOString(),
+            date: new Date().toISOString().split("T")[0]
+          }
+        ]);
+      }
+    };
+
+    loadInitialData();
   }, []);
 
-  // Save changes to localStorage helper
-  const saveState = (key: string, data: any) => {
+  // Save changes to localStorage helper and sync to MySQL database
+  const saveState = async (key: string, data: any) => {
     localStorage.setItem(key, JSON.stringify(data));
+    try {
+      await fetch('/api/db/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key, data })
+      });
+    } catch (err) {
+      console.error("Failed to sync to database:", err);
+    }
   };
 
-  const handleResetData = () => {
+  const handleResetData = async () => {
     if (confirm("Are you sure you want to restore the database to the spreadsheet seeds? All edits will be overwritten.")) {
       localStorage.clear();
+      
       setCustomerPamper(customerPamperSeed);
+      await saveState("rose_customerPamper", customerPamperSeed);
+
+      setServicesLog(servicesLogSeed);
+      await saveState("rose_servicesLog", servicesLogSeed);
+
       setPaymentTransactions(paymentMonitoringSeed);
+      await saveState("rose_paymentTransactions", paymentMonitoringSeed);
+
       setSuppliesMonitoring(suppliesMonitoringSeed);
+      await saveState("rose_suppliesMonitoring", suppliesMonitoringSeed);
+
       setSuppliesRequest(suppliesRequestSeed);
+      await saveState("rose_suppliesRequest", suppliesRequestSeed);
+
       setStaffPayslips(staffPayslipsSeed);
+      await saveState("rose_staffPayslips", staffPayslipsSeed);
+
       setSalesSummary(salesSummarySeed);
+      await saveState("rose_salesSummary", salesSummarySeed);
+
       setServices(defaultServices);
+      await saveState("rose_services", defaultServices);
+
       setStaffs(staffSeed);
+      await saveState("rose_staffs", staffSeed);
+
+      setStocks(defaultStockItems);
+      await saveState("rose_stocks", defaultStockItems);
+
+      setStockLogs(defaultStockLogs);
+      await saveState("rose_stockLogs", defaultStockLogs);
+
+      const defaultOngoing = [
+        {
+          id: "demo-ongoing-1",
+          customerName: "Patricia Lopez",
+          services: [
+            { id: "s-1", service: "Keratin Treatment & Trim", price: 1200, commissionRate: 0.27 }
+          ],
+          staffCode: "ETET",
+          startTime: new Date(Date.now() - 35 * 60000).toISOString(),
+          date: new Date().toISOString().split("T")[0]
+        }
+      ];
+      setOngoingServices(defaultOngoing);
+      await saveState("rose_ongoingServices", defaultOngoing);
+
       alert("Database reset to spreadsheet seed data successfully.");
     }
   };
@@ -410,6 +624,8 @@ export default function Home() {
         setActivePanel={setActivePanel}
         handleResetData={handleResetData}
         handleLogout={handleLogout}
+        isCollapsed={sidebarCollapsed}
+        onToggleCollapse={toggleSidebar}
       />
 
       {/* -------------------- MAIN WORKSPACE -------------------- */}
@@ -425,6 +641,7 @@ export default function Home() {
             customerPamper={customerPamper}
             suppliesRequest={suppliesRequest}
             setActivePanel={setActivePanel}
+            stocks={stocks}
           />
         )}
 
@@ -436,6 +653,28 @@ export default function Home() {
             setSalesSummary={setSalesSummary}
             paymentTransactions={paymentTransactions}
             setPaymentTransactions={setPaymentTransactions}
+            servicesLog={servicesLog}
+            setServicesLog={setServicesLog}
+            saveState={saveState}
+            ongoingServices={ongoingServices}
+            setOngoingServices={setOngoingServices}
+            activeOngoingId={activeOngoingId}
+            setActiveOngoingId={setActiveOngoingId}
+            stocks={stocks}
+            setStocks={setStocks}
+            stockLogs={stockLogs}
+            setStockLogs={setStockLogs}
+          />
+        )}
+
+        {activePanel === 'queue' && (
+          <QueuePanel
+            services={services}
+            staffs={staffs}
+            ongoingServices={ongoingServices}
+            setOngoingServices={setOngoingServices}
+            setActiveOngoingId={setActiveOngoingId}
+            setActivePanel={setActivePanel}
             saveState={saveState}
           />
         )}
@@ -444,6 +683,16 @@ export default function Home() {
           <BookingsPanel
             customerPamper={customerPamper}
             setCustomerPamper={setCustomerPamper}
+            saveState={saveState}
+          />
+        )}
+
+        {activePanel === 'servicesLog' && (
+          <ServicesLogPanel
+            servicesLog={servicesLog}
+            setServicesLog={setServicesLog}
+            services={services}
+            staffs={staffs}
             saveState={saveState}
           />
         )}
@@ -503,6 +752,17 @@ export default function Home() {
           <ServicesPanel
             services={services}
             setServices={setServices}
+            saveState={saveState}
+          />
+        )}
+
+        {activePanel === 'stocks' && (
+          <StocksPanel
+            stocks={stocks}
+            setStocks={setStocks}
+            stockLogs={stockLogs}
+            setStockLogs={setStockLogs}
+            staffs={staffs}
             saveState={saveState}
           />
         )}

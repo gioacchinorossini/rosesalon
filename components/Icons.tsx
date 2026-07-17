@@ -1,6 +1,16 @@
 import React from "react";
 
 export const Icons = {
+  list: (props: React.SVGProps<SVGSVGElement>) => (
+    <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20" fill="currentColor" {...props}>
+      <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/>
+    </svg>
+  ),
+  grid: (props: React.SVGProps<SVGSVGElement>) => (
+    <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20" fill="currentColor" {...props}>
+      <path d="M120-120v-320h320v320H120Zm400 0v-320h320v320H520Zm-400-400v-320h320v320H120Zm400 0v-320h320v320H520Z"/>
+    </svg>
+  ),
   dashboard: (props: React.SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20" fill="currentColor" {...props}>
       <path d="M520-200v-280h240v280H520Zm-320-360v-200h240v200H200Zm320-40v-200h240v200H520Zm-320 400v-280h240v280H200Z" />
