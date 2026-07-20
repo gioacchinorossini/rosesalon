@@ -16,6 +16,7 @@ export interface ServiceLog {
   staffName: string;
   price: number;
   date: string;
+  isProduct?: boolean;
 }
 
 

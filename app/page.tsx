@@ -693,6 +693,7 @@ export default function Home() {
             setServicesLog={setServicesLog}
             services={services}
             staffs={staffs}
+            paymentTransactions={paymentTransactions}
             saveState={saveState}
           />
         )}

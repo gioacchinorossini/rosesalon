@@ -97,7 +97,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
   setStockLogs,
 }) => {
   // Navigation / POS Sub-tabs
-  const [posSubTab, setPosSubTab] = useState<'new' | 'ongoing'>('new');
+  const [posSubTab, setPosSubTab] = useState<'service' | 'supplies'>('service');
 
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isStylistPopupOpen, setIsStylistPopupOpen] = useState(false);
@@ -123,9 +123,31 @@ export const PosPanel: React.FC<PosPanelProps> = ({
     }
   };
 
-  // Category filters & catalog search
-  const [posCategory, setPosCategory] = useState<'ALL' | 'Hair' | 'Nails' | 'Aesthetic' | 'Other' | 'Products'>('ALL');
+  // Category filters & catalog search (Service Tab)
+  const [posCategory, setPosCategory] = useState<'ALL' | 'Hair' | 'Nails' | 'Aesthetic' | 'Other' | 'Products' | 'Supplies'>('ALL');
   const [posSearch, setPosSearch] = useState("");
+
+  // Search filter for supplies tab
+  const [supplySearch, setSupplySearch] = useState("");
+
+  // Supply Cart State
+  const [supplyCart, setSupplyCart] = useState<Array<{
+    stockId: string;
+    name: string;
+    sku: string;
+    price: number;
+    quantity: number;
+    category: string;
+    onHand: number;
+  }>>([]);
+
+  // Supply client / staff / payment details
+  const [supplyClientName, setSupplyClientName] = useState("Walk-in");
+  const [supplyStaff, setSupplyStaff] = useState(() => staffs.find(s => s.status === 'Active')?.code || "");
+  const [supplyDate, setSupplyDate] = useState(() => new Date().toISOString().split("T")[0]);
+  const [supplyPaymentMethod, setSupplyPaymentMethod] = useState<'Cash' | 'GCash' | 'Bank'>('Cash');
+  const [supplyGcashRef, setSupplyGcashRef] = useState("");
+  const [supplyBankRef, setSupplyBankRef] = useState("");
 
   // Cart & client details
   const [clientName, setClientName] = useState("Walk-in");
@@ -168,7 +190,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
         setDsrStaff(ongoingItem.staffCode);
         setDsrDate(ongoingItem.date);
         updateDsrServices(ongoingItem.services);
-        setPosSubTab('new');
+        setPosSubTab('service');
       }
     }
   }, [activeOngoingId, ongoingServices]);
@@ -206,6 +228,23 @@ export const PosPanel: React.FC<PosPanelProps> = ({
           name: s.name,
           price: s.salesPrice || 0,
           category: 'Retail Product',
+          commissionRate: 0,
+          isProduct: true,
+          sku: s.sku,
+          stockId: s.id,
+          onHand: s.onHand
+        }));
+    }
+
+    if (posCategory === 'Supplies') {
+      return stocks
+        .filter(s => s.category === 'Consumable' || s.category === 'Equipment')
+        .filter(s => s.name.toLowerCase().includes(posSearch.toLowerCase()))
+        .map(s => ({
+          id: `supply-${s.id}`,
+          name: s.name,
+          price: s.salesPrice || 0,
+          category: s.category,
           commissionRate: 0,
           isProduct: true,
           sku: s.sku,
@@ -304,6 +343,52 @@ export const PosPanel: React.FC<PosPanelProps> = ({
     updateDsrServices(dsrServices.filter(s => s.id !== id));
   };
 
+  const handleAddSupplyToCart = (item: StockItem) => {
+    if (item.onHand <= 0) {
+      alert(`"${item.name}" is out of stock.`);
+      return;
+    }
+    setSupplyCart(prev => {
+      const exists = prev.find(ci => ci.stockId === item.id);
+      if (exists) {
+        if (exists.quantity >= item.onHand) {
+          alert(`Cannot add more. Only ${item.onHand} units are available in stock.`);
+          return prev;
+        }
+        return prev.map(ci => ci.stockId === item.id ? { ...ci, quantity: ci.quantity + 1 } : ci);
+      }
+      return [...prev, {
+        stockId: item.id,
+        name: item.name,
+        sku: item.sku,
+        price: item.salesPrice || item.costPrice || 0,
+        quantity: 1,
+        category: item.category,
+        onHand: item.onHand
+      }];
+    });
+  };
+
+  const handleAdjustSupplyQty = (stockId: string, amount: number) => {
+    setSupplyCart(prev => {
+      const exists = prev.find(ci => ci.stockId === stockId);
+      if (!exists) return prev;
+      const newQty = exists.quantity + amount;
+      if (newQty <= 0) {
+        return prev.filter(ci => ci.stockId !== stockId);
+      }
+      if (newQty > exists.onHand) {
+        alert(`Cannot add more. Only ${exists.onHand} units are available in stock.`);
+        return prev;
+      }
+      return prev.map(ci => ci.stockId === stockId ? { ...ci, quantity: newQty } : ci);
+    });
+  };
+
+  const handleRemoveSupplyFromCart = (stockId: string) => {
+    setSupplyCart(prev => prev.filter(ci => ci.stockId !== stockId));
+  };
+
   const handleAdjustDenom = (bill: number, amount: number) => {
     const newVal = {
       ...dsrBills,
@@ -344,7 +429,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
     setDsrDate(item.date);
     updateDsrServices(item.services);
     setActiveOngoingId(item.id);
-    setPosSubTab('new'); // Switch back to checkout ticket tab
+    setPosSubTab('service'); // Switch back to checkout ticket tab
     setIsQueuePopupOpen(false); // Close queue modal popup
   };
 
@@ -514,7 +599,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
       cash: dsrTotalCashCalculated,
       verifiedBy: "MANAGER",
       totalGross: dsrTotalServices + soldSupplies,
-      remarks: `POS: ${staffUpperName}. Mode: ${paymentMethod}. PettyCash: ₱${pettyCash}, Exp: ₱${expenses}, CA: ₱${cashAdvance}, Addon: ₱${addOn}, Cards: ₱${creditDebit}. Over/Short: ₱${dsrOverShort}. Customer: ${clientName}`
+      remarks: `POS: ${staffUpperName}. Mode: ${paymentMethod}. PettyCash: ₱${pettyCash}, Exp: ₱${expenses}, CA: ₱${cashAdvance}, Addon: ₱${addOn}, Cards: ₱${creditDebit}. Supplies: ₱${soldSupplies}. Over/Short: ₱${dsrOverShort}. Customer: ${clientName}`
     };
     const updatedPay = [newTx, ...paymentTransactions];
     setPaymentTransactions(updatedPay);
@@ -527,7 +612,8 @@ export const PosPanel: React.FC<PosPanelProps> = ({
       serviceName: s.service,
       staffName: staffUpperName,
       price: s.price,
-      date: dateStr
+      date: dateStr,
+      isProduct: s.isProduct
     }));
     const updatedServicesLog = [...newLogs, ...servicesLog];
     setServicesLog(updatedServicesLog);
@@ -558,6 +644,168 @@ export const PosPanel: React.FC<PosPanelProps> = ({
     setCashAdvance(0);
     setAddOn(0);
     setSoldSupplies(0);
+  };
+
+  const handleCheckoutSupplies = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (supplyCart.length === 0) return;
+
+    // Validate stock levels
+    for (const item of supplyCart) {
+      const stockItem = stocks.find(s => s.id === item.stockId);
+      if (!stockItem) {
+        alert(`Product "${item.name}" was not found in the database.`);
+        return;
+      }
+      if (stockItem.onHand < item.quantity) {
+        alert(`Not enough stock for "${item.name}". Only ${stockItem.onHand} units left, but you requested ${item.quantity}.`);
+        return;
+      }
+    }
+
+    // Validate payment references
+    if (supplyPaymentMethod !== 'Cash') {
+      const ref = supplyPaymentMethod === 'GCash' ? supplyGcashRef : supplyBankRef;
+      if (!ref.trim()) {
+        alert(`Please specify the ${supplyPaymentMethod} Reference Number.`);
+        return;
+      }
+    }
+
+    const dateStr = supplyDate;
+    const monthIndex = new Date(dateStr).getMonth();
+    const monthsCodes = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+    const monthKey = monthsCodes[monthIndex];
+
+    const currentMonthData = salesSummary[monthKey];
+    if (!currentMonthData) {
+      alert(`Month ${monthKey} is not registered in the 2026 ledger.`);
+      return;
+    }
+
+    const totalAmount = supplyCart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const staffUpperName = supplyStaff.toUpperCase();
+
+    // 1. Update stock levels and create stock logs
+    const stocksCopy = stocks.map(item => {
+      const cartItem = supplyCart.find(ci => ci.stockId === item.id);
+      if (cartItem) {
+        return { ...item, onHand: item.onHand - cartItem.quantity };
+      }
+      return item;
+    });
+
+    const newStockLogs: StockLog[] = supplyCart.map(item => ({
+      id: `sl-pos-supply-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+      date: dateStr,
+      itemId: item.stockId,
+      itemName: item.name,
+      type: "OUT",
+      qty: item.quantity,
+      remarks: `POS Direct Supply checkout for Client: ${supplyClientName || "Walk-in"}`,
+      staff: supplyStaff || "MANAGER"
+    }));
+
+    setStocks(stocksCopy);
+    saveState("rose_stocks", stocksCopy);
+    setStockLogs([...newStockLogs, ...stockLogs]);
+    saveState("rose_stockLogs", [...newStockLogs, ...stockLogs]);
+
+    // 2. Update Sales Summary Ledger
+    let recordsCopy = [...currentMonthData.records];
+    let recordIndex = recordsCopy.findIndex(r => r.date === dateStr);
+
+    if (recordIndex >= 0) {
+      const oldVal = recordsCopy[recordIndex].staffSales[staffUpperName] || 0;
+      recordsCopy[recordIndex].staffSales[staffUpperName] = oldVal + totalAmount;
+      const sumStaff = Object.values(recordsCopy[recordIndex].staffSales).reduce((sum, v) => sum + v, 0);
+      recordsCopy[recordIndex].gross = sumStaff;
+      recordsCopy[recordIndex].netSales = recordsCopy[recordIndex].gross - recordsCopy[recordIndex].exp - recordsCopy[recordIndex].daily - recordsCopy[recordIndex].comi;
+      recordsCopy[recordIndex].roseShare = recordsCopy[recordIndex].netSales;
+    } else {
+      const newRec: DailySalesSummaryRecord = {
+        date: dateStr,
+        staffSales: { [staffUpperName]: totalAmount },
+        gross: totalAmount,
+        exp: 0,
+        daily: 200,
+        comi: 0,
+        netSales: totalAmount - 200,
+        roseShare: totalAmount - 200
+      };
+      recordsCopy.push(newRec);
+    }
+    recordsCopy.sort((a, b) => a.date.localeCompare(b.date));
+
+    const updatedSummary = {
+      ...salesSummary,
+      [monthKey]: {
+        ...currentMonthData,
+        records: recordsCopy
+      }
+    };
+    setSalesSummary(updatedSummary);
+    saveState("rose_salesSummary", updatedSummary);
+
+    // 3. Create Payment Transaction
+    let refNoStr = "";
+    let cashVal = 0;
+    let gcashVal = 0;
+    let bankVal = 0;
+
+    if (supplyPaymentMethod === 'Cash') {
+      refNoStr = `CSH-SUPPLY-${staffUpperName}-${Date.now().toString().slice(-6)}`;
+      cashVal = totalAmount;
+    } else if (supplyPaymentMethod === 'GCash') {
+      refNoStr = `GCASH-SUPPLY-${supplyGcashRef.trim()}`;
+      gcashVal = totalAmount;
+    } else {
+      refNoStr = `BANK-SUPPLY-${supplyBankRef.trim()}`;
+      bankVal = totalAmount;
+    }
+
+    const newTx: PaymentTransaction = {
+      id: (paymentTransactions.length + 1).toString() + "-" + Math.floor(Math.random() * 1000),
+      date: dateStr,
+      refNo: refNoStr,
+      gcash: gcashVal,
+      bank: bankVal,
+      cash: cashVal,
+      verifiedBy: "MANAGER",
+      totalGross: totalAmount,
+      remarks: `POS: ${staffUpperName}. Mode: ${supplyPaymentMethod}. PettyCash: ₱0, Exp: ₱0, CA: ₱0, Addon: ₱0, Cards: ₱0. Supplies: ₱${totalAmount}. Over/Short: ₱0. Customer: ${supplyClientName}`
+    };
+
+    setPaymentTransactions([newTx, ...paymentTransactions]);
+    saveState("rose_paymentTransactions", [newTx, ...paymentTransactions]);
+
+    // 4. Create Services Logs (for Sold Supplies list)
+    const newServicesLogs: ServiceLog[] = [];
+    supplyCart.forEach((item, itemIdx) => {
+      for (let q = 0; q < item.quantity; q++) {
+        newServicesLogs.push({
+          id: `${Date.now()}-supply-${itemIdx}-${q}-${Math.floor(Math.random() * 1000)}`,
+          customerName: supplyClientName || "Walk-in",
+          serviceName: item.name,
+          staffName: staffUpperName,
+          price: item.price,
+          date: dateStr,
+          isProduct: true
+        });
+      }
+    });
+
+    const updatedServicesLog = [...newServicesLogs, ...servicesLog];
+    setServicesLog(updatedServicesLog);
+    saveState("rose_servicesLog", updatedServicesLog);
+
+    alert(`Supply sale successful! Recorded payment, stock reduction, and sales logs.`);
+    
+    // Clear supply sale states
+    setSupplyCart([]);
+    setSupplyClientName("Walk-in");
+    setSupplyGcashRef("");
+    setSupplyBankRef("");
   };
 
   const getStylistName = (code: string) => {
@@ -610,11 +858,50 @@ export const PosPanel: React.FC<PosPanelProps> = ({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      {/* Tab Switcher */}
+      <div className="flex border-b border-outline gap-6 shrink-0 mb-2">
+        <button
+          type="button"
+          onClick={() => setPosSubTab('service')}
+          className={`pb-3 text-xs font-black uppercase tracking-wider transition-all relative cursor-pointer ${
+            posSubTab === 'service'
+              ? 'text-primary'
+              : 'text-on-surface-variant hover:text-on-surface'
+          }`}
+        >
+          <span className="flex items-center gap-1.5">
+            <Icons.cart className="w-4 h-4" />
+            <span>Service Checkout</span>
+          </span>
+          {posSubTab === 'service' && (
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full" />
+          )}
+        </button>
+        <button
+          type="button"
+          onClick={() => setPosSubTab('supplies')}
+          className={`pb-3 text-xs font-black uppercase tracking-wider transition-all relative cursor-pointer ${
+            posSubTab === 'supplies'
+              ? 'text-primary'
+              : 'text-on-surface-variant hover:text-on-surface'
+          }`}
+        >
+          <span className="flex items-center gap-1.5">
+            <Icons.grid className="w-4 h-4" />
+            <span>Sell Supplies</span>
+          </span>
+          {posSubTab === 'supplies' && (
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full" />
+          )}
+        </button>
+      </div>
+
+      {posSubTab === 'service' ? (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* Left Column: Catalog selection board */}
           <div className="lg:col-span-7 flex flex-col gap-4">
             <div className="flex flex-wrap gap-1.5 bg-surface-container-low p-1.5 rounded-xl border border-outline">
-              {(['ALL', 'Hair', 'Nails', 'Aesthetic', 'Other', 'Products'] as const).map(cat => (
+              {(['ALL', 'Hair', 'Nails', 'Aesthetic', 'Other', 'Products', 'Supplies'] as const).map(cat => (
                 <button
                   key={cat}
                   type="button"
@@ -624,7 +911,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                     : 'text-on-surface-variant hover:text-primary hover:bg-white'
                     }`}
                 >
-                  {cat === 'ALL' ? 'All Catalog' : cat === 'Products' ? 'Retail Products' : cat}
+                  {cat === 'ALL' ? 'All Catalog' : cat === 'Products' ? 'Retail Products' : cat === 'Supplies' ? 'Salon Supplies' : cat}
                 </button>
               ))}
             </div>
@@ -634,7 +921,13 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                 <Icons.search className="w-4.5 h-4.5 text-on-surface-variant" />
                 <input
                   type="text"
-                  placeholder={posCategory === 'Products' ? "Search retail products..." : "Search service menu..."}
+                  placeholder={
+                    posCategory === 'Products' 
+                      ? "Search retail products..." 
+                      : posCategory === 'Supplies' 
+                      ? "Search salon supplies..." 
+                      : "Search service menu..."
+                  }
                   value={posSearch}
                   onChange={(e) => setPosSearch(e.target.value)}
                   className="bg-transparent w-full text-xs outline-none border-none text-on-surface"
@@ -689,10 +982,10 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                         service.onHand === 0 
                           ? 'bg-red-50 text-red-650' 
                           : service.onHand <= 5 
-                            ? 'bg-amber-50 text-amber-800' 
+                            ? 'bg-amber-50 text-amber-800 animate-pulse border border-amber-300' 
                             : 'bg-emerald-50 text-emerald-700'
                       }`}>
-                        {service.onHand === 0 ? 'Out of Stock' : `${service.onHand} in stock`}
+                        {service.onHand === 0 ? 'Out of Stock' : service.onHand <= 5 ? `Low Stock: ${service.onHand}` : `${service.onHand} in stock`}
                       </span>
                     ) : (
                       <span className="text-[9px] font-bold text-on-surface-variant font-mono">
@@ -807,7 +1100,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                       <span className="truncate">
                         {staffs.find(s => s.code === dsrStaff)?.name || dsrStaff} ({dsrStaff})
                       </span>
-                      <svg xmlns="http://www.w3.org/2050/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5 text-on-surface-variant shrink-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5 text-on-surface-variant shrink-0">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                       </svg>
                     </button>
@@ -839,7 +1132,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                         <button
                           type="button"
                           onClick={() => handleDeleteDsrService(s.id)}
-                          className="text-red-500 hover:text-red-750 font-bold cursor-pointer text-sm px-0.5"
+                          className="text-red-500 hover:text-red-755 font-bold cursor-pointer text-sm px-0.5"
                         >
                           ×
                         </button>
@@ -1064,6 +1357,228 @@ export const PosPanel: React.FC<PosPanelProps> = ({
             </form>
           </div>
         </div>
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          {/* Left Column: Supplies Inventory list */}
+          <div className="lg:col-span-7 flex flex-col gap-4">
+            <div className="flex bg-surface-container-low p-1.5 rounded-xl border border-outline items-center justify-between">
+              <span className="text-xs font-bold text-on-surface px-2">Supplies & Retail Catalog</span>
+              <span className="text-[10px] text-on-surface-variant font-mono bg-white px-2 py-0.5 border border-outline rounded-lg">
+                {stocks.filter(s => s.category === 'Consumable' || s.category === 'Equipment' || s.category === 'Retail Product').length} items available
+              </span>
+            </div>
+
+            <div className="bg-surface-container-low border border-outline rounded-xl px-4 py-2.5 flex items-center gap-3">
+              <Icons.search className="w-4.5 h-4.5 text-on-surface-variant" />
+              <input
+                type="text"
+                placeholder="Search stock catalog..."
+                value={supplySearch}
+                onChange={(e) => setSupplySearch(e.target.value)}
+                className="bg-transparent w-full text-xs outline-none border-none text-on-surface"
+              />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[460px] overflow-y-auto pr-1">
+              {stocks
+                .filter(s => s.category === 'Consumable' || s.category === 'Equipment' || s.category === 'Retail Product')
+                .filter(s => s.name.toLowerCase().includes(supplySearch.toLowerCase()) || s.sku.toLowerCase().includes(supplySearch.toLowerCase()))
+                .map(item => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => handleAddSupplyToCart(item)}
+                    className="bg-white border border-outline hover:border-primary/50 hover:bg-primary-container/10 p-4 rounded-xl flex flex-col justify-between text-left transition h-28 group relative shadow-sm hover:shadow cursor-pointer"
+                  >
+                    <div className="flex flex-col gap-1">
+                      <span className={`text-[9px] uppercase font-bold px-2 py-0.5 rounded self-start ${
+                        item.category === 'Retail Product' ? 'bg-amber-50 text-amber-800' : 'bg-blue-50 text-blue-800'
+                      }`}>
+                        {item.category}
+                      </span>
+                      <h4 className="font-bold text-xs text-on-surface mt-1 group-hover:text-primary transition">{item.name}</h4>
+                      <span className="text-[9px] text-on-surface-variant font-mono">SKU: {item.sku || 'N/A'}</span>
+                    </div>
+                    <div className="flex items-end justify-between w-full border-t border-outline/10 pt-2 mt-2">
+                      <span className="text-sm font-black text-on-surface">₱{(item.salesPrice || item.costPrice || 0).toLocaleString()}</span>
+                      <span className={`text-[9px] font-bold font-mono px-2 py-0.5 rounded ${
+                        item.onHand === 0 
+                          ? 'bg-red-50 text-red-650' 
+                          : item.onHand <= 5 
+                            ? 'bg-amber-50 text-amber-800 animate-pulse border border-amber-300' 
+                            : 'bg-emerald-50 text-emerald-700'
+                      }`}>
+                        {item.onHand === 0 ? 'Out of Stock' : item.onHand <= 5 ? `Low Stock: ${item.onHand}` : `${item.onHand} units`}
+                      </span>
+                    </div>
+                  </button>
+                ))}
+            </div>
+          </div>
+
+          {/* Right Column: Direct Supply Checkout Form */}
+          <div className="lg:col-span-5 flex flex-col gap-4">
+            <form onSubmit={handleCheckoutSupplies} className="bg-surface border border-outline rounded-2xl p-5 flex flex-col shadow-sm lg:h-[calc(100vh-160px)] min-h-[550px] overflow-hidden gap-0">
+              <div className="flex justify-between items-center border-b border-outline/20 pb-3 shrink-0">
+                <h3 className="font-bold text-sm text-on-surface flex items-center gap-1.5">
+                  <Icons.grid className="w-4.5 h-4.5 text-primary" /> Direct Supply Checkout
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => setSupplyCart([])}
+                  className="text-xs text-red-500 hover:text-red-750 font-bold cursor-pointer"
+                >
+                  Clear All
+                </button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto py-4 flex flex-col gap-4 pr-1">
+                {/* Sale Details */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[10px] font-bold text-on-surface-variant">Date of Sale</label>
+                    <input
+                      type="date"
+                      value={supplyDate}
+                      onChange={(e) => setSupplyDate(e.target.value)}
+                      className="bg-white border border-outline px-3 py-2 rounded-lg text-xs font-semibold outline-none text-on-surface"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[10px] font-bold text-on-surface-variant">Seller (Staff)</label>
+                    <select
+                      value={supplyStaff}
+                      onChange={(e) => setSupplyStaff(e.target.value)}
+                      className="bg-white border border-outline px-2 py-2 rounded-lg text-xs font-bold text-on-surface outline-none cursor-pointer h-[34px]"
+                    >
+                      {staffs.filter(s => s.status === 'Active').map(s => (
+                        <option key={s.code} value={s.code}>
+                          {s.name} ({s.code})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[10px] font-bold text-on-surface-variant">Client Name</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Walk-in client"
+                      value={supplyClientName}
+                      onChange={(e) => setSupplyClientName(e.target.value)}
+                      className="bg-white border border-outline px-3 py-2 rounded-lg text-xs font-semibold outline-none text-on-surface"
+                    />
+                  </div>
+                </div>
+
+                {/* Supply Cart List */}
+                <div className="max-h-[160px] overflow-y-auto flex flex-col gap-2 border border-outline/20 p-2 rounded-xl bg-surface-container-low min-h-24 content-start">
+                  {supplyCart.map((item) => (
+                    <div key={item.stockId} className="flex justify-between items-center bg-white p-2.5 rounded-lg border border-outline/25 text-[11px] h-12">
+                      <div className="flex-1 pr-1 min-w-0">
+                        <span className="font-semibold text-on-surface block truncate" title={item.name}>{item.name}</span>
+                        <span className="text-[9px] text-on-surface-variant block font-mono leading-none mt-0.5">
+                          {item.category} • SKU: {item.sku || 'N/A'}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-3 shrink-0">
+                        {/* Quantity adjust buttons */}
+                        <div className="flex items-center gap-1.5 bg-surface-container-low px-1.5 py-0.5 rounded-lg border border-outline/20">
+                          <button
+                            type="button"
+                            onClick={() => handleAdjustSupplyQty(item.stockId, -1)}
+                            className="w-4 h-4 text-xs font-black flex items-center justify-center hover:text-primary transition"
+                          >
+                            -
+                          </button>
+                          <span className="text-xs font-bold font-mono min-w-3 text-center">{item.quantity}</span>
+                          <button
+                            type="button"
+                            onClick={() => handleAdjustSupplyQty(item.stockId, 1)}
+                            className="w-4 h-4 text-xs font-black flex items-center justify-center hover:text-primary transition"
+                          >
+                            +
+                          </button>
+                        </div>
+                        <span className="font-bold text-on-surface min-w-[50px] text-right">₱{(item.price * item.quantity).toLocaleString()}</span>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveSupplyFromCart(item.stockId)}
+                          className="text-red-500 hover:text-red-750 font-bold cursor-pointer text-sm px-0.5"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                  {supplyCart.length === 0 && (
+                    <div className="flex-1 flex flex-col items-center justify-center text-xs text-on-surface-variant opacity-60 h-24 text-center">
+                      <span>Supply cart is empty.</span>
+                      <span className="text-[10px] mt-0.5">Click catalog supplies on the left to add items.</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Subtotal */}
+                <div className="border-t border-outline/25 pt-3 flex justify-between items-center font-bold text-xs">
+                  <span className="text-on-surface-variant">Total Cart Value:</span>
+                  <span className="text-base font-black text-primary">
+                    ₱{supplyCart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toLocaleString()}
+                  </span>
+                </div>
+
+                {/* Payment Method Selector */}
+                <div className="border-t border-outline/25 pt-3">
+                  <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mb-2 block">Payment Method</label>
+                  <div className="grid grid-cols-3 gap-2 bg-surface-container-low p-1 rounded-xl border border-outline/30">
+                    {(['Cash', 'GCash', 'Bank'] as const).map(method => (
+                      <button
+                        key={method}
+                        type="button"
+                        onClick={() => setSupplyPaymentMethod(method)}
+                        className={`py-2 rounded-lg font-bold text-[10px] transition-all cursor-pointer ${supplyPaymentMethod === method
+                          ? 'bg-primary text-white shadow-sm'
+                          : 'text-on-surface-variant hover:text-primary hover:bg-white'
+                          }`}
+                      >
+                        {method}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Reference Number for Digital Payments */}
+                {supplyPaymentMethod !== 'Cash' && (
+                  <div className="border-t border-outline/25 pt-3 animate-fadeIn flex flex-col gap-1.5">
+                    <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">{supplyPaymentMethod} Reference Number</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. 10293847"
+                      value={supplyPaymentMethod === 'GCash' ? supplyGcashRef : supplyBankRef}
+                      onChange={(e) => {
+                        if (supplyPaymentMethod === 'GCash') setSupplyGcashRef(e.target.value);
+                        else setBankRef(e.target.value);
+                      }}
+                      className="bg-white border border-outline px-3.5 py-2.5 rounded-xl outline-none focus:border-primary text-sm font-semibold transition text-on-surface font-mono"
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* Checkout actions */}
+              <div className="flex gap-2.5 mt-auto border-t border-outline/20 pt-4 shrink-0">
+                <button
+                  type="submit"
+                  disabled={supplyCart.length === 0}
+                  className="w-full bg-primary disabled:bg-zinc-350 disabled:cursor-not-allowed hover:bg-primary-hover text-white py-3.5 rounded-xl text-xs font-bold transition shadow-md hover:shadow-lg cursor-pointer flex items-center justify-center gap-1.5"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-19.5 0a2.25 2.25 0 002.25 2.25h15a2.25 2.25 0 002.25-2.25m-19.5 0v3A2.25 2.25 0 004.5 19.5h15a2.25 2.25 0 002.25-2.25v-3" /></svg>
+                  <span>Finalize Supply Sale</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Stylist Selector Popup Modal */}
       {isStylistPopupOpen && (

@@ -48,7 +48,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'queue', label: 'Queue Board', icon: Icons.list },
     { id: 'pos', label: 'Checkout Counter', icon: Icons.cart },
     // { id: 'bookings', label: 'Bookings', icon: Icons.calendar },
-    // { id: 'servicesLog', label: 'Services Log', icon: Icons.pos },
+    { id: 'servicesLog', label: 'Daily Sales Log', icon: Icons.pos },
     { id: 'salesLedger', label: 'Sales Logs', icon: Icons.salesLedger },
     {
       id: 'staffs_group',
