@@ -150,15 +150,15 @@ export const PosPanel: React.FC<PosPanelProps> = ({
   }>>([]);
 
   // Supply client / staff / payment details
-  const [supplyClientName, setSupplyClientName] = useState("Walk-in");
+  const [supplyClientName, setSupplyClientName] = useState("");
   const [supplyStaff, setSupplyStaff] = useState(() => staffs.find(s => s.status === 'Active')?.code || "");
   const [supplyDate, setSupplyDate] = useState(() => new Date().toISOString().split("T")[0]);
-  const [supplyPaymentMethod, setSupplyPaymentMethod] = useState<'Cash' | 'GCash' | 'Bank'>('Cash');
+  const [supplyPaymentMethod, setSupplyPaymentMethod] = useState<'Cash' | 'GCash' | 'Bank' | null>(null);
   const [supplyGcashRef, setSupplyGcashRef] = useState("");
   const [supplyBankRef, setSupplyBankRef] = useState("");
 
   // Cart & client details
-  const [clientName, setClientName] = useState("Walk-in");
+  const [clientName, setClientName] = useState("");
   const [clientMobile, setClientMobile] = useState("");
   const [dsrDate, setDsrDate] = useState(() => new Date().toISOString().split("T")[0]);
   const [dsrStaff, setDsrStaff] = useState(() => staffs.find(s => s.status === 'Active')?.code || "");
@@ -705,8 +705,18 @@ export const PosPanel: React.FC<PosPanelProps> = ({
       }
     }
 
-    // Validate payment references
-    if (supplyPaymentMethod !== 'Cash') {
+    // Validate payment method selected
+    if (!supplyPaymentMethod) {
+      alert("Please select a payment method.");
+      return;
+    }
+    if (supplyPaymentMethod === 'Cash') {
+      const supplyTotal = supplyCart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      if (dsrTotalCashCalculated < supplyTotal) {
+        alert(`Insufficient cash. The bill is ₱${supplyTotal.toLocaleString()}, but only ₱${dsrTotalCashCalculated.toLocaleString()} was counted in the drawer cash calculator.`);
+        return;
+      }
+    } else {
       const ref = supplyPaymentMethod === 'GCash' ? supplyGcashRef : supplyBankRef;
       if (!ref.trim()) {
         alert(`Please specify the ${supplyPaymentMethod} Reference Number.`);
@@ -848,7 +858,9 @@ export const PosPanel: React.FC<PosPanelProps> = ({
     setSupplyClientName("Walk-in");
     setSupplyGcashRef("");
     setSupplyBankRef("");
-    setSupplyCashTendered("");
+    setSupplyPaymentMethod(null);
+    // Clear cash bills so drawer is fresh for next transaction
+    updateDsrBills({ 1000: 0, 500: 0, 200: 0, 100: 0, 50: 0, 20: 0, 10: 0, 5: 0, 1: 0 });
   };
 
   const getStylistName = (code: string) => {
@@ -1149,7 +1161,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                     <label className="text-[10px] font-bold text-on-surface-variant">Client Name</label>
                     <input
                       type="text"
-                      placeholder="e.g. Walk-in client"
+                      placeholder="Enter client name..."
                       value={clientName}
                       onChange={(e) => setClientName(e.target.value)}
                       className="bg-white border border-outline px-3 py-2 rounded-lg text-xs font-semibold outline-none text-on-surface"
@@ -1394,50 +1406,34 @@ export const PosPanel: React.FC<PosPanelProps> = ({
             <form onSubmit={handleCheckoutSupplies} className="bg-surface border border-outline rounded-2xl p-5 flex flex-col shadow-sm lg:h-[calc(100vh-160px)] min-h-[550px] overflow-hidden gap-0">
               <div className="flex justify-between items-center border-b border-outline/20 pb-3 shrink-0">
                 <h3 className="font-bold text-sm text-on-surface flex items-center gap-1.5">
-                  <Icons.grid className="w-4.5 h-4.5 text-primary" /> Direct Supply Checkout
+                  <Icons.grid className="w-4.5 h-4.5 text-primary" /> Supply Checkout
                 </h3>
                 <button
                   type="button"
                   onClick={() => setSupplyCart([])}
-                  className="text-xs text-red-500 hover:text-red-750 font-bold cursor-pointer"
+                  className="text-xs text-red-500 hover:text-red-700 font-bold cursor-pointer"
                 >
                   Clear All
                 </button>
               </div>
 
               <div className="flex-1 overflow-y-auto py-4 flex flex-col gap-4 pr-1">
-                {/* Sale Details */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div className="flex flex-col gap-1">
-                    <label className="text-[10px] font-bold text-on-surface-variant">Seller (Staff)</label>
-                    <select
-                      value={supplyStaff}
-                      onChange={(e) => setSupplyStaff(e.target.value)}
-                      className="bg-white border border-outline px-2 py-2 rounded-lg text-xs font-bold text-on-surface outline-none cursor-pointer h-[34px]"
-                    >
-                      {staffs.filter(s => s.status === 'Active').map(s => (
-                        <option key={s.code} value={s.code}>
-                          {s.name} ({s.code})
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <label className="text-[10px] font-bold text-on-surface-variant">Client Name</label>
-                    <input
-                      type="text"
-                      placeholder="e.g. Walk-in client"
-                      value={supplyClientName}
-                      onChange={(e) => setSupplyClientName(e.target.value)}
-                      className="bg-white border border-outline px-3 py-2 rounded-lg text-xs font-semibold outline-none text-on-surface"
-                    />
-                  </div>
+                {/* Client Name */}
+                <div className="flex flex-col gap-1">
+                  <label className="text-[10px] font-bold text-on-surface-variant">Client Name</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Walk-in client"
+                    value={supplyClientName}
+                    onChange={(e) => setSupplyClientName(e.target.value)}
+                    className="bg-white border border-outline px-3 py-2 rounded-lg text-xs font-semibold outline-none text-on-surface"
+                  />
                 </div>
 
                 {/* Supply Cart List */}
                 <div className="flex flex-col gap-2 border border-outline/20 p-2 rounded-xl bg-surface-container-low content-start">
                   {supplyCart.map((item) => (
-                    <div key={item.stockId} className="flex justify-between items-center bg-white p-2.5 rounded-lg border border-outline/25 text-[11px] h-12">
+                    <div key={item.stockId} className="flex justify-between items-center bg-white p-2 py-1.5 rounded-lg border border-outline/25 text-[11px] h-11">
                       <div className="flex-1 pr-1 min-w-0">
                         <span className="font-semibold text-on-surface block truncate" title={item.name}>{item.name}</span>
                         <span className="text-[9px] text-on-surface-variant block font-mono leading-none mt-0.5">
@@ -1445,115 +1441,149 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                         </span>
                       </div>
                       <div className="flex items-center gap-3 shrink-0">
-                        {/* Quantity adjust buttons */}
                         <div className="flex items-center gap-1.5 bg-surface-container-low px-1.5 py-0.5 rounded-lg border border-outline/20">
                           <button
                             type="button"
                             onClick={() => handleAdjustSupplyQty(item.stockId, -1)}
                             className="w-4 h-4 text-xs font-black flex items-center justify-center hover:text-primary transition"
-                          >
-                            -
-                          </button>
+                          >-</button>
                           <span className="text-xs font-bold font-mono min-w-3 text-center">{item.quantity}</span>
                           <button
                             type="button"
                             onClick={() => handleAdjustSupplyQty(item.stockId, 1)}
                             className="w-4 h-4 text-xs font-black flex items-center justify-center hover:text-primary transition"
-                          >
-                            +
-                          </button>
+                          >+</button>
                         </div>
                         <span className="font-bold text-on-surface min-w-[50px] text-right">₱{(item.price * item.quantity).toLocaleString()}</span>
                         <button
                           type="button"
                           onClick={() => handleRemoveSupplyFromCart(item.stockId)}
-                          className="text-red-500 hover:text-red-750 font-bold cursor-pointer text-sm px-0.5"
-                        >
-                          ×
-                        </button>
+                          className="text-red-500 hover:text-red-700 font-bold cursor-pointer text-sm px-0.5"
+                        >×</button>
                       </div>
                     </div>
                   ))}
                   {supplyCart.length === 0 && (
-                    <div className="flex-1 flex flex-col items-center justify-center text-xs text-on-surface-variant opacity-60 h-24 text-center">
-                      <span>Supply cart is empty.</span>
-                      <span className="text-[10px] mt-0.5">Click catalog supplies on the left to add items.</span>
+                    <div className="col-span-2 flex items-center justify-center text-xs text-on-surface-variant opacity-60 h-20 text-center">
+                      Cart is empty.<br />Click catalog supplies on the left.
                     </div>
                   )}
                 </div>
 
-                {/* Subtotal */}
-                <div className="border-t border-outline/25 pt-3 flex justify-between items-center font-bold text-xs">
-                  <span className="text-on-surface-variant">Total Cart Value:</span>
-                  <span className="text-base font-black text-primary">
-                    ₱{supplyCart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toLocaleString()}
-                  </span>
-                </div>
-
-                {/* Cash Tendered & Change */}
+                {/* Drawer Cash Calculator — shown when Cash is selected */}
                 {supplyPaymentMethod === 'Cash' && (
-                  <div className="flex flex-col gap-2 border-t border-outline/10 pt-2.5 animate-fadeIn">
-                    <div className="flex justify-between items-center text-xs font-bold">
-                      <span className="text-on-surface-variant">Cash Paid:</span>
-                      <div className="flex items-center gap-1 bg-white border border-outline rounded-lg px-2 py-1 w-28 shadow-2xs">
-                        <span className="text-on-surface-variant text-[11px] font-bold">₱</span>
-                        <input
-                          type="text"
-                          inputMode="numeric"
-                          pattern="[0-9]*"
-                          placeholder="0"
-                          value={supplyCashTendered}
-                          onChange={(e) => {
-                            const val = e.target.value.replace(/[^0-9]/g, "");
-                            setSupplyCashTendered(val);
-                          }}
-                          className="bg-transparent w-full text-right text-xs font-mono font-bold outline-none text-on-surface"
-                        />
-                      </div>
+                  <div className="border-t border-outline/25 pt-3 animate-fadeIn">
+                    <div className="flex items-center gap-2 mb-2.5">
+                      <button
+                        type="button"
+                        onClick={() => setSupplyPaymentMethod(null)}
+                        className="px-2 py-1 rounded-lg hover:bg-surface-container-high text-[10px] font-bold text-primary transition cursor-pointer flex items-center gap-1 border border-outline/45 bg-white shadow-3xs"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-3 h-3">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                        </svg>
+                        <span>Back</span>
+                      </button>
+                      <h4 className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Drawer Cash Calculator</h4>
                     </div>
-                    <div className="flex justify-between items-center text-xs font-bold">
-                      <span className="text-on-surface-variant">Change:</span>
-                      <span className="font-mono text-sm font-black text-emerald-700">
-                        ₱{Math.max(0, (Number(supplyCashTendered) || 0) - supplyCart.reduce((sum, item) => sum + (item.price * item.quantity), 0)).toLocaleString()}
-                      </span>
+                    <div className="grid grid-cols-3 gap-2">
+                      {[1000, 500, 200, 100, 50, 20, 10, 5, 1].map(bill => (
+                        <div key={bill} className="flex flex-col items-center justify-between bg-surface border border-outline p-1.5 rounded-lg text-center gap-1 shadow-sm">
+                          <span className="text-[10px] font-black text-on-surface">₱{bill}</span>
+                          <div className="flex items-center gap-1.5">
+                            <button
+                              type="button"
+                              onClick={() => handleAdjustDenom(bill, -1)}
+                              className="w-5 h-5 rounded-md bg-surface-container hover:bg-surface-container-high text-xs font-bold flex items-center justify-center transition cursor-pointer"
+                            >-</button>
+                            <span className="text-xs font-bold font-mono min-w-4">{dsrBills[bill] || 0}</span>
+                            <button
+                              type="button"
+                              onClick={() => handleAdjustDenom(bill, 1)}
+                              className="w-5 h-5 rounded-md bg-surface-container hover:bg-surface-container-high text-xs font-bold flex items-center justify-center transition cursor-pointer"
+                            >+</button>
+                          </div>
+                          <span className="text-[9px] text-on-surface-variant font-mono mt-0.5">₱{(bill * (dsrBills[bill] || 0)).toLocaleString()}</span>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 )}
 
-                {/* Payment Method Selector */}
-                <div className="border-t border-outline/25 pt-3">
-                  <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mb-2 block">Payment Method</label>
-                  <div className="grid grid-cols-3 gap-2 bg-surface-container-low p-1 rounded-xl border border-outline/30">
-                    {(['Cash', 'GCash', 'Bank'] as const).map(method => (
-                      <button
-                        key={method}
-                        type="button"
-                        onClick={() => setSupplyPaymentMethod(method)}
-                        className={`py-2 rounded-lg font-bold text-[10px] transition-all cursor-pointer ${supplyPaymentMethod === method
-                          ? 'bg-primary text-white shadow-sm'
-                          : 'text-on-surface-variant hover:text-primary hover:bg-white'
-                          }`}
-                      >
-                        {method}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+                {/* Cash Summary — below drawer calculator */}
+                {supplyPaymentMethod === 'Cash' && (() => {
+                  const supplyTotal = supplyCart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                  return (
+                    <div className="flex flex-col gap-2 border-t border-outline/10 animate-fadeIn">
+                      <div className="border-t border-outline/25 pt-3 flex justify-between items-center font-bold text-xs">
+                        <span className="text-on-surface-variant">Total Bill Amount:</span>
+                        <span className="text-base font-black text-primary">₱{supplyTotal.toLocaleString()}</span>
+                      </div>
+                      <div className="flex justify-between items-center text-xs font-bold">
+                        <span className="text-on-surface-variant">Cash Paid:</span>
+                        <span className="font-mono text-sm font-black text-on-surface">₱{dsrTotalCashCalculated.toLocaleString()}</span>
+                      </div>
+                      <div className="flex justify-between items-center text-xs font-bold">
+                        <span className="text-on-surface-variant">Change:</span>
+                        <span className="font-mono text-sm font-black text-emerald-700">₱{Math.max(0, dsrTotalCashCalculated - supplyTotal).toLocaleString()}</span>
+                      </div>
+                    </div>
+                  );
+                })()}
 
-                {/* Reference Number for Digital Payments */}
+                {/* Payment Method Selector — shown when no method selected yet */}
                 {supplyPaymentMethod !== 'Cash' && (
-                  <div className="border-t border-outline/25 pt-3 animate-fadeIn flex flex-col gap-1.5">
-                    <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">{supplyPaymentMethod} Reference Number</label>
+                  <div className="border-t border-outline/25 pt-3">
+                    <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mb-2 block">Payment Method</label>
+                    <div className="grid grid-cols-3 gap-2 bg-surface-container-low p-1 rounded-xl border border-outline/30">
+                      {(['Cash', 'GCash', 'Bank'] as const).map(method => (
+                        <button
+                          key={method}
+                          type="button"
+                          onClick={() => setSupplyPaymentMethod(method)}
+                          className={`py-2 rounded-lg font-bold text-[10px] transition-all cursor-pointer ${
+                            supplyPaymentMethod === method
+                              ? 'bg-primary text-white shadow-sm'
+                              : 'text-on-surface-variant hover:text-primary hover:bg-white'
+                          }`}
+                        >
+                          {method}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Digital payment reference input */}
+                {(supplyPaymentMethod === 'GCash' || supplyPaymentMethod === 'Bank') && (
+                  <div className="border-t border-outline/25 pt-3 animate-fadeIn flex flex-col gap-2.5">
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <button
+                        type="button"
+                        onClick={() => setSupplyPaymentMethod(null)}
+                        className="px-2 py-1 rounded-lg hover:bg-surface-container-high text-[10px] font-bold text-primary transition cursor-pointer flex items-center gap-1 border border-outline/45 bg-white shadow-3xs"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-3 h-3">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                        </svg>
+                        <span>Back</span>
+                      </button>
+                      <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">{supplyPaymentMethod} Reference Number</label>
+                    </div>
                     <input
                       type="text"
                       placeholder="e.g. 10293847"
                       value={supplyPaymentMethod === 'GCash' ? supplyGcashRef : supplyBankRef}
                       onChange={(e) => {
                         if (supplyPaymentMethod === 'GCash') setSupplyGcashRef(e.target.value);
-                        else setBankRef(e.target.value);
+                        else setSupplyBankRef(e.target.value);
                       }}
                       className="bg-white border border-outline px-3.5 py-2.5 rounded-xl outline-none focus:border-primary text-sm font-semibold transition text-on-surface font-mono"
                     />
+                    <div className="border-t border-outline/25 pt-3 flex justify-between items-center font-bold text-xs">
+                      <span className="text-on-surface-variant">Total Bill Amount:</span>
+                      <span className="text-base font-black text-primary">₱{supplyCart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toLocaleString()}</span>
+                    </div>
                   </div>
                 )}
               </div>
@@ -1563,10 +1593,10 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                 <button
                   type="submit"
                   disabled={supplyCart.length === 0}
-                  className="w-full bg-primary disabled:bg-zinc-350 disabled:cursor-not-allowed hover:bg-primary-hover text-white py-3.5 rounded-xl text-xs font-bold transition shadow-md hover:shadow-lg cursor-pointer flex items-center justify-center gap-1.5"
+                  className="w-full bg-primary disabled:bg-zinc-350 disabled:cursor-not-allowed hover:bg-primary-hover text-white py-3 rounded-xl text-xs font-bold transition shadow-md hover:shadow-lg cursor-pointer flex items-center justify-center gap-1.5"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-19.5 0a2.25 2.25 0 002.25 2.25h15a2.25 2.25 0 002.25-2.25m-19.5 0v3A2.25 2.25 0 004.5 19.5h15a2.25 2.25 0 002.25-2.25v-3" /></svg>
-                  <span>Finalize Supply Sale</span>
+                  <span>Checkout &amp; Pay</span>
                 </button>
               </div>
             </form>
