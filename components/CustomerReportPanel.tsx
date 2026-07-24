@@ -111,7 +111,7 @@ export const CustomerReportPanel: React.FC<CustomerReportPanelProps> = ({
   };
 
   const handleDelete = (id: string) => {
-    if (confirm("Delete this customer pamper day record?")) {
+    if (confirm("Delete this customer record?")) {
       const updated = customerPamper.filter(c => c.id !== id);
       setCustomerPamper(updated);
       saveState("rose_customerPamper", updated);
@@ -127,8 +127,8 @@ export const CustomerReportPanel: React.FC<CustomerReportPanelProps> = ({
       {/* Header Info */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 print:hidden">
         <div>
-          <h2 className="text-xl font-bold text-on-surface">Customer Report</h2>
-          <p className="text-xs text-on-surface-variant">Analyze customer registrations and chosen packages</p>
+          <h2 className="text-xl font-bold text-on-surface">Customers</h2>
+          <p className="text-xs text-on-surface-variant">View client history and services received</p>
         </div>
 
         <div className="flex gap-2.5">
@@ -147,15 +147,15 @@ export const CustomerReportPanel: React.FC<CustomerReportPanelProps> = ({
             className="flex items-center gap-2 bg-primary hover:bg-primary-hover text-white px-4 py-2.5 rounded-xl text-xs font-bold transition shadow-md cursor-pointer"
           >
             <Icons.add className="w-4 h-4" />
-            Register Customer
+            Add Customer
           </button>
         </div>
       </div>
 
       {/* Printable Sheet Header - Displays ONLY during printing */}
       <div className="hidden print:flex flex-col items-center text-center gap-1 border-b border-zinc-200 pb-4 mb-6">
-        <h1 className="text-2xl font-black tracking-wider text-zinc-950">CUSTOMER REPORT</h1>
-        <p className="text-[10px] font-bold text-zinc-650 uppercase tracking-widest">Customer Monitoring Log Sheet</p>
+        <h1 className="text-2xl font-black tracking-wider text-zinc-950">CUSTOMERS</h1>
+        <p className="text-[10px] font-bold text-zinc-650 uppercase tracking-widest">Customer Visit Log</p>
         {selectedDate && (
           <p className="text-xs font-bold text-zinc-700 mt-1">Date: {new Date(selectedDate).toLocaleDateString('en-US', { dateStyle: 'long' })}</p>
         )}
@@ -168,8 +168,8 @@ export const CustomerReportPanel: React.FC<CustomerReportPanelProps> = ({
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.109A11.386 11.386 0 0110.089 18H8.25c-.18 0-.357-.023-.526-.068a11.008 11.008 0 01-.474-2.868L12 14M12 14a3 3 0 11-6 0M12 14L9 9m3 5l3-5" /></svg>
           </div>
           <div>
-            <span className="text-[10px] text-on-surface-variant font-bold uppercase tracking-wider block">Total Pampered</span>
-            <span className="text-xl font-bold font-mono text-on-surface mt-0.5 block">{totalReservations} Customers</span>
+            <span className="text-[10px] text-on-surface-variant font-bold uppercase tracking-wider block">Total Customers</span>
+            <span className="text-xl font-bold font-mono text-on-surface mt-0.5 block">{totalReservations} Clients</span>
           </div>
         </div>
 
@@ -178,7 +178,7 @@ export const CustomerReportPanel: React.FC<CustomerReportPanelProps> = ({
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M9.53 16.122l.18-.362a6.03 6.03 0 012.579-2.58l.362-.181m0 0a3 3 0 114.243-4.243 3 3 0 01-4.243 4.243zM9.53 16.122a9.75 9.75 0 01-2.903-2.903m2.903 2.903L5.2 20.09a.75.75 0 01-1.092-1.092l3.968-3.968m1.264-1.264a9.75 9.75 0 01-2.903-2.903m2.903 2.903v3.086M6.627 13.22a9.75 9.75 0 00-2.903 2.903m2.903-2.903h-3.086" /></svg>
           </div>
           <div>
-            <span className="text-[10px] text-on-surface-variant font-bold uppercase tracking-wider block">Top Package Choice</span>
+            <span className="text-[10px] text-on-surface-variant font-bold uppercase tracking-wider block">Most Popular Service</span>
             <span className="text-xs font-bold text-on-surface mt-1 block truncate max-w-sm sm:max-w-lg md:max-w-xl">{popularPackage}</span>
           </div>
         </div>
@@ -195,7 +195,7 @@ export const CustomerReportPanel: React.FC<CustomerReportPanelProps> = ({
               <Icons.search className="w-4 h-4 text-on-surface-variant" />
               <input
                 type="text"
-                placeholder="Search name or package..."
+                placeholder="Search name or service..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="bg-transparent w-full text-xs outline-none border-none text-on-surface"
@@ -210,7 +210,7 @@ export const CustomerReportPanel: React.FC<CustomerReportPanelProps> = ({
                 onChange={(e) => setSelectedDate(e.target.value)}
                 className="bg-transparent text-xs font-bold outline-none border-none text-on-surface w-full cursor-pointer"
               >
-                <option value="">All Pamper Days</option>
+                <option value="">All Days</option>
                 {uniqueDates.map(d => (
                   <option key={d} value={d}>{d}</option>
                 ))}
@@ -231,10 +231,10 @@ export const CustomerReportPanel: React.FC<CustomerReportPanelProps> = ({
               <tr className="bg-surface-container-low text-on-surface-variant font-bold border-b border-outline uppercase tracking-wider text-[10px]">
                 <th className="p-3.5 pl-6 w-12 text-center">#</th>
                 <th className="p-3.5">NAME</th>
-                <th className="p-3.5">Mobile #</th>
-                <th className="p-3.5">Pamper choose</th>
-                <th className="p-3.5 pr-6 print:w-32">Date</th>
-                <th className="p-3.5 pr-6 text-center print:hidden">Actions</th>
+                <th className="p-3.5">PHONE</th>
+                <th className="p-3.5">SERVICE RECEIVED</th>
+                <th className="p-3.5 pr-6 print:w-32">DATE</th>
+                <th className="p-3.5 pr-6 text-center print:hidden">ACTIONS</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-outline/10">
@@ -278,7 +278,7 @@ export const CustomerReportPanel: React.FC<CustomerReportPanelProps> = ({
                     <div className="flex flex-col items-center gap-2">
                       <Icons.calendar className="w-8 h-8 opacity-45" />
                       <p className="font-bold text-sm">No records found matching filters</p>
-                      <p className="text-xs opacity-75">Click "Register Customer" to insert a new pamper reservation</p>
+                      <p className="text-xs opacity-75">Click "Add Customer" to insert a new client visit</p>
                     </div>
                   </td>
                 </tr>
@@ -294,10 +294,10 @@ export const CustomerReportPanel: React.FC<CustomerReportPanelProps> = ({
           <form onSubmit={handleSave} className="bg-surface border border-outline rounded-2xl p-6 w-full max-w-sm flex flex-col gap-4 shadow-xl">
             <div>
               <h3 className="text-base font-bold text-on-surface">
-                {editingId ? "Update Customer Record" : "Register Customer"}
+                {editingId ? "Edit Customer Record" : "Add Customer"}
               </h3>
               <p className="text-xs text-on-surface-variant">
-                Fill in the details for the customer monitoring log
+                Fill in the details for the customer visit
               </p>
             </div>
 
@@ -315,7 +315,7 @@ export const CustomerReportPanel: React.FC<CustomerReportPanelProps> = ({
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="font-semibold text-on-surface-variant">Mobile #</label>
+                <label className="font-semibold text-on-surface-variant">Phone Number</label>
                 <input
                   type="text"
                   placeholder="e.g. 0917-123-4567"
@@ -326,7 +326,7 @@ export const CustomerReportPanel: React.FC<CustomerReportPanelProps> = ({
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="font-semibold text-on-surface-variant">Pamper choose</label>
+                <label className="font-semibold text-on-surface-variant">SERVICE RECEIVED</label>
                 <input
                   type="text"
                   required
@@ -355,13 +355,13 @@ export const CustomerReportPanel: React.FC<CustomerReportPanelProps> = ({
                 onClick={() => setShowModal(false)}
                 className="px-4 py-2.5 border border-outline hover:bg-surface-container-low rounded-xl font-bold text-on-surface transition cursor-pointer text-xs"
               >
-                Dismiss
+                Cancel
               </button>
               <button
                 type="submit"
                 className="px-5 py-2.5 bg-primary hover:bg-primary-hover text-white rounded-xl font-bold transition cursor-pointer text-xs"
               >
-                {editingId ? "Save Changes" : "Register Slot"}
+                Save
               </button>
             </div>
           </form>

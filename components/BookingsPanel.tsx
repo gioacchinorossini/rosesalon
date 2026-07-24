@@ -109,8 +109,8 @@ export const BookingsPanel: React.FC<BookingsPanelProps> = ({
     <div className="flex flex-col gap-6 animate-fadeIn">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-on-surface">Appointment Bookings</h2>
-          <p className="text-xs text-on-surface-variant">Manage client pampering registrations and daily salon timetables</p>
+          <h2 className="text-xl font-bold text-on-surface">Bookings</h2>
+          <p className="text-xs text-on-surface-variant">View and manage client bookings by day</p>
         </div>
         <button
           type="button"
@@ -124,7 +124,7 @@ export const BookingsPanel: React.FC<BookingsPanelProps> = ({
           className="flex items-center gap-2 bg-primary hover:bg-primary-hover text-white px-5 py-3 rounded-xl text-xs font-bold transition shadow-md hover:shadow-lg self-start cursor-pointer"
         >
           <Icons.add className="w-4.5 h-4.5" />
-          Add Pamper Reservation
+          Add Booking
         </button>
       </div>
 
@@ -132,7 +132,7 @@ export const BookingsPanel: React.FC<BookingsPanelProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
         {/* Date Input */}
         <div className="flex flex-col gap-1 bg-surface-container-low border border-outline p-3 rounded-xl">
-          <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Active Bookings Date</label>
+          <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Selected Date</label>
           <input
             type="date"
             value={selectedBookingDate}
@@ -146,7 +146,7 @@ export const BookingsPanel: React.FC<BookingsPanelProps> = ({
           <Icons.search className="w-4.5 h-4.5 text-on-surface-variant" />
           <input
             type="text"
-            placeholder="Search customer name or treatment package..."
+            placeholder="Search name or service..."
             value={custSearch}
             onChange={(e) => setCustSearch(e.target.value)}
             className="bg-transparent w-full text-xs outline-none border-none text-on-surface"
@@ -186,7 +186,7 @@ export const BookingsPanel: React.FC<BookingsPanelProps> = ({
               <div className="flex justify-between items-start">
                 <div>
                   <span className="text-[9px] font-bold text-on-surface-variant bg-surface-container border border-outline/20 px-2 py-0.5 rounded uppercase">
-                    Slot #{i + 1}
+                    Booking #{i + 1}
                   </span>
                   <h4 className="font-bold text-base text-on-surface mt-1">{c.name}</h4>
                 </div>
@@ -213,7 +213,7 @@ export const BookingsPanel: React.FC<BookingsPanelProps> = ({
 
               <div className="flex flex-col gap-1 mt-1 text-xs">
                 <p className="text-[11px] text-on-surface-variant flex items-center gap-1.5">
-                  <span className="font-semibold text-on-surface">Mobile:</span> {c.mobile}
+                  <span className="font-semibold text-on-surface">Phone:</span> {c.mobile}
                 </p>
 
                 <div className="mt-2 bg-primary/5 border border-primary/10 rounded-xl px-3 py-2 text-xs font-bold text-primary self-start flex items-center gap-1.5">
@@ -225,7 +225,7 @@ export const BookingsPanel: React.FC<BookingsPanelProps> = ({
 
             <div className="text-[10px] text-on-surface-variant border-t border-outline/10 pt-2 font-mono font-bold text-right flex items-center justify-end gap-1">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3 h-3"><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
-              <span>Schedule: {c.date}</span>
+              <span>Date: {c.date}</span>
             </div>
           </div>
         ))}
@@ -234,8 +234,8 @@ export const BookingsPanel: React.FC<BookingsPanelProps> = ({
           <div className="col-span-full py-16 text-center text-xs text-on-surface-variant bg-surface-container-low border border-outline border-dashed rounded-2xl flex flex-col items-center justify-center gap-3">
             <Icons.calendar className="w-8 h-8 opacity-40 text-on-surface-variant" />
             <div>
-              <p className="font-bold">No bookings registered for this day</p>
-              <p className="opacity-75 mt-0.5">Click "Add Pamper Reservation" to schedule a customer</p>
+              <p className="font-bold">No bookings for this day</p>
+              <p className="opacity-75 mt-0.5">Click "Add Booking" to add one</p>
             </div>
           </div>
         )}
@@ -246,8 +246,8 @@ export const BookingsPanel: React.FC<BookingsPanelProps> = ({
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50 animate-fadeIn">
           <form onSubmit={handleAddCustomer} className="bg-surface border border-outline rounded-2xl p-6 w-full max-w-sm flex flex-col gap-4 shadow-xl">
             <div>
-              <h3 className="text-base font-bold text-on-surface">{editingCustId ? "Update Pamper Reservation" : "Add Pamper Reservation"}</h3>
-              <p className="text-xs text-on-surface-variant">Register appointment details for client schedules</p>
+              <h3 className="text-base font-bold text-on-surface">{editingCustId ? "Edit Booking" : "Add Booking"}</h3>
+              <p className="text-xs text-on-surface-variant">Add booking details below</p>
             </div>
 
             <div className="flex flex-col gap-3.5 text-xs">
@@ -264,7 +264,7 @@ export const BookingsPanel: React.FC<BookingsPanelProps> = ({
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="font-semibold text-on-surface-variant">Mobile Contact</label>
+                <label className="font-semibold text-on-surface-variant">Phone Number</label>
                 <input
                   type="text"
                   placeholder="e.g. 0917-123-4567"
@@ -275,7 +275,7 @@ export const BookingsPanel: React.FC<BookingsPanelProps> = ({
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="font-semibold text-on-surface-variant">Pamper Treatment Choose</label>
+                <label className="font-semibold text-on-surface-variant">Service Requested</label>
                 <input
                   type="text"
                   required
@@ -293,13 +293,13 @@ export const BookingsPanel: React.FC<BookingsPanelProps> = ({
                 onClick={() => setShowAddCustomerModal(false)}
                 className="px-4 py-2.5 border border-outline hover:bg-surface-container-low rounded-xl font-bold text-on-surface transition cursor-pointer text-xs"
               >
-                Dismiss
+                Cancel
               </button>
               <button
                 type="submit"
                 className="px-5 py-2.5 bg-primary hover:bg-primary-hover text-white rounded-xl font-bold transition cursor-pointer text-xs"
               >
-                {editingCustId ? "Update Reservation" : "Register Slot"}
+                Save
               </button>
             </div>
           </form>

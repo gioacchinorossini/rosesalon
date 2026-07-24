@@ -158,7 +158,7 @@ export const SalesLedgerPanel: React.FC<SalesLedgerPanelProps> = ({
   const staffSummaries = orderedStaffKeys.map(s => {
     const staffObj = staffs.find(st => st.code.toUpperCase() === s.toUpperCase());
     const displayName = staffObj ? staffObj.name : s;
-    const displayRole = staffObj ? staffObj.role : "Stylist";
+    const displayRole = staffObj ? staffObj.role : "Staff";
     const dailyRateVal = activeMonthData?.rates?.[s] ?? staffObj?.dailyRate ?? 200;
     const commissionRateVal = staffObj?.commissionRate ?? 0.27;
 
@@ -220,15 +220,15 @@ export const SalesLedgerPanel: React.FC<SalesLedgerPanelProps> = ({
     <div className="flex flex-col gap-6 animate-fadeIn">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-on-surface">2026 Sales Ledgers</h2>
-          <p className="text-xs text-on-surface-variant">Aggregated stylist performance logs and date-based ledger records</p>
+          <h2 className="text-xl font-bold text-on-surface">Monthly Sales</h2>
+          <p className="text-xs text-on-surface-variant">Staff performance summary and daily salon logs</p>
         </div>
         <button
           onClick={() => setShowAddDailyRecordModal(true)}
           className="flex items-center gap-2 bg-primary hover:bg-primary-hover text-white px-5 py-3 rounded-xl text-xs font-bold transition shadow-md hover:shadow-lg self-start cursor-pointer"
         >
           <Icons.add className="w-4.5 h-4.5" />
-          Add Daily Ledger
+          Add Daily Record
         </button>
       </div>
 
@@ -262,7 +262,7 @@ export const SalesLedgerPanel: React.FC<SalesLedgerPanelProps> = ({
           }`}
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
-          <span>Staff Performance View</span>
+          <span>Staff Performance</span>
         </button>
         <button
           onClick={() => setViewMode("date")}
@@ -273,7 +273,7 @@ export const SalesLedgerPanel: React.FC<SalesLedgerPanelProps> = ({
           }`}
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
-          <span>Daily Salon Ledger</span>
+          <span>Daily Sales Table</span>
         </button>
       </div>
 
@@ -281,11 +281,11 @@ export const SalesLedgerPanel: React.FC<SalesLedgerPanelProps> = ({
       <div className="bg-surface border border-outline rounded-2xl overflow-hidden flex flex-col shadow-sm">
         <div className="p-4 bg-surface-container-low border-b border-outline flex flex-col sm:flex-row gap-3 justify-between sm:items-center">
           <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">
-            Active Month: {activeMonthData?.monthName} 2026 ({viewMode === "staff" ? "By Staff Row" : "By Date Row"})
+            Active Month: {activeMonthData?.monthName} 2026 ({viewMode === "staff" ? "By Staff" : "By Date"})
           </span>
           <span className="text-[10px] text-primary font-bold bg-primary-container/30 px-3 py-1.5 rounded-lg border border-primary/10 self-start flex items-center gap-1">
             {viewMode === "staff" 
-              ? "Click on any stylist's row to expand and view their individual daily contributions." 
+              ? "Click on any staff member's row to expand and view their individual daily contributions." 
               : "Tip: Click the Edit button on any row to update financials securely."}
           </span>
         </div>
@@ -297,14 +297,14 @@ export const SalesLedgerPanel: React.FC<SalesLedgerPanelProps> = ({
               <thead>
                 <tr className="bg-surface-container-low text-on-surface-variant border-b border-outline font-bold">
                   <th className="p-3 w-8"></th>
-                  <th className="p-3">STYLIST / STAFF</th>
+                  <th className="p-3">STAFF MEMBER</th>
                   <th className="p-3 text-center">DAYS WORKED</th>
-                  <th className="p-3 text-right">TOTAL GROSS SALES</th>
-                  <th className="p-3 text-right">COMMISSION RATE</th>
-                  <th className="p-3 text-right">TOTAL COMMISSIONS</th>
-                  <th className="p-3 text-right">DAILY WAGES</th>
+                  <th className="p-3 text-right">TOTAL SALES</th>
+                  <th className="p-3 text-right">SHARE RATE</th>
+                  <th className="p-3 text-right">TOTAL STAFF SHARE</th>
+                  <th className="p-3 text-right">BASE PAY</th>
                   <th className="p-3 text-right">TOTAL PAYOUT</th>
-                  <th className="p-3 text-right text-emerald-800 font-extrabold">NET SALON SHARE</th>
+                  <th className="p-3 text-right text-emerald-800 font-extrabold">SALON TAKE-HOME</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-outline/10 font-medium">
@@ -362,18 +362,18 @@ export const SalesLedgerPanel: React.FC<SalesLedgerPanelProps> = ({
                               </div>
                               {st.dailyLogs.length === 0 ? (
                                 <div className="p-4 text-center text-on-surface-variant text-[11px] font-medium">
-                                  No daily log entries found for this stylist in {activeMonthData?.monthName}.
+                                  No daily log entries found for this staff member in {activeMonthData?.monthName}.
                                 </div>
                               ) : (
                                 <table className="w-full text-left border-collapse text-[11px]">
                                   <thead>
                                     <tr className="bg-surface-container-low/60 text-on-surface-variant border-b border-outline font-bold">
                                       <th className="p-2.5">DATE</th>
-                                      <th className="p-2.5 text-right">GROSS SALES</th>
-                                      <th className="p-2.5 text-right">BASE DAILY WAGE</th>
-                                      <th className="p-2.5 text-right font-semibold">COMMISSION ({(st.commissionRate * 100).toFixed(0)}%)</th>
-                                      <th className="p-2.5 text-right text-primary font-bold">STYLIST PAYOUT</th>
-                                      <th className="p-2.5 text-right text-emerald-800 font-extrabold">SALON SHARE</th>
+                                      <th className="p-2.5 text-right">TOTAL SALES</th>
+                                      <th className="p-2.5 text-right">BASE PAY</th>
+                                      <th className="p-2.5 text-right font-semibold">STAFF SHARE ({(st.commissionRate * 100).toFixed(0)}%)</th>
+                                      <th className="p-2.5 text-right text-primary font-bold">STAFF PAYOUT</th>
+                                      <th className="p-2.5 text-right text-emerald-800 font-extrabold">SALON TAKE-HOME</th>
                                       <th className="p-2.5 text-center">ACTION</th>
                                     </tr>
                                   </thead>
@@ -426,7 +426,7 @@ export const SalesLedgerPanel: React.FC<SalesLedgerPanelProps> = ({
                     <td className="p-3"></td>
                     <td className="p-3">
                       <div className="font-bold text-on-surface flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg><span>Other / Shop Sales</span></div>
-                      <div className="text-[10px] text-on-surface-variant font-semibold uppercase">Product or Non-Stylist Revenue</div>
+                      <div className="text-[10px] text-on-surface-variant font-semibold uppercase">Product or Non-Staff Sales</div>
                     </td>
                     <td className="p-3 text-center font-mono">-</td>
                     <td className="p-3 text-right font-bold font-mono">
@@ -474,11 +474,11 @@ export const SalesLedgerPanel: React.FC<SalesLedgerPanelProps> = ({
               <thead>
                 <tr className="bg-surface-container-low text-on-surface-variant border-b border-outline font-bold">
                   <th className="p-3 bg-surface-container-low">DATE</th>
-                  <th className="p-3 text-right">GROSS SALES</th>
+                  <th className="p-3 text-right">TOTAL SALES</th>
                   <th className="p-3 text-right">SALON EXPENSES</th>
-                  <th className="p-3 text-right">DAILY STAFF RATE</th>
-                  <th className="p-3 text-right">TOTAL COMMISSIONS</th>
-                  <th className="p-3 text-right text-emerald-800 font-extrabold">NET SALES (ROSE)</th>
+                  <th className="p-3 text-right">BASE PAY</th>
+                  <th className="p-3 text-right">TOTAL STAFF SHARE</th>
+                  <th className="p-3 text-right text-emerald-800 font-extrabold">SALON TAKE-HOME</th>
                   <th className="p-3 text-center">ACTION</th>
                 </tr>
               </thead>
@@ -550,8 +550,8 @@ export const SalesLedgerPanel: React.FC<SalesLedgerPanelProps> = ({
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50 animate-fadeIn">
           <div className="bg-surface border border-outline rounded-2xl p-6 w-full max-w-sm flex flex-col gap-4 shadow-xl">
             <div>
-              <h3 className="text-base font-bold text-on-surface">Add Daily Ledger Entry</h3>
-              <p className="text-xs text-on-surface-variant">Create a blank daily record for the ledger</p>
+              <h3 className="text-base font-bold text-on-surface">Add Daily Entry</h3>
+              <p className="text-xs text-on-surface-variant">Create a blank daily record</p>
             </div>
             <div className="flex flex-col gap-3 text-xs">
               <div className="flex flex-col gap-1">
@@ -574,7 +574,7 @@ export const SalesLedgerPanel: React.FC<SalesLedgerPanelProps> = ({
                 />
               </div>
               <div className="flex flex-col gap-1">
-                <label className="font-semibold text-on-surface-variant">Default Daily Staff Rate (₱)</label>
+                <label className="font-semibold text-on-surface-variant">Default Base Pay (₱)</label>
                 <input
                   type="number"
                   value={newDailyRateVal}
@@ -606,7 +606,7 @@ export const SalesLedgerPanel: React.FC<SalesLedgerPanelProps> = ({
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50 animate-fadeIn">
           <div className="bg-surface border border-outline rounded-2xl p-6 w-full max-w-lg flex flex-col gap-4 shadow-xl">
             <div>
-              <h3 className="text-base font-bold text-on-surface">Update Daily Ledger Record</h3>
+              <h3 className="text-base font-bold text-on-surface">Update Daily Record</h3>
               <p className="text-xs text-on-surface-variant font-mono">Date: {activeLedgerRecord.date}</p>
             </div>
 
@@ -622,7 +622,7 @@ export const SalesLedgerPanel: React.FC<SalesLedgerPanelProps> = ({
                   />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label className="font-semibold text-on-surface-variant">Daily Staff Rate (₱)</label>
+                  <label className="font-semibold text-on-surface-variant">Base Pay (₱)</label>
                   <input
                     type="number"
                     value={editedLedgerDaily || ""}
@@ -633,7 +633,7 @@ export const SalesLedgerPanel: React.FC<SalesLedgerPanelProps> = ({
               </div>
 
               <div className="border-t border-outline/25 pt-3">
-                <h4 className="font-bold text-xs text-on-surface-variant uppercase tracking-wider mb-2">Stylist Sales Allocations</h4>
+                <h4 className="font-bold text-xs text-on-surface-variant uppercase tracking-wider mb-2">Staff Sales</h4>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                   {orderedStaffKeys.map(name => (
                     <div key={name} className="flex flex-col gap-1 bg-surface-container-low p-2.5 rounded-xl border border-outline">

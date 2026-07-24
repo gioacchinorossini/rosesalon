@@ -60,25 +60,25 @@ export const Sidebar: React.FC<SidebarProps> = ({
       icon: Icons.salesLedger,
       isDropdown: true,
       subItems: [
-        { id: 'servicesLog', label: 'Daily Sales Log', icon: Icons.pos },
-        { id: 'salesLedger', label: 'Sales Logs', icon: Icons.salesLedger },
-        { id: 'payments', label: 'Payment History', icon: Icons.payments },
-        { id: 'customerReport', label: 'Customer Report', icon: Icons.bookings }
+        { id: 'servicesLog', label: 'Daily Sales', icon: Icons.pos },
+        { id: 'salesLedger', label: 'Monthly Sales', icon: Icons.salesLedger },
+        { id: 'payments', label: 'Payments', icon: Icons.payments },
+        { id: 'customerReport', label: 'Customers', icon: Icons.bookings }
       ]
     },
     {
       id: 'staffs_group',
-      label: 'Staffs',
+      label: 'Staff',
       icon: Icons.bookings,
       isDropdown: true,
       subItems: [
-        { id: 'staffs', label: 'Staffs', icon: Icons.bookings },
-        { id: 'payslips', label: 'Staff Payslips', icon: Icons.payslip }
+        { id: 'staffs', label: 'Staff List', icon: Icons.bookings },
+        { id: 'payslips', label: 'Payslips', icon: Icons.payslip }
       ]
     },
-    { id: 'supplies', label: 'Supplies & Inventory', icon: Icons.supplies },
-    { id: 'stocks', label: 'Stocks & Retail', icon: Icons.grid },
-    { id: 'services', label: 'Service List', icon: Icons.services }
+    { id: 'supplies', label: 'Supplies', icon: Icons.supplies },
+    { id: 'stocks', label: 'Stocks', icon: Icons.grid },
+    { id: 'services', label: 'Services', icon: Icons.services }
   ];
 
   return (

@@ -70,10 +70,10 @@ export const DashboardPanel: React.FC<DashboardPanelProps> = ({
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: "Total Gross Revenue", val: `₱${dashboardStats.gross.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, desc: "Cumulative gross sales", color: "bg-primary-container/20 border-primary/20 text-primary" },
-          { label: "Total Salon Expenses", val: `₱${dashboardStats.expenses.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, desc: "Rent, utilities & supplies", color: "bg-orange-50 border-orange-200 text-orange-850" },
-          { label: "Stylist Commissions", val: `₱${dashboardStats.commissions.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, desc: "Paid stylist tier shares", color: "bg-secondary-container/20 border-secondary/20 text-secondary" },
-          { label: "Net Salon Profit", val: `₱${dashboardStats.net.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, desc: "Owner net return share", color: "bg-emerald-50 border-emerald-250 text-emerald-800" }
+          { label: "Total Sales", val: `₱${dashboardStats.gross.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, desc: "Total sales from services and products", color: "bg-primary-container/20 border-primary/20 text-primary" },
+          { label: "Salon Expenses", val: `₱${dashboardStats.expenses.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, desc: "Rent, utilities, supplies, and other costs", color: "bg-orange-50 border-orange-200 text-orange-850" },
+          { label: "Staff Shares", val: `₱${dashboardStats.commissions.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, desc: "Total share paid to staff", color: "bg-secondary-container/20 border-secondary/20 text-secondary" },
+          { label: "Net Profit", val: `₱${dashboardStats.net.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, desc: "Salon take-home after expenses and staff shares", color: "bg-emerald-50 border-emerald-250 text-emerald-800" }
         ].map((card, i) => (
           <div key={i} className={`p-5 rounded-2xl border ${card.color} flex flex-col justify-between h-32`}>
             <div>
@@ -91,8 +91,8 @@ export const DashboardPanel: React.FC<DashboardPanelProps> = ({
         {/* Trends chart */}
         <div className="lg:col-span-2 p-5 bg-surface border border-outline rounded-2xl flex flex-col gap-4">
           <div>
-            <h4 className="font-bold text-sm text-on-surface">Monthly Financial Trend (2026)</h4>
-            <p className="text-xs text-on-surface-variant">Gross revenue comparison against net salon profits</p>
+            <h4 className="font-bold text-sm text-on-surface">Monthly Trend (2026)</h4>
+            <p className="text-xs text-on-surface-variant">Total sales compared to net profit</p>
           </div>
 
           <div className="h-60 w-full relative pt-4 flex items-end">
@@ -128,7 +128,7 @@ export const DashboardPanel: React.FC<DashboardPanelProps> = ({
 
           <div className="flex gap-4 text-xs font-bold justify-center mt-1">
             <div className="flex items-center gap-1.5 text-primary">
-              <div className="w-2.5 h-2.5 bg-primary/45 rounded-sm" /> Gross Revenue
+              <div className="w-2.5 h-2.5 bg-primary/45 rounded-sm" /> Total Sales
             </div>
             <div className="flex items-center gap-1.5 text-secondary">
               <div className="w-2.5 h-2.5 bg-secondary/55 rounded-sm" /> Net Profit
@@ -140,8 +140,8 @@ export const DashboardPanel: React.FC<DashboardPanelProps> = ({
         <div className="p-5 bg-surface border border-outline rounded-2xl flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <div>
-              <h4 className="font-bold text-sm text-on-surface">Stylist Share</h4>
-              <p className="text-xs text-on-surface-variant">Active monthly billing shares</p>
+              <h4 className="font-bold text-sm text-on-surface">Staff Share</h4>
+              <p className="text-xs text-on-surface-variant">Staff earnings for the month</p>
             </div>
             <select
               value={activeMonthKey}
@@ -189,12 +189,12 @@ export const DashboardPanel: React.FC<DashboardPanelProps> = ({
         {/* Active reservations */}
         <div className="p-5 bg-surface border border-outline rounded-2xl flex flex-col gap-4">
           <div className="flex justify-between items-center">
-            <h4 className="font-bold text-sm text-on-surface">Active Client Bookings</h4>
+            <h4 className="font-bold text-sm text-on-surface">Upcoming Client Visits</h4>
             <button
               onClick={() => setActivePanel('bookings')}
               className="text-xs text-primary font-bold hover:underline"
             >
-              Manage Slots
+              Manage Bookings
             </button>
           </div>
           <div className="flex flex-col gap-2">
@@ -213,12 +213,12 @@ export const DashboardPanel: React.FC<DashboardPanelProps> = ({
         {/* Pending purchases */}
         <div className="p-5 bg-surface border border-outline rounded-2xl flex flex-col gap-4">
           <div className="flex justify-between items-center">
-            <h4 className="font-bold text-sm text-on-surface">Supply Purchase Forms</h4>
+            <h4 className="font-bold text-sm text-on-surface">Supply Requests</h4>
             <button
               onClick={() => setActivePanel('supplies')}
               className="text-xs text-primary font-bold hover:underline"
             >
-              Inventory Board
+              Manage Supplies
             </button>
           </div>
           <div className="flex flex-col gap-2">
@@ -235,7 +235,7 @@ export const DashboardPanel: React.FC<DashboardPanelProps> = ({
             ))}
             {suppliesRequest.filter(r => r.status === 'Pending').length === 0 && (
               <div className="text-xs text-on-surface-variant text-center py-6">
-                No pending supplies requests.
+                No pending supply requests.
               </div>
             )}
           </div>

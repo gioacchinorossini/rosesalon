@@ -243,8 +243,8 @@ export const SuppliesPanel: React.FC<SuppliesPanelProps> = ({
     <div className="flex flex-col gap-6 animate-fadeIn">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-on-surface">Supplies & Inventory Manager</h2>
-          <p className="text-xs text-on-surface-variant">Monitor chemical stocks, request purchasing forms, and process stock-in approvals</p>
+          <h2 className="text-xl font-bold text-on-surface">Supplies</h2>
+          <p className="text-xs text-on-surface-variant">Monitor salon supplies, request new items, and approve deliveries</p>
         </div>
 
         <div className="flex gap-2">
@@ -263,7 +263,7 @@ export const SuppliesPanel: React.FC<SuppliesPanelProps> = ({
             className="flex items-center gap-1.5 border border-outline hover:bg-surface-container-low text-on-surface px-4 py-2.5 rounded-xl text-xs font-bold transition cursor-pointer"
           >
             <Icons.add className="w-4 h-4" />
-            Log Stocks In/Out
+            Add/Remove Stock
           </button>
           <button
             type="button"
@@ -279,7 +279,7 @@ export const SuppliesPanel: React.FC<SuppliesPanelProps> = ({
             className="flex items-center gap-2 bg-primary hover:bg-primary-hover text-white px-4 py-2.5 rounded-xl text-xs font-bold transition shadow-md cursor-pointer"
           >
             <Icons.add className="w-4 h-4" />
-            Submit Request Form
+            Request Supplies
           </button>
         </div>
       </div>
@@ -290,8 +290,8 @@ export const SuppliesPanel: React.FC<SuppliesPanelProps> = ({
         {/* Left Column: Visual product shelf */}
         <div className="lg:col-span-7 p-5 bg-surface border border-outline rounded-2xl flex flex-col gap-4 shadow-sm">
           <div>
-            <h3 className="font-bold text-sm text-on-surface">Product Shelf Health</h3>
-            <p className="text-xs text-on-surface-variant">Current remaining salon counts calculated from stock flows</p>
+            <h3 className="font-bold text-sm text-on-surface">Supply Stock Levels</h3>
+            <p className="text-xs text-on-surface-variant">Remaining items in the salon</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mt-2">
@@ -348,8 +348,8 @@ export const SuppliesPanel: React.FC<SuppliesPanelProps> = ({
         {/* Right Column: Approvals pipeline */}
         <div className="lg:col-span-5 p-5 bg-surface border border-outline rounded-2xl flex flex-col gap-4 shadow-sm">
           <div>
-            <h3 className="font-bold text-sm text-on-surface">Purchase Forms Status</h3>
-            <p className="text-xs text-on-surface-variant">Pipeline approvals workflow tracking</p>
+            <h3 className="font-bold text-sm text-on-surface">Requested Supplies</h3>
+            <p className="text-xs text-on-surface-variant">Track requested supplies and approve deliveries</p>
           </div>
 
           <div className="flex flex-col gap-3">
@@ -428,8 +428,8 @@ export const SuppliesPanel: React.FC<SuppliesPanelProps> = ({
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50 animate-fadeIn">
           <form onSubmit={handleAddSupplyLog} className="bg-surface border border-outline rounded-2xl p-6 w-full max-w-sm flex flex-col gap-4 shadow-xl">
             <div>
-              <h3 className="text-base font-bold text-on-surface">{editingSuppLogId ? "Update Inventory Flow" : "Log Stock Flow"}</h3>
-              <p className="text-xs text-on-surface-variant">Log custom shipments in or out of shelves</p>
+              <h3 className="text-base font-bold text-on-surface">{editingSuppLogId ? "Update Stock" : "Log Stock"}</h3>
+              <p className="text-xs text-on-surface-variant">Log items added or removed from shelves</p>
             </div>
 
             <div className="flex flex-col gap-3 text-xs">
@@ -446,7 +446,7 @@ export const SuppliesPanel: React.FC<SuppliesPanelProps> = ({
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="flex flex-col gap-1">
-                  <label className="font-semibold text-on-surface-variant">Stock IN Item Name</label>
+                  <label className="font-semibold text-on-surface-variant">Item Added</label>
                   <input
                     type="text"
                     placeholder="e.g. Developer 20 Vol"
@@ -456,7 +456,7 @@ export const SuppliesPanel: React.FC<SuppliesPanelProps> = ({
                   />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label className="font-semibold text-on-surface-variant">Pcs In</label>
+                  <label className="font-semibold text-on-surface-variant">Amount Added</label>
                   <input
                     type="number"
                     min={0}
@@ -469,7 +469,7 @@ export const SuppliesPanel: React.FC<SuppliesPanelProps> = ({
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="flex flex-col gap-1">
-                  <label className="font-semibold text-on-surface-variant">Stock OUT Item Name</label>
+                  <label className="font-semibold text-on-surface-variant">Item Removed</label>
                   <input
                     type="text"
                     placeholder="e.g. Developer 20 Vol"
@@ -479,7 +479,7 @@ export const SuppliesPanel: React.FC<SuppliesPanelProps> = ({
                   />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label className="font-semibold text-on-surface-variant">Pcs Out</label>
+                  <label className="font-semibold text-on-surface-variant">Amount Removed</label>
                   <input
                     type="number"
                     min={0}
@@ -541,8 +541,8 @@ export const SuppliesPanel: React.FC<SuppliesPanelProps> = ({
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50 animate-fadeIn">
           <form onSubmit={handleAddSupplyRequest} className="bg-surface border border-outline rounded-2xl p-6 w-full max-w-sm flex flex-col gap-4 shadow-xl">
             <div>
-              <h3 className="text-base font-bold text-on-surface">{editingSuppReqId ? "Modify Purchase Form" : "Create Purchase Form"}</h3>
-              <p className="text-xs text-on-surface-variant">Submit supply replenishment requests to store management</p>
+              <h3 className="text-base font-bold text-on-surface">{editingSuppReqId ? "Modify Request" : "Request Supplies"}</h3>
+              <p className="text-xs text-on-surface-variant">Request items to be bought for the salon</p>
             </div>
 
             <div className="flex flex-col gap-3.5 text-xs">

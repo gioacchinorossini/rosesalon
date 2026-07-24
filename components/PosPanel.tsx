@@ -164,6 +164,8 @@ export const PosPanel: React.FC<PosPanelProps> = ({
   const [paymentMethod, setPaymentMethod] = useState<'Cash' | 'GCash' | 'Bank'>('Cash');
   const [gcashRef, setGcashRef] = useState("");
   const [bankRef, setBankRef] = useState("");
+  const [cashTendered, setCashTendered] = useState<string>("");
+  const [supplyCashTendered, setSupplyCashTendered] = useState<string>("");
 
   const [dsrServices, setDsrServices] = useState<Array<{
     id: string;
@@ -428,6 +430,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
     updateDsrServices([]);
     setClientName("Walk-in");
     setClientMobile("");
+    setCashTendered("");
     setActiveOngoingId(null);
 
     alert(`Started service for ${newOngoing.customerName}. Placed in Ongoing Services queue.`);
@@ -661,6 +664,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
     setClientMobile("");
     setGcashRef("");
     setBankRef("");
+    setCashTendered("");
     // Clear cash count bills
     updateDsrBills({ 1000: 0, 500: 0, 200: 0, 100: 0, 50: 0, 20: 0, 10: 0, 5: 0, 1: 0 });
 
@@ -833,6 +837,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
     setSupplyClientName("Walk-in");
     setSupplyGcashRef("");
     setSupplyBankRef("");
+    setSupplyCashTendered("");
   };
 
   const getStylistName = (code: string) => {
@@ -1016,7 +1021,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                       </span>
                     ) : (
                       <span className="text-[9px] font-bold text-on-surface-variant font-mono">
-                        {Math.round((service.commissionRate ?? 0.27) * 100)}% Stylist
+                        {Math.round((service.commissionRate ?? 0.27) * 100)}% Staff
                       </span>
                     )}
                   </div>
@@ -1030,7 +1035,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                 <div className="flex justify-between items-center text-xs font-bold">
                   <span className="text-on-surface-variant flex items-center gap-1.5">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.214-.112a2.386 2.386 0 001.378-2.146v-1.127m0-2.818V10m0 2.818V16m-3-2.818h6m-6 0a3 3 0 003 3h0a3 3 0 003-3m-6 0a3 3 0 003-3h0a3 3 0 003 3M6.75 12a5.25 5.25 0 1110.5 0 5.25 5.25 0 01-10.5 0z" /></svg>
-                    Tally Cash Sum:
+                    Total Cash in Drawer:
                   </span>
                   <span className="font-mono text-sm font-black text-on-surface">
                     ₱{dsrTotalCashCalculated.toLocaleString()}
@@ -1045,13 +1050,13 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                       : 'bg-red-50 border-red-200 text-red-850'
                 }`}>
                   <div>
-                    <span className="text-[9px] font-bold uppercase tracking-wider block">Drawer Tally Status</span>
+                    <span className="text-[9px] font-bold uppercase tracking-wider block">Drawer Status</span>
                     <span className="text-xs font-bold mt-0.5 block">
                       {dsrOverShort === 0
-                        ? "Drawer is perfectly balanced"
+                        ? "Drawer balances perfectly"
                         : dsrOverShort > 0
-                          ? `Cash over by ₱${dsrOverShort.toLocaleString()}`
-                          : `Cash short by ₱${Math.abs(dsrOverShort).toLocaleString()}`
+                          ? `Extra Cash: ₱${dsrOverShort.toLocaleString()}`
+                          : `Short Cash: ₱${Math.abs(dsrOverShort).toLocaleString()}`
                       }
                     </span>
                   </div>
@@ -1119,7 +1124,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                     />
                   </div>
                   <div className="flex flex-col gap-1">
-                    <label className="text-[10px] font-bold text-on-surface-variant">Stylist</label>
+                    <label className="text-[10px] font-bold text-on-surface-variant">Staff</label>
                     <button
                       type="button"
                       onClick={() => setIsStylistPopupOpen(true)}
@@ -1190,6 +1195,36 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                   <span className="text-base font-black text-primary">₱{dsrTotalServices.toLocaleString()}</span>
                 </div>
 
+                {/* Cash Tendered & Change */}
+                {paymentMethod === 'Cash' && (
+                  <div className="flex flex-col gap-2 border-t border-outline/10 pt-2.5 animate-fadeIn">
+                    <div className="flex justify-between items-center text-xs font-bold">
+                      <span className="text-on-surface-variant">Cash Paid:</span>
+                      <div className="flex items-center gap-1 bg-white border border-outline rounded-lg px-2 py-1 w-28 shadow-2xs">
+                        <span className="text-on-surface-variant text-[11px] font-bold">₱</span>
+                        <input
+                          type="text"
+                          inputMode="numeric"
+                          pattern="[0-9]*"
+                          placeholder="0"
+                          value={cashTendered}
+                          onChange={(e) => {
+                            const val = e.target.value.replace(/[^0-9]/g, "");
+                            setCashTendered(val);
+                          }}
+                          className="bg-transparent w-full text-right text-xs font-mono font-bold outline-none text-on-surface"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-center text-xs font-bold">
+                      <span className="text-on-surface-variant">Change:</span>
+                      <span className="font-mono text-sm font-black text-emerald-700">
+                        ₱{Math.max(0, (Number(cashTendered) || 0) - dsrTotalServices).toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
                 {/* Drawer Cash Calculator */}
                 {paymentMethod === 'Cash' && (
                   <div className="border-t border-outline/25 pt-3 animate-fadeIn">
@@ -1250,7 +1285,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                   >
                     <h4 className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider flex items-center gap-1.5">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-2.25A1.125 1.125 0 013 17.625v-4.5zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v9c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125v-9zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v13.5c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg>
-                      <span>DSR Reconciliation Fields</span>
+                      <span>Cash Drawer Details</span>
                     </h4>
                     <span className="text-[10px] text-primary font-bold hover:underline">
                       {showAuditDetails ? "Collapse ▴" : "Expand ▾"}
@@ -1260,7 +1295,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                   {showAuditDetails && (
                     <div className="grid grid-cols-2 gap-2.5 bg-surface-container-low p-3 rounded-xl border border-outline/30 animate-fadeIn">
                       <div className="flex flex-col gap-1">
-                        <label className="text-[9px] font-bold text-on-surface-variant">Petty Cash Float (₱)</label>
+                        <label className="text-[9px] font-bold text-on-surface-variant">Starting Cash / Float (₱)</label>
                         <input
                           type="number"
                           min="0"
@@ -1271,7 +1306,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                         />
                       </div>
                       <div className="flex flex-col gap-1">
-                        <label className="text-[9px] font-bold text-on-surface-variant">Daily Expenses (₱)</label>
+                        <label className="text-[9px] font-bold text-on-surface-variant">Expenses Today (₱)</label>
                         <input
                           type="number"
                           min="0"
@@ -1282,7 +1317,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                         />
                       </div>
                       <div className="flex flex-col gap-1">
-                        <label className="text-[9px] font-bold text-on-surface-variant">Cash Advance / CA (₱)</label>
+                        <label className="text-[9px] font-bold text-on-surface-variant">Staff Cash Advance (₱)</label>
                         <input
                           type="number"
                           min="0"
@@ -1293,7 +1328,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                         />
                       </div>
                       <div className="flex flex-col gap-1">
-                        <label className="text-[9px] font-bold text-on-surface-variant">Sold Supplies (₱)</label>
+                        <label className="text-[9px] font-bold text-on-surface-variant">Supplies Sold (₱)</label>
                         <input
                           type="number"
                           min="0"
@@ -1304,7 +1339,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                         />
                       </div>
                       <div className="flex flex-col gap-1">
-                        <label className="text-[9px] font-bold text-on-surface-variant">Credit/Debit Card (₱)</label>
+                        <label className="text-[9px] font-bold text-on-surface-variant">Card Payments (₱)</label>
                         <input
                           type="number"
                           min="0"
@@ -1315,7 +1350,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                         />
                       </div>
                       <div className="flex flex-col gap-1">
-                        <label className="text-[9px] font-bold text-on-surface-variant">Add-on Cash (₱)</label>
+                        <label className="text-[9px] font-bold text-on-surface-variant">Extra Cash Received (₱)</label>
                         <input
                           type="number"
                           min="0"
@@ -1564,6 +1599,36 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                   </span>
                 </div>
 
+                {/* Cash Tendered & Change */}
+                {supplyPaymentMethod === 'Cash' && (
+                  <div className="flex flex-col gap-2 border-t border-outline/10 pt-2.5 animate-fadeIn">
+                    <div className="flex justify-between items-center text-xs font-bold">
+                      <span className="text-on-surface-variant">Cash Paid:</span>
+                      <div className="flex items-center gap-1 bg-white border border-outline rounded-lg px-2 py-1 w-28 shadow-2xs">
+                        <span className="text-on-surface-variant text-[11px] font-bold">₱</span>
+                        <input
+                          type="text"
+                          inputMode="numeric"
+                          pattern="[0-9]*"
+                          placeholder="0"
+                          value={supplyCashTendered}
+                          onChange={(e) => {
+                            const val = e.target.value.replace(/[^0-9]/g, "");
+                            setSupplyCashTendered(val);
+                          }}
+                          className="bg-transparent w-full text-right text-xs font-mono font-bold outline-none text-on-surface"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-center text-xs font-bold">
+                      <span className="text-on-surface-variant">Change:</span>
+                      <span className="font-mono text-sm font-black text-emerald-700">
+                        ₱{Math.max(0, (Number(supplyCashTendered) || 0) - supplyCart.reduce((sum, item) => sum + (item.price * item.quantity), 0)).toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
                 {/* Payment Method Selector */}
                 <div className="border-t border-outline/25 pt-3">
                   <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mb-2 block">Payment Method</label>
@@ -1626,9 +1691,9 @@ export const PosPanel: React.FC<PosPanelProps> = ({
               <div>
                 <h3 className="font-extrabold text-base text-on-surface flex items-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4 text-primary"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
-                  <span>Select Stylist</span>
+                  <span>Select Staff</span>
                 </h3>
-                <p className="text-xs text-on-surface-variant">Assign a stylist for this checkout ticket.</p>
+                <p className="text-xs text-on-surface-variant">Assign a staff member for this checkout ticket.</p>
               </div>
               <button
                 type="button"
@@ -1737,7 +1802,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                         <div>
                           <h4 className="font-bold text-xs text-on-surface truncate max-w-[140px]">{item.customerName}</h4>
                           <span className="text-[10px] text-on-surface-variant block mt-0.5 font-semibold">
-                            Stylist: <span className="text-primary font-bold">{getStylistName(item.staffCode)}</span>
+                            Staff: <span className="text-primary font-bold">{getStylistName(item.staffCode)}</span>
                           </span>
                         </div>
                         <ElapsedTimer startTime={item.startTime} />

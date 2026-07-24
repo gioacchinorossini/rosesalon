@@ -89,8 +89,8 @@ export const ServicesPanel: React.FC<ServicesPanelProps> = ({
     <div className="flex flex-col gap-6 animate-fadeIn">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-on-surface">Service List</h2>
-          <p className="text-xs text-on-surface-variant">Set standard prices and stylist commission rates</p>
+          <h2 className="text-xl font-bold text-on-surface">Services</h2>
+          <p className="text-xs text-on-surface-variant">Set standard prices and staff share rates</p>
         </div>
         <button
           type="button"
@@ -131,7 +131,7 @@ export const ServicesPanel: React.FC<ServicesPanelProps> = ({
         <div className="bg-surface-container-low border border-outline p-5 rounded-2xl animate-fadeIn">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-bold text-sm text-on-surface">
-              {editingServiceId ? "Modify Existing Treatment Service" : "Register New Treatment Service"}
+              {editingServiceId ? "Edit Service" : "Add Service"}
             </h3>
             <button
               type="button"
@@ -142,7 +142,7 @@ export const ServicesPanel: React.FC<ServicesPanelProps> = ({
               }}
               className="text-xs text-on-surface-variant hover:text-on-surface font-bold cursor-pointer"
             >
-              Dismiss
+              Cancel
             </button>
           </div>
 
@@ -187,16 +187,16 @@ export const ServicesPanel: React.FC<ServicesPanelProps> = ({
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="font-bold text-on-surface-variant">Stylist Commission Rate</label>
+              <label className="font-bold text-on-surface-variant">Staff Share Rate</label>
               <select
                 value={newServiceComm}
                 onChange={(e) => setNewServiceComm(Number(e.target.value))}
                 className="bg-white border border-outline px-3.5 py-2.5 rounded-lg outline-none focus:border-primary cursor-pointer font-bold text-on-surface text-xs"
               >
-                <option value={0.27}>27% (Standard Services)</option>
+                <option value={0.27}>27% (Standard Share)</option>
                 <option value={0.36}>36% (Haircut Special)</option>
                 <option value={0.16}>16% (Facial/Aesthetic Special)</option>
-                <option value={0.0}>0% (No Commission)</option>
+                <option value={0.0}>0% (No Share)</option>
                 <option value={0.50}>50% (Equal Split)</option>
               </select>
             </div>
@@ -258,11 +258,11 @@ export const ServicesPanel: React.FC<ServicesPanelProps> = ({
 
             <div className="flex items-end justify-between border-t border-outline/10 pt-3">
               <div className="flex flex-col">
-                <span className="text-[9px] text-on-surface-variant font-bold uppercase tracking-wider">Catalog Price</span>
+                <span className="text-[9px] text-on-surface-variant font-bold uppercase tracking-wider">Price</span>
                 <span className="text-base font-black text-on-surface">₱{service.price.toLocaleString()}</span>
               </div>
               <div className="flex flex-col items-end">
-                <span className="text-[9px] text-on-surface-variant font-bold uppercase tracking-wider">Comm Rate</span>
+                <span className="text-[9px] text-on-surface-variant font-bold uppercase tracking-wider">Share Rate</span>
                 <span className="text-xs font-black text-primary font-mono">{Math.round(service.commissionRate * 100)}%</span>
               </div>
             </div>

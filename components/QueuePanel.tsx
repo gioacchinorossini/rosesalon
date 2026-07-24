@@ -187,7 +187,7 @@ export const QueuePanel: React.FC<QueuePanelProps> = ({
       <div className="border-b border-outline pb-4 flex flex-col gap-2">
         <h2 className="text-xl font-bold text-on-surface">Queue</h2>
         <p className="text-xs text-on-surface-variant">
-          Monitor and manage active, in-chair treatment sessions currently operating in the salon.
+          Monitor and manage active sessions currently operating in the salon.
         </p>
       </div>
 
@@ -195,7 +195,7 @@ export const QueuePanel: React.FC<QueuePanelProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-surface border border-outline/25 p-4 rounded-2xl shadow-sm flex items-center justify-between">
           <div>
-            <span className="text-[10px] uppercase font-bold text-on-surface-variant block tracking-wider">Active Treatments</span>
+            <span className="text-[10px] uppercase font-bold text-on-surface-variant block tracking-wider">Active Sessions</span>
             <span className="text-2xl font-black text-primary mt-1 block">{stats.totalActive} Clients</span>
           </div>
           <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
@@ -215,7 +215,7 @@ export const QueuePanel: React.FC<QueuePanelProps> = ({
 
         <div className="bg-surface border border-outline/25 p-4 rounded-2xl shadow-sm flex items-center justify-between">
           <div>
-            <span className="text-[10px] uppercase font-bold text-on-surface-variant block tracking-wider">Estimated Queue Value</span>
+            <span className="text-[10px] uppercase font-bold text-on-surface-variant block tracking-wider">Estimated Session Value</span>
             <span className="text-2xl font-black text-emerald-700 mt-1 block">₱{stats.totalEstRevenue.toLocaleString()}</span>
           </div>
           <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
@@ -240,7 +240,7 @@ export const QueuePanel: React.FC<QueuePanelProps> = ({
                       <div>
                         <h4 className="font-bold text-sm text-on-surface">{item.customerName}</h4>
                         <span className="text-[10px] font-semibold text-on-surface-variant block mt-0.5">
-                          Stylist: <span className="text-primary font-bold">{getStaffName(item.staffCode)}</span>
+                          Staff: <span className="text-primary font-bold">{getStaffName(item.staffCode)}</span>
                         </span>
                       </div>
                       <QueueElapsedTimer startTime={item.startTime} />
@@ -270,7 +270,7 @@ export const QueuePanel: React.FC<QueuePanelProps> = ({
                         type="button"
                         onClick={() => handleCancelOngoing(item.id)}
                         className="p-2 text-red-600 hover:bg-red-50 rounded-xl border border-red-200 transition text-[10px] font-bold cursor-pointer"
-                        title="Cancel Treatment"
+                        title="Cancel Session"
                       >
                         Cancel
                       </button>
@@ -292,7 +292,7 @@ export const QueuePanel: React.FC<QueuePanelProps> = ({
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-on-surface-variant/40"><path strokeLinecap="round" strokeLinejoin="round" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 <h4 className="font-bold text-xs text-on-surface">Queue is currently empty</h4>
                 <p className="text-[10px] text-on-surface-variant max-w-[240px]">
-                  Use the check-in form on the right to start a treatment session for a walk-in client.
+                  Use the check-in form on the right to start a session for a walk-in client.
                 </p>
               </div>
             )}
@@ -301,7 +301,7 @@ export const QueuePanel: React.FC<QueuePanelProps> = ({
 
         {/* Right Column: Check-in new client form */}
         <div className="lg:col-span-4 bg-surface border border-outline rounded-2xl p-4 flex flex-col gap-4">
-          <h3 className="font-bold text-sm text-on-surface border-b border-outline/10 pb-2">Check-in Walk-in Client</h3>
+          <h3 className="font-bold text-sm text-on-surface border-b border-outline/10 pb-2">Check-in Walk-in</h3>
 
           <form onSubmit={handleStartTreatment} className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
@@ -317,7 +317,7 @@ export const QueuePanel: React.FC<QueuePanelProps> = ({
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Assign Stylist</label>
+              <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Assign Staff</label>
               <button
                 type="button"
                 onClick={() => setIsStylistPopupOpen(true)}
@@ -393,7 +393,7 @@ export const QueuePanel: React.FC<QueuePanelProps> = ({
                       <button
                         type="button"
                         onClick={() => handleToggleService(s)}
-                        className="text-red-500 hover:text-red-750 font-bold"
+                        className="text-red-550 hover:text-red-750 font-bold"
                       >
                         ×
                       </button>
@@ -407,7 +407,7 @@ export const QueuePanel: React.FC<QueuePanelProps> = ({
               type="submit"
               className="w-full bg-primary hover:bg-primary-hover text-white font-bold py-2.5 rounded-xl transition shadow-md hover:shadow-lg text-xs mt-2 cursor-pointer"
             >
-              Start Treatment & Add to Queue
+              Start Session
             </button>
           </form>
         </div>
@@ -421,9 +421,9 @@ export const QueuePanel: React.FC<QueuePanelProps> = ({
               <div>
                 <h3 className="font-extrabold text-base text-on-surface flex items-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4 text-primary"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
-                  <span>Select Stylist</span>
+                  <span>Select Staff</span>
                 </h3>
-                <p className="text-xs text-on-surface-variant">Assign a stylist for this treatment session.</p>
+                <p className="text-xs text-on-surface-variant">Assign a staff member for this session.</p>
               </div>
               <button
                 type="button"
@@ -452,10 +452,7 @@ export const QueuePanel: React.FC<QueuePanelProps> = ({
                       setSelectedStaff(s.code);
                       setIsStylistPopupOpen(false);
                     }}
-                    className={`flex items-center justify-between p-3 rounded-2xl border transition text-left cursor-pointer ${isSelected
-                        ? 'border-primary bg-primary/5 hover:bg-primary/10'
-                        : 'border-outline/50 hover:border-primary/50 hover:bg-surface-container-low'
-                      }`}
+                    className="flex items-center justify-between p-3 rounded-2xl border transition text-left cursor-pointer border-outline/50 hover:border-primary/50 hover:bg-surface-container-low"
                   >
                     <div className="flex items-center gap-3">
                       <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xs font-black shrink-0 ${isSelected ? 'bg-primary text-white' : 'bg-secondary/10 text-secondary'
@@ -472,12 +469,12 @@ export const QueuePanel: React.FC<QueuePanelProps> = ({
 
                     <div className="flex flex-col items-end gap-1 font-semibold text-[10px]">
                       <span className="text-on-surface-variant">
-                        {Math.round(s.commissionRate * 100)}% Rate
+                        {Math.round(s.commissionRate * 100)}% Share
                       </span>
                       {activeOngoingCount > 0 ? (
                         <span className="px-1.5 py-0.5 rounded-full bg-secondary/15 text-secondary font-bold flex items-center gap-1">
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3 h-3"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                          <span>{activeOngoingCount} in chair</span>
+                          <span>{activeOngoingCount} active</span>
                         </span>
                       ) : (
                         <span className="px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 font-bold flex items-center gap-1">

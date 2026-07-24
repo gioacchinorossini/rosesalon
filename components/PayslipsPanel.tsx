@@ -20,14 +20,14 @@ export const PayslipsPanel: React.FC<PayslipsPanelProps> = ({
   return (
     <div className="flex flex-col gap-6 animate-fadeIn">
       <div className="no-print">
-        <h2 className="text-xl font-bold text-on-surface">Staff Payslips Ledger</h2>
-        <p className="text-xs text-on-surface-variant">View daily commissions and print professional payout vouchers</p>
+        <h2 className="text-xl font-bold text-on-surface">Payslips</h2>
+        <p className="text-xs text-on-surface-variant">View daily staff pay and print payout vouchers</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column: Stylist directory cards */}
         <div className="no-print lg:col-span-4 p-5 bg-surface border border-outline rounded-2xl flex flex-col gap-3 shadow-sm">
-          <h3 className="font-bold text-sm pb-2 border-b border-outline/20 text-on-surface">Stylists Directory</h3>
+          <h3 className="font-bold text-sm pb-2 border-b border-outline/20 text-on-surface">Staff</h3>
 
           <div className="flex flex-col gap-2 overflow-y-auto max-h-[500px]">
             {staffs.map((staff) => {
@@ -70,8 +70,8 @@ export const PayslipsPanel: React.FC<PayslipsPanelProps> = ({
           {activeStaffPayslipInfo && (
             <div className="no-print grid grid-cols-2 sm:grid-cols-4 gap-3">
               {[
-                { label: "Commission", val: `₱${activeStaffPayslipInfo.totalComi.toLocaleString(undefined, { minimumFractionDigits: 2 })}` },
-                { label: "Daily Rate Sum", val: `₱${activeStaffPayslipInfo.totalDaily.toLocaleString(undefined, { minimumFractionDigits: 2 })}` },
+                { label: "Staff Share", val: `₱${activeStaffPayslipInfo.totalComi.toLocaleString(undefined, { minimumFractionDigits: 2 })}` },
+                { label: "Base Pay", val: `₱${activeStaffPayslipInfo.totalDaily.toLocaleString(undefined, { minimumFractionDigits: 2 })}` },
                 { label: "Deductions", val: `₱${(activeStaffPayslipInfo.totalCA + activeStaffPayslipInfo.utang).toLocaleString(undefined, { minimumFractionDigits: 2 })}`, color: "text-red-500" },
                 { label: "Net Pay", val: `₱${activeStaffPayslipInfo.netPay.toLocaleString(undefined, { minimumFractionDigits: 2 })}`, color: "text-emerald-800 font-extrabold" }
               ].map((card, idx) => (
@@ -90,7 +90,7 @@ export const PayslipsPanel: React.FC<PayslipsPanelProps> = ({
               <div className="flex justify-between items-start border-b border-outline/35 pb-4">
                 <div>
                   <div className="text-[9px] bg-primary-container text-primary px-3 py-1 rounded-full font-bold uppercase inline-block border border-primary/10">
-                    Official Payroll Slip
+                    Payslip
                   </div>
                   <h3 className="text-lg font-black mt-2 text-on-surface">{activeStaffPayslipInfo.name}</h3>
                   <p className="text-xs text-on-surface-variant font-mono">Period: Dec 1 - Dec 26, 2025</p>
@@ -102,41 +102,41 @@ export const PayslipsPanel: React.FC<PayslipsPanelProps> = ({
                   className="no-print flex items-center gap-1.5 border border-outline hover:bg-surface-container-low px-4 py-2.5 rounded-xl text-xs font-bold transition cursor-pointer shadow-sm"
                 >
                   <Icons.print className="w-4 h-4 text-on-surface-variant" />
-                  Print Voucher
+                  Print
                 </button>
               </div>
 
               {/* Voucher metadata details */}
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs bg-surface-container-low border border-outline p-4 rounded-2xl">
                 <div>
-                  <span className="text-on-surface-variant block font-bold text-[9px] uppercase tracking-wider">Stylist Designation</span>
-                  <span className="font-bold mt-0.5 block">{staffs.find(s => s.code === activeStaffName)?.role || "Salon Stylist / Aesthetician"}</span>
+                  <span className="text-on-surface-variant block font-bold text-[9px] uppercase tracking-wider">Role</span>
+                  <span className="font-bold mt-0.5 block">{staffs.find(s => s.code === activeStaffName)?.role || "Salon Staff"}</span>
                 </div>
                 <div>
                   <span className="text-on-surface-variant block font-bold text-[9px] uppercase tracking-wider">Payout Date</span>
                   <span className="font-bold mt-0.5 block">December 26, 2025</span>
                 </div>
                 <div>
-                  <span className="text-on-surface-variant block font-bold text-[9px] uppercase tracking-wider">Payment channel</span>
-                  <span className="font-bold mt-0.5 block text-primary">Cash Vault</span>
+                  <span className="text-on-surface-variant block font-bold text-[9px] uppercase tracking-wider">Payment Method</span>
+                  <span className="font-bold mt-0.5 block text-primary">Cash</span>
                 </div>
               </div>
 
               {/* Commission table breakdown */}
               <div>
-                <h4 className="font-bold text-xs text-on-surface-variant uppercase tracking-wider mb-2">Daily Allocation Ledger</h4>
+                <h4 className="font-bold text-xs text-on-surface-variant uppercase tracking-wider mb-2">Daily Log</h4>
                 <div className="max-h-56 overflow-y-auto border border-outline rounded-xl">
                   <table className="w-full text-left text-xs border-collapse">
                     <thead>
                       <tr className="bg-surface-container-low text-on-surface-variant border-b border-outline font-bold sticky top-0">
                         <th className="p-2">Date</th>
                         <th className="p-2 text-right">Service 1</th>
-                        <th className="p-2 text-right text-primary">Comi 1</th>
+                        <th className="p-2 text-right text-primary">Share 1</th>
                         <th className="p-2 text-right">Service 2</th>
-                        <th className="p-2 text-right text-primary">Comi 2</th>
-                        <th className="p-2 text-right">Daily Rate</th>
+                        <th className="p-2 text-right text-primary">Share 2</th>
+                        <th className="p-2 text-right">Base Pay</th>
                         <th className="p-2 text-right font-bold text-on-surface">Daily Total</th>
-                        <th className="p-2 text-right text-red-600">CA Advance</th>
+                        <th className="p-2 text-right text-red-600">Cash Advance</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-outline/10 font-mono text-[10px]">
@@ -163,25 +163,25 @@ export const PayslipsPanel: React.FC<PayslipsPanelProps> = ({
               {/* Receipt bottom calculations */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-xs">
                 <div className="flex flex-col gap-2 bg-surface-container-low p-4 rounded-2xl border border-outline">
-                  <h4 className="font-bold text-xs text-on-surface-variant uppercase tracking-wider mb-1">Salary Calculations</h4>
+                  <h4 className="font-bold text-xs text-on-surface-variant uppercase tracking-wider mb-1">Payout Calculations</h4>
                   <div className="flex justify-between border-b border-outline/10 pb-1.5">
-                    <span className="text-on-surface-variant font-semibold">Commissions:</span>
+                    <span className="text-on-surface-variant font-semibold">Staff Shares:</span>
                     <span className="font-bold font-mono">₱{activeStaffPayslipInfo.totalComi.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                   </div>
                   <div className="flex justify-between border-b border-outline/10 pb-1.5">
-                    <span className="text-on-surface-variant font-semibold">Daily Rates Sum:</span>
+                    <span className="text-on-surface-variant font-semibold">Base Pay:</span>
                     <span className="font-bold font-mono">₱{activeStaffPayslipInfo.totalDaily.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                   </div>
                   <div className="flex justify-between border-b border-outline/10 pb-1.5 text-red-600">
                     <span className="font-semibold">Less Cash Advances:</span>
                     <span className="font-bold font-mono">-₱{activeStaffPayslipInfo.totalCA.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                   </div>
-                  <div className="flex justify-between border-b border-outline/10 pb-1.5 text-red-650">
+                  <div className="flex justify-between border-b border-outline/10 pb-1.5 text-red-655">
                     <span className="font-semibold">Less Other Deductions:</span>
                     <span className="font-bold font-mono">-₱{activeStaffPayslipInfo.utang.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                   </div>
                   <div className="flex justify-between text-sm font-black text-emerald-800 pt-1">
-                    <span>NET PAYOUT DISBURSED:</span>
+                    <span>NET PAY:</span>
                     <span className="font-mono">₱{activeStaffPayslipInfo.netPay.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                   </div>
                 </div>
@@ -189,7 +189,7 @@ export const PayslipsPanel: React.FC<PayslipsPanelProps> = ({
                 <div className="flex flex-col justify-end gap-8 pl-6 border-l border-outline/25">
                   <div className="text-center">
                     <div className="h-0.5 bg-on-surface/30 w-40 mx-auto mb-1" />
-                    <span className="text-[9px] text-on-surface-variant font-bold uppercase tracking-wider">Stylist Signature Receipt</span>
+                    <span className="text-[9px] text-on-surface-variant font-bold uppercase tracking-wider">Staff Signature</span>
                   </div>
                   <div className="text-center">
                     <div className="h-0.5 bg-on-surface/30 w-40 mx-auto mb-1" />

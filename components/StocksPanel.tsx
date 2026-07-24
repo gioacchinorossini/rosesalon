@@ -261,8 +261,8 @@ export const StocksPanel: React.FC<StocksPanelProps> = ({
       {/* Title Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-on-surface">Product Stocks & Catalog</h2>
-          <p className="text-xs text-on-surface-variant">Manage salon items, view products on hand, and track stock changes</p>
+          <h2 className="text-xl font-bold text-on-surface">Stocks</h2>
+          <p className="text-xs text-on-surface-variant">Manage products, view stock levels, and track stock changes</p>
         </div>
 
         <div className="flex gap-2.5">
@@ -282,7 +282,7 @@ export const StocksPanel: React.FC<StocksPanelProps> = ({
             className="flex items-center gap-1.5 border border-outline hover:bg-surface-container-low text-on-surface px-4 py-2.5 rounded-xl text-xs font-bold transition cursor-pointer"
           >
             <Icons.add className="w-4 h-4" />
-            Add Stock Changes
+            Adjust Stock
           </button>
           
           <button
@@ -294,7 +294,7 @@ export const StocksPanel: React.FC<StocksPanelProps> = ({
             className="flex items-center gap-2 bg-primary hover:bg-primary-hover text-white px-4 py-2.5 rounded-xl text-xs font-bold transition shadow-md cursor-pointer"
           >
             <Icons.add className="w-4 h-4" />
-            Add New Product
+            Add Product
           </button>
         </div>
       </div>
@@ -370,7 +370,7 @@ export const StocksPanel: React.FC<StocksPanelProps> = ({
               }`}
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" /></svg>
-              <span>Product Catalog</span>
+              <span>Products</span>
             </button>
             <button
               type="button"
@@ -382,7 +382,7 @@ export const StocksPanel: React.FC<StocksPanelProps> = ({
               }`}
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-              <span>Stock Log History</span>
+              <span>Stock Log</span>
             </button>
           </div>
 
@@ -448,15 +448,15 @@ export const StocksPanel: React.FC<StocksPanelProps> = ({
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
                   <tr className="bg-surface-container-low text-on-surface-variant font-bold border-b border-outline uppercase tracking-wider text-[10px]">
-                    <th className="p-3.5">Barcode / SKU</th>
+                    <th className="p-3.5">SKU</th>
                     <th className="p-3.5">Product Name</th>
                     <th className="p-3.5">Category</th>
-                    <th className="p-3.5 text-right">Cost Price</th>
-                    <th className="p-3.5 text-right">Sales Price</th>
-                    <th className="p-3.5 text-center">Quantity On Hand</th>
+                    <th className="p-3.5 text-right">Cost</th>
+                    <th className="p-3.5 text-right">Price</th>
+                    <th className="p-3.5 text-center">Quantity</th>
                     <th className="p-3.5">Supplier</th>
                     <th className="p-3.5">Status</th>
-                    <th className="p-3.5 text-center">Quick Edit</th>
+                    <th className="p-3.5 text-center">Quick Adjust</th>
                     <th className="p-3.5 text-center">Actions</th>
                   </tr>
                 </thead>
@@ -623,15 +623,15 @@ export const StocksPanel: React.FC<StocksPanelProps> = ({
           <form onSubmit={handleSaveItem} className="bg-surface border border-outline rounded-2xl p-6 w-full max-w-sm flex flex-col gap-4 shadow-xl">
             <div>
               <h3 className="text-base font-bold text-on-surface">
-                {editingItemId ? "Edit Product" : "Add New Product"}
+                {editingItemId ? "Edit Product" : "Add Product"}
               </h3>
-              <p className="text-xs text-on-surface-variant">Fill in product name, details, and warning level</p>
+              <p className="text-xs text-on-surface-variant">Fill in product details and warning level</p>
             </div>
 
             <div className="flex flex-col gap-3 text-xs">
               <div className="grid grid-cols-2 gap-3">
                 <div className="flex flex-col gap-1">
-                  <label className="font-semibold text-on-surface-variant">Barcode / SKU</label>
+                  <label className="font-semibold text-on-surface-variant">SKU</label>
                   <input
                     type="text"
                     required
@@ -649,8 +649,8 @@ export const StocksPanel: React.FC<StocksPanelProps> = ({
                     className="bg-white border border-outline px-3 py-2 rounded-lg outline-none focus:border-primary text-xs font-bold cursor-pointer"
                   >
                     <option value="Retail Product">Retail Product</option>
-                    <option value="Consumable">Consumable Supply</option>
-                    <option value="Equipment">Salon Equipment</option>
+                    <option value="Consumable">Consumable</option>
+                    <option value="Equipment">Equipment</option>
                   </select>
                 </div>
               </div>
@@ -669,7 +669,7 @@ export const StocksPanel: React.FC<StocksPanelProps> = ({
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="flex flex-col gap-1">
-                  <label className="font-semibold text-on-surface-variant">Quantity On Hand</label>
+                  <label className="font-semibold text-on-surface-variant">Quantity</label>
                   <input
                     type="number"
                     min={0}
@@ -680,7 +680,7 @@ export const StocksPanel: React.FC<StocksPanelProps> = ({
                   />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label className="font-semibold text-on-surface-variant">Low Stock Warning Level</label>
+                  <label className="font-semibold text-on-surface-variant">Warning Level</label>
                   <input
                     type="number"
                     min={1}
@@ -694,7 +694,7 @@ export const StocksPanel: React.FC<StocksPanelProps> = ({
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="flex flex-col gap-1">
-                  <label className="font-semibold text-on-surface-variant">Cost Price (₱)</label>
+                  <label className="font-semibold text-on-surface-variant">Cost (₱)</label>
                   <input
                     type="number"
                     min={0}
@@ -707,7 +707,7 @@ export const StocksPanel: React.FC<StocksPanelProps> = ({
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className={`font-semibold text-on-surface-variant ${itemCategory !== 'Retail Product' ? 'opacity-40' : ''}`}>
-                    Sales Price (₱) {itemCategory !== 'Retail Product' ? '(N/A)' : ''}
+                    Price (₱) {itemCategory !== 'Retail Product' ? '(N/A)' : ''}
                   </label>
                   <input
                     type="number"
@@ -722,14 +722,14 @@ export const StocksPanel: React.FC<StocksPanelProps> = ({
               </div>
 
               <div className="flex flex-col gap-1">
-                <label className="font-semibold text-on-surface-variant">Supplier Name</label>
-                <input
-                  type="text"
-                  placeholder="e.g. L'Oreal Corp, Generic, etc."
-                  value={itemSupplier}
-                  onChange={(e) => setItemSupplier(e.target.value)}
-                  className="bg-white border border-outline px-3.5 py-2 rounded-lg outline-none focus:border-primary text-xs font-medium"
-                />
+                  <label className="font-semibold text-on-surface-variant">Supplier</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. L'Oreal Corp, Generic, etc."
+                    value={itemSupplier}
+                    onChange={(e) => setItemSupplier(e.target.value)}
+                    className="bg-white border border-outline px-3.5 py-2 rounded-lg outline-none focus:border-primary text-xs font-medium"
+                  />
               </div>
             </div>
 
@@ -760,8 +760,8 @@ export const StocksPanel: React.FC<StocksPanelProps> = ({
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50 animate-fadeIn">
           <form onSubmit={handleSaveAdjustment} className="bg-surface border border-outline rounded-2xl p-6 w-full max-w-sm flex flex-col gap-4 shadow-xl">
             <div>
-              <h3 className="text-base font-bold text-on-surface">Change Stock Quantity</h3>
-              <p className="text-xs text-on-surface-variant">Add or remove items from the salon stocks</p>
+              <h3 className="text-base font-bold text-on-surface">Adjust Stock</h3>
+              <p className="text-xs text-on-surface-variant">Add or remove items from salon stock</p>
             </div>
 
             <div className="flex flex-col gap-3 text-xs">
@@ -782,15 +782,15 @@ export const StocksPanel: React.FC<StocksPanelProps> = ({
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="flex flex-col gap-1">
-                  <label className="font-semibold text-on-surface-variant">Change Type</label>
+                  <label className="font-semibold text-on-surface-variant">Type</label>
                   <select
                     value={adjustType}
                     onChange={(e) => setAdjustType(e.target.value as any)}
                     className="bg-white border border-outline px-3 py-2 rounded-lg outline-none focus:border-primary text-xs font-bold cursor-pointer"
                   >
-                    <option value="IN">Stock In (Delivery/Return)</option>
-                    <option value="OUT">Stock Out (Usage/Sold)</option>
-                    <option value="ADJUST">Correction (Manual Audit)</option>
+                    <option value="IN">Stock In</option>
+                    <option value="OUT">Stock Out</option>
+                    <option value="ADJUST">Correction</option>
                   </select>
                 </div>
                 <div className="flex flex-col gap-1">

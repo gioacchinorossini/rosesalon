@@ -107,8 +107,8 @@ export const PaymentsPanel: React.FC<PaymentsPanelProps> = ({
     <div className="flex flex-col gap-6 animate-fadeIn">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-on-surface">Payment Logs</h2>
-          <p className="text-xs text-on-surface-variant">Daily transaction tracker for GCash, Bank, and Cash collections</p>
+          <h2 className="text-xl font-bold text-on-surface">Payments</h2>
+          <p className="text-xs text-on-surface-variant">Track payments made via GCash, Bank Transfer, and Cash</p>
         </div>
 
         <button
@@ -127,7 +127,7 @@ export const PaymentsPanel: React.FC<PaymentsPanelProps> = ({
           className="flex items-center gap-2 bg-primary hover:bg-primary-hover text-white px-5 py-3 rounded-xl text-xs font-bold transition shadow-md hover:shadow-lg self-start cursor-pointer"
         >
           <Icons.add className="w-4.5 h-4.5" />
-          Add Transaction
+          Record Payment
         </button>
       </div>
 
@@ -136,7 +136,7 @@ export const PaymentsPanel: React.FC<PaymentsPanelProps> = ({
         <Icons.search className="w-4.5 h-4.5 text-on-surface-variant" />
         <input
           type="text"
-          placeholder="Filter by reference code, remarks content, verification status..."
+          placeholder="Search reference, remarks, or status..."
           value={paySearch}
           onChange={(e) => setPaySearch(e.target.value)}
           className="bg-transparent w-full text-xs outline-none border-none text-on-surface"
@@ -151,10 +151,10 @@ export const PaymentsPanel: React.FC<PaymentsPanelProps> = ({
               <tr className="bg-surface-container-low text-on-surface-variant border-b border-outline font-bold">
                 <th className="p-3">Log Date</th>
                 <th className="p-3">Reference No</th>
-                <th className="p-3 text-right">GCash Pay</th>
+                <th className="p-3 text-right">GCash</th>
                 <th className="p-3 text-right">Bank Transfer</th>
-                <th className="p-3 text-right">Drawer Cash</th>
-                <th className="p-3 text-right text-primary font-black">Gross Revenue</th>
+                <th className="p-3 text-right">Cash</th>
+                <th className="p-3 text-right text-primary font-black">Total Paid</th>
                 <th className="p-3 text-center">Verified By</th>
                 <th className="p-3">Remarks / Memo</th>
                 <th className="p-3 text-center">Actions</th>
@@ -216,7 +216,7 @@ export const PaymentsPanel: React.FC<PaymentsPanelProps> = ({
             </tbody>
             <tfoot>
               <tr className="bg-surface-container-low text-on-surface font-bold border-t border-outline">
-                <td colSpan={2} className="p-3 text-right uppercase">Running Sums:</td>
+                <td colSpan={2} className="p-3 text-right uppercase">Total:</td>
                 <td className="p-3 text-right text-blue-850 font-mono">
                   ₱{filteredPayments.reduce((s, p) => s + p.gcash, 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                 </td>
@@ -241,8 +241,8 @@ export const PaymentsPanel: React.FC<PaymentsPanelProps> = ({
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50 animate-fadeIn">
           <form onSubmit={handleAddPayment} className="bg-surface border border-outline rounded-2xl p-6 w-full max-w-sm flex flex-col gap-4 shadow-xl">
             <div>
-              <h3 className="text-base font-bold text-on-surface">{editingPaymentId ? "Update Payment Entry" : "Record Payment Entry"}</h3>
-              <p className="text-xs text-on-surface-variant">Manually audit transaction receipts & bank reference numbers</p>
+              <h3 className="text-base font-bold text-on-surface">{editingPaymentId ? "Edit Payment" : "Add Payment"}</h3>
+              <p className="text-xs text-on-surface-variant">Add or update payment record</p>
             </div>
 
             <div className="flex flex-col gap-3 text-xs">
@@ -303,22 +303,22 @@ export const PaymentsPanel: React.FC<PaymentsPanelProps> = ({
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="font-semibold text-on-surface-variant">Verified Roster</label>
+                <label className="font-semibold text-on-surface-variant">Verified By</label>
                 <select
                   value={newPayVerified}
                   onChange={(e) => setNewPayVerified(e.target.value as any)}
                   className="bg-white border border-outline px-3.5 py-2.5 rounded-lg outline-none focus:border-primary font-bold cursor-pointer text-xs"
                 >
-                  <option value="MANAGER">MANAGER (Verified & Deposited)</option>
-                  <option value="COUNTER">COUNTER (Cashier Drawer)</option>
-                  <option value="PENDING">PENDING (Unreconciled)</option>
+                  <option value="MANAGER">MANAGER</option>
+                  <option value="COUNTER">CASHIER</option>
+                  <option value="PENDING">PENDING</option>
                 </select>
               </div>
 
               <div className="flex flex-col gap-1.5">
                 <label className="font-semibold text-on-surface-variant">Remarks / Memo</label>
                 <textarea
-                  placeholder="Additional client treatment notes or GCash receipt snapshot details..."
+                  placeholder="Payment details or notes..."
                   value={newPayRemarks}
                   onChange={(e) => setNewPayRemarks(e.target.value)}
                   className="bg-white border border-outline px-3.5 py-2 rounded-lg outline-none focus:border-primary h-16 resize-none font-medium"
@@ -332,13 +332,13 @@ export const PaymentsPanel: React.FC<PaymentsPanelProps> = ({
                 onClick={() => setShowAddPaymentModal(false)}
                 className="px-4 py-2.5 border border-outline hover:bg-surface-container-low rounded-xl font-bold text-on-surface transition cursor-pointer text-xs"
               >
-                Dismiss
+                Cancel
               </button>
               <button
                 type="submit"
                 className="px-5 py-2.5 bg-primary hover:bg-primary-hover text-white rounded-xl font-bold transition cursor-pointer text-xs"
               >
-                {editingPaymentId ? "Update Receipt" : "Submit Log"}
+                Save
               </button>
             </div>
           </form>

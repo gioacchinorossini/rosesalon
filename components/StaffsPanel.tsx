@@ -114,8 +114,8 @@ export const StaffsPanel: React.FC<StaffsPanelProps> = ({
     <div className="flex flex-col gap-6 animate-fadeIn">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-on-surface">All Staffs</h2>
-          <p className="text-xs text-on-surface-variant">Register and manage salon stylists, commission settings, and roster status</p>
+          <h2 className="text-xl font-bold text-on-surface">Staff</h2>
+          <p className="text-xs text-on-surface-variant">Manage staff profiles, pay rates, and status</p>
         </div>
         <button
           type="button"
@@ -178,7 +178,7 @@ export const StaffsPanel: React.FC<StaffsPanelProps> = ({
                 {/* Contact and Hire Date */}
                 <div className="text-[11px] text-on-surface-variant flex flex-col gap-1.5 border-y border-outline/10 py-3">
                   <div className="flex items-center gap-2">
-                    <span className="font-semibold text-on-surface/80">Mobile:</span>
+                    <span className="font-semibold text-on-surface/80">Phone:</span>
                     <span className="font-mono">{staff.mobile || "N/A"}</span>
                   </div>
                   <div className="flex items-center gap-2">
@@ -196,7 +196,7 @@ export const StaffsPanel: React.FC<StaffsPanelProps> = ({
               {/* Rates & Actions */}
               <div className="flex items-center justify-between mt-4">
                 <div className="flex flex-col">
-                  <span className="text-[9px] text-on-surface-variant font-bold uppercase tracking-wider">Salary & Comm</span>
+                  <span className="text-[9px] text-on-surface-variant font-bold uppercase tracking-wider">Pay & Share</span>
                   <span className="text-xs font-bold text-on-surface">
                     ₱{staff.dailyRate.toLocaleString()}/day • <span className="text-primary font-mono">{Math.round(staff.commissionRate * 100)}%</span>
                   </span>
@@ -231,14 +231,14 @@ export const StaffsPanel: React.FC<StaffsPanelProps> = ({
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50 animate-fadeIn">
           <form onSubmit={handleAddStaff} className="bg-surface border border-outline rounded-2xl p-6 w-full max-w-md flex flex-col gap-4 shadow-xl">
             <div>
-              <h3 className="text-base font-bold text-on-surface">{editingStaffId ? "Update Staff Profile" : "Register Staff Member"}</h3>
-              <p className="text-xs text-on-surface-variant">Update active stylists, default rates, and commission tiers</p>
+              <h3 className="text-base font-bold text-on-surface">{editingStaffId ? "Edit Staff Profile" : "Add Staff Member"}</h3>
+              <p className="text-xs text-on-surface-variant">Update active staff, pay rates, and share tiers</p>
             </div>
 
             <div className="flex flex-col gap-3 text-xs max-h-[460px] overflow-y-auto pr-1">
               <div className="grid grid-cols-2 gap-3">
                 <div className="flex flex-col gap-1.5">
-                  <label className="font-semibold text-on-surface-variant">Stylist Code (Unique)</label>
+                  <label className="font-semibold text-on-surface-variant">Staff Code (Unique)</label>
                   <input
                     type="text"
                     required
@@ -264,7 +264,7 @@ export const StaffsPanel: React.FC<StaffsPanelProps> = ({
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="flex flex-col gap-1.5">
-                  <label className="font-semibold text-on-surface-variant">Role / Service Title</label>
+                  <label className="font-semibold text-on-surface-variant">Role</label>
                   <input
                     type="text"
                     required
@@ -275,7 +275,7 @@ export const StaffsPanel: React.FC<StaffsPanelProps> = ({
                   />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <label className="font-semibold text-on-surface-variant">Mobile Contact</label>
+                  <label className="font-semibold text-on-surface-variant">Phone Number</label>
                   <input
                     type="text"
                     placeholder="e.g. 0918-123-4567"
@@ -288,7 +288,7 @@ export const StaffsPanel: React.FC<StaffsPanelProps> = ({
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="flex flex-col gap-1.5">
-                  <label className="font-semibold text-on-surface-variant">Daily Rate Pay (₱)</label>
+                  <label className="font-semibold text-on-surface-variant">Base Pay (₱)</label>
                   <input
                     type="number"
                     required
@@ -299,7 +299,7 @@ export const StaffsPanel: React.FC<StaffsPanelProps> = ({
                   />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <label className="font-semibold text-on-surface-variant">Stylist Commission Share</label>
+                  <label className="font-semibold text-on-surface-variant">Staff Share</label>
                   <select
                     value={newStaffCommRate}
                     onChange={(e) => setNewStaffCommRate(Number(e.target.value))}
@@ -316,18 +316,18 @@ export const StaffsPanel: React.FC<StaffsPanelProps> = ({
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="flex flex-col gap-1.5">
-                  <label className="font-semibold text-on-surface-variant">Roster Status</label>
+                  <label className="font-semibold text-on-surface-variant">Status</label>
                   <select
                     value={newStaffStatus}
                     onChange={(e) => setNewStaffStatus(e.target.value as "Active" | "Inactive")}
                     className="bg-white border border-outline px-3.5 py-2.5 rounded-lg outline-none focus:border-primary text-xs font-semibold cursor-pointer"
                   >
-                    <option value="Active">Active Duty</option>
-                    <option value="Inactive">On Leave / Inactive</option>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
                   </select>
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <label className="font-semibold text-on-surface-variant">Hiring Date</label>
+                  <label className="font-semibold text-on-surface-variant">Hire Date</label>
                   <input
                     type="date"
                     value={newStaffHireDate}
@@ -338,9 +338,9 @@ export const StaffsPanel: React.FC<StaffsPanelProps> = ({
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="font-semibold text-on-surface-variant">Profile Notes / Skill Specs</label>
+                <label className="font-semibold text-on-surface-variant">Notes</label>
                 <textarea
-                  placeholder="Notes about stylist performance or specialized skills..."
+                  placeholder="Notes about staff member..."
                   value={newStaffNotes}
                   onChange={(e) => setNewStaffNotes(e.target.value)}
                   className="bg-white border border-outline px-3.5 py-2 rounded-lg outline-none focus:border-primary text-xs font-medium h-16 resize-none"
@@ -354,13 +354,13 @@ export const StaffsPanel: React.FC<StaffsPanelProps> = ({
                 onClick={() => setShowAddStaffModal(false)}
                 className="px-4 py-2.5 border border-outline hover:bg-surface-container-low rounded-xl font-bold text-on-surface transition cursor-pointer text-xs"
               >
-                Dismiss
+                Cancel
               </button>
               <button
                 type="submit"
                 className="px-5 py-2.5 bg-primary hover:bg-primary-hover text-white rounded-xl font-bold transition cursor-pointer text-xs"
               >
-                {editingStaffId ? "Update Staff" : "Register Stylist"}
+                {editingStaffId ? "Save" : "Add Staff"}
               </button>
             </div>
           </form>

@@ -33,7 +33,7 @@ export const ServicesLogPanel: React.FC<ServicesLogPanelProps> = ({
   const [servicePrice, setServicePrice] = useState<number>(0);
   const [logDate, setLogDate] = useState(() => new Date().toISOString().split("T")[0]);
 
-  // Derived active service & stylist mappings for quick lookups
+  // Derived active service & staff mappings for quick lookups
   const serviceMap = useMemo(() => {
     return new Map(services.map(s => [s.name, s]));
   }, [services]);
@@ -282,8 +282,8 @@ export const ServicesLogPanel: React.FC<ServicesLogPanelProps> = ({
     <div className="flex flex-col gap-6 animate-fadeIn">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-on-surface">Daily Sales Log</h2>
-          <p className="text-xs text-on-surface-variant">View completed services, stylist assignments, and total sales for the day.</p>
+          <h2 className="text-xl font-bold text-on-surface">Daily Sales</h2>
+          <p className="text-xs text-on-surface-variant">View completed services, staff assignments, and total sales for the day.</p>
         </div>
 
         <div className="flex items-center gap-3 self-start md:self-auto w-full md:w-auto justify-between md:justify-end">
@@ -350,7 +350,7 @@ export const ServicesLogPanel: React.FC<ServicesLogPanelProps> = ({
           <Icons.search className="w-4.5 h-4.5 text-on-surface-variant" />
           <input
             type="text"
-            placeholder="Search by client, service, or stylist..."
+            placeholder="Search by client, service, or staff..."
             value={logSearch}
             onChange={(e) => setLogSearch(e.target.value)}
             className="bg-transparent w-full text-xs outline-none border-none text-on-surface"
@@ -390,61 +390,61 @@ export const ServicesLogPanel: React.FC<ServicesLogPanelProps> = ({
               <Icons.salesLedger className="w-4 h-4 text-primary" />
               <span>Daily Payment & Cash Summary</span>
             </h4>
-            <p className="text-[10px] text-on-surface-variant mt-0.5">Summary of payments, expenses, and cash drawer reconciliation for this date</p>
+            <p className="text-[10px] text-on-surface-variant mt-0.5">Summary of payments, expenses, and cash drawer status for this date</p>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-9 gap-3">
-            {/* Petty Cash */}
+            {/* Starting Cash */}
             <div className="bg-white border border-outline/60 p-3.5 rounded-xl flex flex-col gap-1 shadow-sm">
-              <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-wider">Petty Cash</span>
+              <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-wider">Starting Cash</span>
               <span className="text-sm font-black text-zinc-700">₱{dailyPaymentSummary.pettyCash.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
             </div>
 
             {/* GCash */}
             <div className="bg-white border border-outline/60 p-3.5 rounded-xl flex flex-col gap-1 shadow-sm">
-              <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-wider">GCash</span>
+              <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-wider">GCash Payments</span>
               <span className="text-sm font-black text-blue-700">₱{dailyPaymentSummary.gcash.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
             </div>
 
-            {/* Online Transfer */}
+            {/* Bank Transfer */}
             <div className="bg-white border border-outline/60 p-3.5 rounded-xl flex flex-col gap-1 shadow-sm">
-              <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-wider">Online Transfer</span>
+              <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-wider">Bank Transfer</span>
               <span className="text-sm font-black text-teal-700">₱{dailyPaymentSummary.bank.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
             </div>
 
-            {/* Credit/Debit */}
+            {/* Card Payments */}
             <div className="bg-white border border-outline/60 p-3.5 rounded-xl flex flex-col gap-1 shadow-sm">
-              <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-wider">Credit / Debit</span>
+              <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-wider">Card Payments</span>
               <span className="text-sm font-black text-indigo-700">₱{dailyPaymentSummary.cards.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
             </div>
 
-            {/* Sold Supplies */}
+            {/* Supplies Sold */}
             <div className="bg-white border border-outline/60 p-3.5 rounded-xl flex flex-col gap-1 shadow-sm">
-              <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-wider">Sold Supplies</span>
+              <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-wider">Supplies Sold</span>
               <span className="text-sm font-black text-purple-750">₱{dailyPaymentSummary.supplies.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
             </div>
 
-            {/* Expense */}
+            {/* Expenses */}
             <div className="bg-white border border-outline/60 p-3.5 rounded-xl flex flex-col gap-1 shadow-sm">
-              <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-wider">Expense</span>
+              <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-wider">Expenses</span>
               <span className="text-sm font-black text-red-655">₱{dailyPaymentSummary.exp.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
             </div>
 
-            {/* Add-on */}
+            {/* Extra Cash */}
             <div className="bg-white border border-outline/60 p-3.5 rounded-xl flex flex-col gap-1 shadow-sm">
-              <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-wider">Add On</span>
+              <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-wider">Extra Cash</span>
               <span className="text-sm font-black text-amber-700">₱{dailyPaymentSummary.addon.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
             </div>
 
-            {/* Net Cash */}
+            {/* Total Cash */}
             <div className="bg-white border border-outline/60 p-3.5 rounded-xl flex flex-col gap-1 shadow-sm">
-              <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-wider">Net Cash</span>
+              <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-wider">Total Cash</span>
               <span className="text-sm font-black text-emerald-800">₱{dailyPaymentSummary.netCash.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
             </div>
 
-            {/* Remit */}
+            {/* Cash to Turn In */}
             <div className="bg-primary/5 border border-primary/20 p-3.5 rounded-xl flex flex-col gap-1 shadow-sm ring-1 ring-primary/10">
-              <span className="text-[9px] font-bold text-primary uppercase tracking-wider">Remit</span>
+              <span className="text-[9px] font-bold text-primary uppercase tracking-wider">Cash to Turn In</span>
               <span className="text-sm font-black text-primary">₱{dailyPaymentSummary.remit.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
             </div>
           </div>
@@ -515,7 +515,7 @@ export const ServicesLogPanel: React.FC<ServicesLogPanelProps> = ({
                   <th className="p-3.5">#</th>
                   <th className="p-3.5">Client</th>
                   <th className="p-3.5">Service</th>
-                  <th className="p-3.5">Stylist</th>
+                  <th className="p-3.5">Staff</th>
                   <th className="p-3.5 text-right">Price</th>
                   <th className="p-3.5 text-center">Date</th>
                   <th className="p-3.5 text-center">Actions</th>
@@ -637,7 +637,7 @@ export const ServicesLogPanel: React.FC<ServicesLogPanelProps> = ({
 
                   <div className="flex flex-col gap-1 mt-1 text-xs">
                     <p className="text-[11px] text-on-surface-variant flex items-center gap-1.5">
-                      <span className="font-semibold text-on-surface">Stylist:</span> {stylist ? `${stylist.name} (${log.staffName})` : log.staffName}
+                      <span className="font-semibold text-on-surface">Staff:</span> {stylist ? `${stylist.name} (${log.staffName})` : log.staffName}
                     </p>
 
                     <div className="flex items-center gap-2 mt-2">
@@ -724,15 +724,15 @@ export const ServicesLogPanel: React.FC<ServicesLogPanelProps> = ({
                 />
               </div>
 
-              {/* Stylist Selection */}
+              {/* Staff Selection */}
               <div className="flex flex-col gap-1.5">
-                <label className="font-semibold text-on-surface-variant">Stylist</label>
+                <label className="font-semibold text-on-surface-variant">Staff</label>
                 <select
                   value={selectedStaffCode}
                   onChange={(e) => setSelectedStaffCode(e.target.value)}
                   className="bg-white border border-outline px-3.5 py-2.5 rounded-xl outline-none focus:border-primary text-sm font-semibold transition text-on-surface cursor-pointer"
                 >
-                  <option value="" disabled>Select stylist...</option>
+                  <option value="" disabled>Select staff...</option>
                   {staffs.filter(s => s.status === 'Active').map(s => (
                     <option key={s.id} value={s.code}>{s.name} ({s.code})</option>
                   ))}
