@@ -109,6 +109,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isStylistPopupOpen, setIsStylistPopupOpen] = useState(false);
   const [isQueuePopupOpen, setIsQueuePopupOpen] = useState(false);
+  const [isDrawerDetailsOpen, setIsDrawerDetailsOpen] = useState(false);
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -161,7 +162,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
   const [clientMobile, setClientMobile] = useState("");
   const [dsrDate, setDsrDate] = useState(() => new Date().toISOString().split("T")[0]);
   const [dsrStaff, setDsrStaff] = useState(() => staffs.find(s => s.status === 'Active')?.code || "");
-  const [paymentMethod, setPaymentMethod] = useState<'Cash' | 'GCash' | 'Bank'>('Cash');
+  const [paymentMethod, setPaymentMethod] = useState<'Cash' | 'GCash' | 'Bank' | null>(null);
   const [gcashRef, setGcashRef] = useState("");
   const [bankRef, setBankRef] = useState("");
   const [cashTendered, setCashTendered] = useState<string>("");
@@ -521,7 +522,16 @@ export const PosPanel: React.FC<PosPanelProps> = ({
     }
 
     // Validate payment fields
-    if (paymentMethod !== 'Cash') {
+    if (!paymentMethod) {
+      alert("Please select a payment method.");
+      return;
+    }
+    if (paymentMethod === 'Cash') {
+      if (dsrTotalCashCalculated < dsrTotalServices) {
+        alert(`Insufficient cash. The bill is ₱${dsrTotalServices.toLocaleString()}, but only ₱${dsrTotalCashCalculated.toLocaleString()} was counted in the drawer cash calculator.`);
+        return;
+      }
+    } else {
       const ref = paymentMethod === 'GCash' ? gcashRef : bankRef;
       if (!ref.trim()) {
         alert(`Please specify the ${paymentMethod} Reference Number.`);
@@ -662,6 +672,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
     updateDsrServices([]);
     setClientName("Walk-in");
     setClientMobile("");
+    setPaymentMethod(null);
     setGcashRef("");
     setBankRef("");
     setCashTendered("");
@@ -831,7 +842,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
     saveState("rose_servicesLog", updatedServicesLog);
 
     alert(`Supply sale successful! Recorded payment, stock reduction, and sales logs.`);
-    
+
     // Clear supply sale states
     setSupplyCart([]);
     setSupplyClientName("Walk-in");
@@ -873,6 +884,15 @@ export const PosPanel: React.FC<PosPanelProps> = ({
 
           <button
             type="button"
+            onClick={() => setIsDrawerDetailsOpen(true)}
+            className="px-4 py-2 rounded-xl text-xs font-bold transition-all duration-150 cursor-pointer flex items-center gap-1.5 bg-surface-container-low border border-outline text-on-surface-variant hover:text-primary hover:bg-white h-[38px] shadow-xs"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-2.25A1.125 1.125 0 013 17.625v-4.5zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v9c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125v-9zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v13.5c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg>
+            <span>Cash Drawer Details</span>
+          </button>
+
+          <button
+            type="button"
             onClick={handleToggleFullscreen}
             className="flex items-center justify-center p-2.5 rounded-xl border border-outline hover:bg-surface-container-low text-on-surface-variant hover:text-on-surface transition cursor-pointer h-[38px] w-[38px]"
             title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
@@ -895,11 +915,10 @@ export const PosPanel: React.FC<PosPanelProps> = ({
         <button
           type="button"
           onClick={() => setPosSubTab('service')}
-          className={`pb-3 text-xs font-black uppercase tracking-wider transition-all relative cursor-pointer ${
-            posSubTab === 'service'
-              ? 'text-primary'
-              : 'text-on-surface-variant hover:text-on-surface'
-          }`}
+          className={`pb-3 text-xs font-black uppercase tracking-wider transition-all relative cursor-pointer ${posSubTab === 'service'
+            ? 'text-primary'
+            : 'text-on-surface-variant hover:text-on-surface'
+            }`}
         >
           <span className="flex items-center gap-1.5">
             <Icons.cart className="w-4 h-4" />
@@ -912,11 +931,10 @@ export const PosPanel: React.FC<PosPanelProps> = ({
         <button
           type="button"
           onClick={() => setPosSubTab('supplies')}
-          className={`pb-3 text-xs font-black uppercase tracking-wider transition-all relative cursor-pointer ${
-            posSubTab === 'supplies'
-              ? 'text-primary'
-              : 'text-on-surface-variant hover:text-on-surface'
-          }`}
+          className={`pb-3 text-xs font-black uppercase tracking-wider transition-all relative cursor-pointer ${posSubTab === 'supplies'
+            ? 'text-primary'
+            : 'text-on-surface-variant hover:text-on-surface'
+            }`}
         >
           <span className="flex items-center gap-1.5">
             <Icons.grid className="w-4 h-4" />
@@ -954,11 +972,11 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                 <input
                   type="text"
                   placeholder={
-                    posCategory === 'Products' 
-                      ? "Search retail products..." 
-                      : posCategory === 'Supplies' 
-                      ? "Search salon supplies..." 
-                      : "Search service menu..."
+                    posCategory === 'Products'
+                      ? "Search retail products..."
+                      : posCategory === 'Supplies'
+                        ? "Search salon supplies..."
+                        : "Search service menu..."
                   }
                   value={posSearch}
                   onChange={(e) => setPosSearch(e.target.value)}
@@ -1010,13 +1028,12 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                   <div className="flex items-end justify-between w-full border-t border-outline/10 pt-2 mt-2">
                     <span className="text-sm font-black text-on-surface">₱{service.price.toLocaleString()}</span>
                     {service.isProduct ? (
-                      <span className={`text-[9px] font-bold font-mono px-2 py-0.5 rounded ${
-                        service.onHand === 0 
-                          ? 'bg-red-50 text-red-650' 
-                          : service.onHand <= 5 
-                            ? 'bg-amber-50 text-amber-800 animate-pulse border border-amber-300' 
-                            : 'bg-emerald-50 text-emerald-700'
-                      }`}>
+                      <span className={`text-[9px] font-bold font-mono px-2 py-0.5 rounded ${service.onHand === 0
+                        ? 'bg-red-50 text-red-650'
+                        : service.onHand <= 5
+                          ? 'bg-amber-50 text-amber-800 animate-pulse border border-amber-300'
+                          : 'bg-emerald-50 text-emerald-700'
+                        }`}>
                         {service.onHand === 0 ? 'Out of Stock' : service.onHand <= 5 ? `Low Stock: ${service.onHand}` : `${service.onHand} in stock`}
                       </span>
                     ) : (
@@ -1042,13 +1059,12 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                   </span>
                 </div>
 
-                <div className={`p-2.5 rounded-xl border flex items-center justify-between ${
-                  dsrOverShort === 0
-                    ? 'bg-emerald-50 border-emerald-250 text-emerald-800'
-                    : dsrOverShort > 0
-                      ? 'bg-blue-50 border-blue-200 text-blue-800'
-                      : 'bg-red-50 border-red-200 text-red-850'
-                }`}>
+                <div className={`p-2.5 rounded-xl border flex items-center justify-between ${dsrOverShort === 0
+                  ? 'bg-emerald-50 border-emerald-250 text-emerald-800'
+                  : dsrOverShort > 0
+                    ? 'bg-blue-50 border-blue-200 text-blue-800'
+                    : 'bg-red-50 border-red-200 text-red-850'
+                  }`}>
                   <div>
                     <span className="text-[9px] font-bold uppercase tracking-wider block">Drawer Status</span>
                     <span className="text-xs font-bold mt-0.5 block">
@@ -1113,16 +1129,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                 )}
 
                 {/* Client info grid */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-                  <div className="flex flex-col gap-1">
-                    <label className="text-[10px] font-bold text-on-surface-variant">Date</label>
-                    <input
-                      type="date"
-                      value={dsrDate}
-                      onChange={(e) => setDsrDate(e.target.value)}
-                      className="bg-white border border-outline px-3 py-2 rounded-lg text-xs font-semibold outline-none text-on-surface"
-                    />
-                  </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div className="flex flex-col gap-1">
                     <label className="text-[10px] font-bold text-on-surface-variant">Staff</label>
                     <button
@@ -1148,20 +1155,21 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                       className="bg-white border border-outline px-3 py-2 rounded-lg text-xs font-semibold outline-none text-on-surface"
                     />
                   </div>
-                  <div className="flex flex-col gap-1">
-                    <label className="text-[10px] font-bold text-on-surface-variant">Mobile #</label>
-                    <input
-                      type="text"
-                      placeholder="e.g. 0917-123-4567"
-                      value={clientMobile}
-                      onChange={(e) => setClientMobile(e.target.value)}
-                      className="bg-white border border-outline px-3 py-2 rounded-lg text-xs font-semibold outline-none text-on-surface font-mono"
-                    />
-                  </div>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="text-[10px] font-bold text-on-surface-variant">Mobile #</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. 0917-123-4567"
+                    value={clientMobile}
+                    onChange={(e) => setClientMobile(e.target.value)}
+                    className="bg-white border border-outline px-3 py-2 rounded-lg text-xs font-semibold outline-none text-on-surface font-mono"
+                  />
                 </div>
 
                 {/* Cart List */}
-                <div className="max-h-[104px] overflow-y-auto grid grid-cols-2 gap-2 border border-outline/20 p-2 rounded-xl bg-surface-container-low min-h-24 content-start">
+                <div className="grid grid-cols-2 gap-2 border border-outline/20 p-2 rounded-xl bg-surface-container-low content-start">
                   {dsrServices.map((s, idx) => (
                     <div key={s.id} className="flex justify-between items-center bg-white p-2 py-1.5 rounded-lg border border-outline/25 text-[11px] h-11">
                       <div className="flex-1 pr-1 min-w-0">
@@ -1189,46 +1197,22 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                   )}
                 </div>
 
-                {/* Payment Summary */}
-                <div className="border-t border-outline/25 pt-3 flex justify-between items-center font-bold text-xs">
-                  <span className="text-on-surface-variant">Total Bill Amount:</span>
-                  <span className="text-base font-black text-primary">₱{dsrTotalServices.toLocaleString()}</span>
-                </div>
-
-                {/* Cash Tendered & Change */}
-                {paymentMethod === 'Cash' && (
-                  <div className="flex flex-col gap-2 border-t border-outline/10 pt-2.5 animate-fadeIn">
-                    <div className="flex justify-between items-center text-xs font-bold">
-                      <span className="text-on-surface-variant">Cash Paid:</span>
-                      <div className="flex items-center gap-1 bg-white border border-outline rounded-lg px-2 py-1 w-28 shadow-2xs">
-                        <span className="text-on-surface-variant text-[11px] font-bold">₱</span>
-                        <input
-                          type="text"
-                          inputMode="numeric"
-                          pattern="[0-9]*"
-                          placeholder="0"
-                          value={cashTendered}
-                          onChange={(e) => {
-                            const val = e.target.value.replace(/[^0-9]/g, "");
-                            setCashTendered(val);
-                          }}
-                          className="bg-transparent w-full text-right text-xs font-mono font-bold outline-none text-on-surface"
-                        />
-                      </div>
-                    </div>
-                    <div className="flex justify-between items-center text-xs font-bold">
-                      <span className="text-on-surface-variant">Change:</span>
-                      <span className="font-mono text-sm font-black text-emerald-700">
-                        ₱{Math.max(0, (Number(cashTendered) || 0) - dsrTotalServices).toLocaleString()}
-                      </span>
-                    </div>
-                  </div>
-                )}
-
                 {/* Drawer Cash Calculator */}
                 {paymentMethod === 'Cash' && (
                   <div className="border-t border-outline/25 pt-3 animate-fadeIn">
-                    <h4 className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mb-2">Drawer Cash Calculator</h4>
+                    <div className="flex items-center gap-2 mb-2.5">
+                      <button
+                        type="button"
+                        onClick={() => setPaymentMethod(null)}
+                        className="px-2 py-1 rounded-lg hover:bg-surface-container-high text-[10px] font-bold text-primary transition cursor-pointer flex items-center gap-1 border border-outline/45 bg-white shadow-3xs"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-3 h-3">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                        </svg>
+                        <span>Back</span>
+                      </button>
+                      <h4 className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Drawer Cash Calculator</h4>
+                    </div>
                     <div className="grid grid-cols-3 gap-2">
                       {[1000, 500, 200, 100, 50, 20, 10, 5, 1].map(bill => (
                         <div key={bill} className="flex flex-col items-center justify-between bg-surface border border-outline p-1.5 rounded-lg text-center gap-1 shadow-sm">
@@ -1257,137 +1241,55 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                   </div>
                 )}
 
-                {/* Payment Method Selector */}
-                <div className="border-t border-outline/25 pt-3">
-                  <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mb-2 block">Payment Method</label>
-                  <div className="grid grid-cols-3 gap-2 bg-surface-container-low p-1 rounded-xl border border-outline/30">
-                    {(['Cash', 'GCash', 'Bank'] as const).map(method => (
-                      <button
-                        key={method}
-                        type="button"
-                        onClick={() => setPaymentMethod(method)}
-                        className={`py-2 rounded-lg font-bold text-[10px] transition-all cursor-pointer ${paymentMethod === method
-                          ? 'bg-primary text-white shadow-sm'
-                          : 'text-on-surface-variant hover:text-primary hover:bg-white'
-                          }`}
-                      >
-                        {method}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Daily Sales Reconciliation Fields */}
-                <div className="border-t border-outline/25 pt-3">
-                  <div
-                    className="flex justify-between items-center cursor-pointer select-none mb-2"
-                    onClick={() => setShowAuditDetails(!showAuditDetails)}
-                  >
-                    <h4 className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider flex items-center gap-1.5">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-2.25A1.125 1.125 0 013 17.625v-4.5zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v9c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125v-9zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v13.5c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg>
-                      <span>Cash Drawer Details</span>
-                    </h4>
-                    <span className="text-[10px] text-primary font-bold hover:underline">
-                      {showAuditDetails ? "Collapse ▴" : "Expand ▾"}
-                    </span>
-                  </div>
-
-                  {showAuditDetails && (
-                    <div className="grid grid-cols-2 gap-2.5 bg-surface-container-low p-3 rounded-xl border border-outline/30 animate-fadeIn">
-                      <div className="flex flex-col gap-1">
-                        <label className="text-[9px] font-bold text-on-surface-variant">Starting Cash / Float (₱)</label>
-                        <input
-                          type="number"
-                          min="0"
-                          value={pettyCash || ""}
-                          onChange={(e) => setPettyCash(Number(e.target.value))}
-                          className="bg-white border border-outline px-2.5 py-1.5 rounded-lg text-xs outline-none text-on-surface focus:border-primary transition"
-                          placeholder="e.g. 1000"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1">
-                        <label className="text-[9px] font-bold text-on-surface-variant">Expenses Today (₱)</label>
-                        <input
-                          type="number"
-                          min="0"
-                          value={expenses || ""}
-                          onChange={(e) => setExpenses(Number(e.target.value))}
-                          className="bg-white border border-outline px-2.5 py-1.5 rounded-lg text-xs outline-none text-on-surface focus:border-primary transition"
-                          placeholder="0"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1">
-                        <label className="text-[9px] font-bold text-on-surface-variant">Staff Cash Advance (₱)</label>
-                        <input
-                          type="number"
-                          min="0"
-                          value={cashAdvance || ""}
-                          onChange={(e) => setCashAdvance(Number(e.target.value))}
-                          className="bg-white border border-outline px-2.5 py-1.5 rounded-lg text-xs outline-none text-on-surface focus:border-primary transition"
-                          placeholder="0"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1">
-                        <label className="text-[9px] font-bold text-on-surface-variant">Supplies Sold (₱)</label>
-                        <input
-                          type="number"
-                          min="0"
-                          value={soldSupplies || ""}
-                          onChange={(e) => setSoldSupplies(Number(e.target.value))}
-                          className="bg-white border border-outline px-2.5 py-1.5 rounded-lg text-xs outline-none text-on-surface focus:border-primary transition"
-                          placeholder="0"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1">
-                        <label className="text-[9px] font-bold text-on-surface-variant">Card Payments (₱)</label>
-                        <input
-                          type="number"
-                          min="0"
-                          value={creditDebit || ""}
-                          onChange={(e) => setCreditDebit(Number(e.target.value))}
-                          className="bg-white border border-outline px-2.5 py-1.5 rounded-lg text-xs outline-none text-on-surface focus:border-primary transition"
-                          placeholder="0"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1">
-                        <label className="text-[9px] font-bold text-on-surface-variant">Extra Cash Received (₱)</label>
-                        <input
-                          type="number"
-                          min="0"
-                          value={addOn || ""}
-                          onChange={(e) => setAddOn(Number(e.target.value))}
-                          className="bg-white border border-outline px-2.5 py-1.5 rounded-lg text-xs outline-none text-on-surface focus:border-primary transition"
-                          placeholder="0"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1">
-                        <label className="text-[9px] font-bold text-on-surface-variant">GCash Amount (₱)</label>
-                        <input
-                          type="number"
-                          min="0"
-                          value={gcashAmt || ""}
-                          onChange={(e) => setGcashAmt(Number(e.target.value))}
-                          className="bg-white border border-outline px-2.5 py-1.5 rounded-lg text-xs outline-none text-on-surface focus:border-primary transition font-mono"
-                          placeholder="0"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1">
-                        <label className="text-[9px] font-bold text-on-surface-variant">Online Transfer (₱)</label>
-                        <input
-                          type="number"
-                          min="0"
-                          value={onlineTransfer || ""}
-                          onChange={(e) => setOnlineTransfer(Number(e.target.value))}
-                          className="bg-white border border-outline px-2.5 py-1.5 rounded-lg text-xs outline-none text-on-surface focus:border-primary transition font-mono"
-                          placeholder="0"
-                        />
-                      </div>
+                {/* Payment Summary */}
+                {/* Cash Tendered & Change */}
+                {paymentMethod === 'Cash' && (
+                  <div className="flex flex-col gap-2 border-t border-outline/10 animate-fadeIn">
+                    <div className="border-t border-outline/25 pt-3 flex justify-between items-center font-bold text-xs">
+                      <span className="text-on-surface-variant">Total Bill Amount:</span>
+                      <span className="text-base font-black text-primary">₱{dsrTotalServices.toLocaleString()}</span>
                     </div>
-                  )}
-                </div>
+                    <div className="flex justify-between items-center text-xs font-bold">
+                      <span className="text-on-surface-variant">Cash Paid:</span>
+                      <span className="font-mono text-sm font-black text-on-surface">
+                        ₱{dsrTotalCashCalculated.toLocaleString()}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center text-xs font-bold">
+                      <span className="text-on-surface-variant">Change:</span>
+                      <span className="font-mono text-sm font-black text-emerald-700">
+                        ₱{Math.max(0, dsrTotalCashCalculated - dsrTotalServices).toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Payment Method Selector */}
+                {paymentMethod !== 'Cash' && (
+                  <div className="border-t border-outline/25 pt-3">
+                    <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mb-2 block">Payment Method</label>
+                    <div className="grid grid-cols-3 gap-2 bg-surface-container-low p-1 rounded-xl border border-outline/30">
+                      {(['Cash', 'GCash', 'Bank'] as const).map(method => (
+                        <button
+                          key={method}
+                          type="button"
+                          onClick={() => setPaymentMethod(method)}
+                          className={`py-2 rounded-lg font-bold text-[10px] transition-all cursor-pointer ${paymentMethod === method
+                            ? 'bg-primary text-white shadow-sm'
+                            : 'text-on-surface-variant hover:text-primary hover:bg-white'
+                            }`}
+                        >
+                          {method}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+
 
                 {/* Digital payment verification details */}
-                {paymentMethod !== 'Cash' && (
+                {(paymentMethod === 'GCash' || paymentMethod === 'Bank') && (
                   <div className="border-t border-outline/25 pt-3 animate-fadeIn flex flex-col gap-2.5">
                     <div className="flex flex-col gap-1.5">
                       <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">{paymentMethod} Reference Number</label>
@@ -1464,9 +1366,8 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                     className="bg-white border border-outline hover:border-primary/50 hover:bg-primary-container/10 p-4 rounded-xl flex flex-col justify-between text-left transition h-28 group relative shadow-sm hover:shadow cursor-pointer"
                   >
                     <div className="flex flex-col gap-1">
-                      <span className={`text-[9px] uppercase font-bold px-2 py-0.5 rounded self-start ${
-                        item.category === 'Retail Product' ? 'bg-amber-50 text-amber-800' : 'bg-blue-50 text-blue-800'
-                      }`}>
+                      <span className={`text-[9px] uppercase font-bold px-2 py-0.5 rounded self-start ${item.category === 'Retail Product' ? 'bg-amber-50 text-amber-800' : 'bg-blue-50 text-blue-800'
+                        }`}>
                         {item.category}
                       </span>
                       <h4 className="font-bold text-xs text-on-surface mt-1 group-hover:text-primary transition">{item.name}</h4>
@@ -1474,13 +1375,12 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                     </div>
                     <div className="flex items-end justify-between w-full border-t border-outline/10 pt-2 mt-2">
                       <span className="text-sm font-black text-on-surface">₱{(item.salesPrice || item.costPrice || 0).toLocaleString()}</span>
-                      <span className={`text-[9px] font-bold font-mono px-2 py-0.5 rounded ${
-                        item.onHand === 0 
-                          ? 'bg-red-50 text-red-650' 
-                          : item.onHand <= 5 
-                            ? 'bg-amber-50 text-amber-800 animate-pulse border border-amber-300' 
-                            : 'bg-emerald-50 text-emerald-700'
-                      }`}>
+                      <span className={`text-[9px] font-bold font-mono px-2 py-0.5 rounded ${item.onHand === 0
+                        ? 'bg-red-50 text-red-650'
+                        : item.onHand <= 5
+                          ? 'bg-amber-50 text-amber-800 animate-pulse border border-amber-300'
+                          : 'bg-emerald-50 text-emerald-700'
+                        }`}>
                         {item.onHand === 0 ? 'Out of Stock' : item.onHand <= 5 ? `Low Stock: ${item.onHand}` : `${item.onHand} units`}
                       </span>
                     </div>
@@ -1507,16 +1407,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
 
               <div className="flex-1 overflow-y-auto py-4 flex flex-col gap-4 pr-1">
                 {/* Sale Details */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                  <div className="flex flex-col gap-1">
-                    <label className="text-[10px] font-bold text-on-surface-variant">Date of Sale</label>
-                    <input
-                      type="date"
-                      value={supplyDate}
-                      onChange={(e) => setSupplyDate(e.target.value)}
-                      className="bg-white border border-outline px-3 py-2 rounded-lg text-xs font-semibold outline-none text-on-surface"
-                    />
-                  </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div className="flex flex-col gap-1">
                     <label className="text-[10px] font-bold text-on-surface-variant">Seller (Staff)</label>
                     <select
@@ -1544,7 +1435,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                 </div>
 
                 {/* Supply Cart List */}
-                <div className="max-h-[160px] overflow-y-auto flex flex-col gap-2 border border-outline/20 p-2 rounded-xl bg-surface-container-low min-h-24 content-start">
+                <div className="flex flex-col gap-2 border border-outline/20 p-2 rounded-xl bg-surface-container-low content-start">
                   {supplyCart.map((item) => (
                     <div key={item.stockId} className="flex justify-between items-center bg-white p-2.5 rounded-lg border border-outline/25 text-[11px] h-12">
                       <div className="flex-1 pr-1 min-w-0">
@@ -1710,10 +1601,10 @@ export const PosPanel: React.FC<PosPanelProps> = ({
               {staffs.filter(s => s.status === 'Active').map(s => {
                 const isSelected = s.code === dsrStaff;
                 const activeOngoingCount = ongoingServices.filter(os => os.staffCode === s.code).length;
-                
+
                 // Initials for avatar
                 const initials = s.name.substring(0, 2).toUpperCase();
-                
+
                 return (
                   <button
                     key={s.code}
@@ -1722,16 +1613,14 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                       setDsrStaff(s.code);
                       setIsStylistPopupOpen(false);
                     }}
-                    className={`flex items-center justify-between p-3 rounded-2xl border transition text-left cursor-pointer ${
-                      isSelected 
-                        ? 'border-primary bg-primary/5 hover:bg-primary/10' 
-                        : 'border-outline/50 hover:border-primary/50 hover:bg-surface-container-low'
-                    }`}
+                    className={`flex items-center justify-between p-3 rounded-2xl border transition text-left cursor-pointer ${isSelected
+                      ? 'border-primary bg-primary/5 hover:bg-primary/10'
+                      : 'border-outline/50 hover:border-primary/50 hover:bg-surface-container-low'
+                      }`}
                   >
                     <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xs font-black shrink-0 ${
-                        isSelected ? 'bg-primary text-white' : 'bg-secondary/10 text-secondary'
-                      }`}>
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xs font-black shrink-0 ${isSelected ? 'bg-primary text-white' : 'bg-secondary/10 text-secondary'
+                        }`}>
                         {initials}
                       </div>
                       <div>
@@ -1866,6 +1755,133 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                   </div>
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Cash Drawer Details Popup Modal */}
+      {isDrawerDetailsOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-xs animate-fadeIn">
+          <div className="bg-white border border-outline rounded-3xl p-6 max-w-md w-full shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto transform scale-100 transition-all duration-200 animate-scaleUp">
+            <div className="flex justify-between items-center border-b border-outline/20 pb-3">
+              <div>
+                <h3 className="font-extrabold text-base text-on-surface flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4 text-primary"><path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-2.25A1.125 1.125 0 013 17.625v-4.5zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v9c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125v-9zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v13.5c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg>
+                  <span>Cash Drawer Details</span>
+                </h3>
+                <p className="text-xs text-on-surface-variant">Update the cash float, daily expenses, and non-cash totals.</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsDrawerDetailsOpen(false)}
+                className="p-1.5 rounded-xl hover:bg-surface-container-low text-on-surface-variant hover:text-on-surface transition cursor-pointer"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3.5">
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Starting Cash / Float (₱)</label>
+                <input
+                  type="number"
+                  min="0"
+                  value={pettyCash || ""}
+                  onChange={(e) => setPettyCash(Number(e.target.value))}
+                  className="bg-white border border-outline px-3 py-2 rounded-xl text-xs outline-none text-on-surface focus:border-primary transition"
+                  placeholder="e.g. 1000"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Expenses Today (₱)</label>
+                <input
+                  type="number"
+                  min="0"
+                  value={expenses || ""}
+                  onChange={(e) => setExpenses(Number(e.target.value))}
+                  className="bg-white border border-outline px-3 py-2 rounded-xl text-xs outline-none text-on-surface focus:border-primary transition"
+                  placeholder="0"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Staff Cash Advance (₱)</label>
+                <input
+                  type="number"
+                  min="0"
+                  value={cashAdvance || ""}
+                  onChange={(e) => setCashAdvance(Number(e.target.value))}
+                  className="bg-white border border-outline px-3 py-2 rounded-xl text-xs outline-none text-on-surface focus:border-primary transition"
+                  placeholder="0"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Supplies Sold (₱)</label>
+                <input
+                  type="number"
+                  min="0"
+                  value={soldSupplies || ""}
+                  onChange={(e) => setSoldSupplies(Number(e.target.value))}
+                  className="bg-white border border-outline px-3 py-2 rounded-xl text-xs outline-none text-on-surface focus:border-primary transition"
+                  placeholder="0"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Card Payments (₱)</label>
+                <input
+                  type="number"
+                  min="0"
+                  value={creditDebit || ""}
+                  onChange={(e) => setCreditDebit(Number(e.target.value))}
+                  className="bg-white border border-outline px-3 py-2 rounded-xl text-xs outline-none text-on-surface focus:border-primary transition"
+                  placeholder="0"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Extra Cash Received (₱)</label>
+                <input
+                  type="number"
+                  min="0"
+                  value={addOn || ""}
+                  onChange={(e) => setAddOn(Number(e.target.value))}
+                  className="bg-white border border-outline px-3 py-2 rounded-xl text-xs outline-none text-on-surface focus:border-primary transition"
+                  placeholder="0"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">GCash Amount (₱)</label>
+                <input
+                  type="number"
+                  min="0"
+                  value={gcashAmt || ""}
+                  onChange={(e) => setGcashAmt(Number(e.target.value))}
+                  className="bg-white border border-outline px-3 py-2 rounded-xl text-xs outline-none text-on-surface focus:border-primary transition font-mono"
+                  placeholder="0"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Online Transfer (₱)</label>
+                <input
+                  type="number"
+                  min="0"
+                  value={onlineTransfer || ""}
+                  onChange={(e) => setOnlineTransfer(Number(e.target.value))}
+                  className="bg-white border border-outline px-3 py-2 rounded-xl text-xs outline-none text-on-surface focus:border-primary transition font-mono"
+                  placeholder="0"
+                />
+              </div>
+            </div>
+
+            <div className="border-t border-outline/20 pt-4 flex justify-end">
+              <button
+                type="button"
+                onClick={() => setIsDrawerDetailsOpen(false)}
+                className="px-5 py-2 bg-primary hover:bg-primary/90 text-white rounded-xl text-xs font-bold transition shadow-md hover:shadow-lg cursor-pointer"
+              >
+                Done
+              </button>
             </div>
           </div>
         </div>
