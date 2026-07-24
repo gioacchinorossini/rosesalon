@@ -35,8 +35,9 @@ import { ServicesPanel } from "../components/ServicesPanel";
 import { ServicesLogPanel } from "../components/ServicesLogPanel";
 import { QueuePanel } from "../components/QueuePanel";
 import { StocksPanel, StockItem, StockLog } from "../components/StocksPanel";
+import { CustomerReportPanel } from "../components/CustomerReportPanel";
 
-type ActivePanel = 'dashboard' | 'salesLedger' | 'pos' | 'services' | 'payslips' | 'payments' | 'bookings' | 'supplies' | 'staffs' | 'servicesLog' | 'queue' | 'stocks';
+type ActivePanel = 'dashboard' | 'salesLedger' | 'pos' | 'services' | 'payslips' | 'payments' | 'bookings' | 'supplies' | 'staffs' | 'servicesLog' | 'queue' | 'stocks' | 'customerReport';
 
 const defaultStockItems: StockItem[] = [
   { id: "st-1", name: "Premium Keratin Shampoo 500ml", sku: "SH-KER-500", category: "Retail Product", onHand: 15, minThreshold: 5, costPrice: 450.00, salesPrice: 850.00, supplier: "L'Oreal Corp" },
@@ -95,6 +96,7 @@ export default function Home() {
   const [ongoingServices, setOngoingServices] = useState<Array<{
     id: string;
     customerName: string;
+    customerMobile?: string;
     services: Array<{ id: string; service: string; price: number; commissionRate?: number }>;
     staffCode: string;
     startTime: string; // ISO string
@@ -664,6 +666,8 @@ export default function Home() {
             setStocks={setStocks}
             stockLogs={stockLogs}
             setStockLogs={setStockLogs}
+            customerPamper={customerPamper}
+            setCustomerPamper={setCustomerPamper}
           />
         )}
 
@@ -681,6 +685,14 @@ export default function Home() {
 
         {activePanel === 'bookings' && (
           <BookingsPanel
+            customerPamper={customerPamper}
+            setCustomerPamper={setCustomerPamper}
+            saveState={saveState}
+          />
+        )}
+
+        {activePanel === 'customerReport' && (
+          <CustomerReportPanel
             customerPamper={customerPamper}
             setCustomerPamper={setCustomerPamper}
             saveState={saveState}

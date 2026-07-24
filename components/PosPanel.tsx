@@ -6,7 +6,8 @@ import {
   PaymentTransaction,
   MonthlySalesSummary,
   DailySalesSummaryRecord,
-  ServiceLog
+  ServiceLog,
+  CustomerPamper
 } from "../app/data/initialData";
 import { StockItem, StockLog } from "./StocksPanel";
 
@@ -23,6 +24,7 @@ interface PosPanelProps {
   ongoingServices: Array<{
     id: string;
     customerName: string;
+    customerMobile?: string;
     services: Array<{ id: string; service: string; price: number; commissionRate?: number }>;
     staffCode: string;
     startTime: string; // ISO string
@@ -31,6 +33,7 @@ interface PosPanelProps {
   setOngoingServices: React.Dispatch<React.SetStateAction<Array<{
     id: string;
     customerName: string;
+    customerMobile?: string;
     services: Array<{ id: string; service: string; price: number; commissionRate?: number }>;
     staffCode: string;
     startTime: string;
@@ -42,6 +45,8 @@ interface PosPanelProps {
   setStocks: React.Dispatch<React.SetStateAction<StockItem[]>>;
   stockLogs: StockLog[];
   setStockLogs: React.Dispatch<React.SetStateAction<StockLog[]>>;
+  customerPamper: CustomerPamper[];
+  setCustomerPamper: React.Dispatch<React.SetStateAction<CustomerPamper[]>>;
 }
 
 // Sub-component to display active live elapsed timer
@@ -95,6 +100,8 @@ export const PosPanel: React.FC<PosPanelProps> = ({
   setStocks,
   stockLogs,
   setStockLogs,
+  customerPamper,
+  setCustomerPamper,
 }) => {
   // Navigation / POS Sub-tabs
   const [posSubTab, setPosSubTab] = useState<'service' | 'supplies'>('service');
@@ -151,6 +158,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
 
   // Cart & client details
   const [clientName, setClientName] = useState("Walk-in");
+  const [clientMobile, setClientMobile] = useState("");
   const [dsrDate, setDsrDate] = useState(() => new Date().toISOString().split("T")[0]);
   const [dsrStaff, setDsrStaff] = useState(() => staffs.find(s => s.status === 'Active')?.code || "");
   const [paymentMethod, setPaymentMethod] = useState<'Cash' | 'GCash' | 'Bank'>('Cash');
@@ -187,6 +195,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
       const ongoingItem = ongoingServices.find(item => item.id === activeOngoingId);
       if (ongoingItem) {
         setClientName(ongoingItem.customerName);
+        setClientMobile(ongoingItem.customerMobile || "");
         setDsrStaff(ongoingItem.staffCode);
         setDsrDate(ongoingItem.date);
         updateDsrServices(ongoingItem.services);
@@ -404,6 +413,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
     const newOngoing = {
       id: "ongoing-" + Date.now() + "-" + Math.floor(Math.random() * 1000),
       customerName: clientName.trim() || "Walk-in Client",
+      customerMobile: clientMobile.trim(),
       services: dsrServices,
       staffCode: dsrStaff || staffs.find(s => s.status === 'Active')?.code || "",
       startTime: new Date().toISOString(),
@@ -417,6 +427,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
     // Reset checkout fields
     updateDsrServices([]);
     setClientName("Walk-in");
+    setClientMobile("");
     setActiveOngoingId(null);
 
     alert(`Started service for ${newOngoing.customerName}. Placed in Ongoing Services queue.`);
@@ -425,6 +436,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
   // Load a treatment back into checkout ticket
   const handleLoadOngoingToPos = (item: typeof ongoingServices[0]) => {
     setClientName(item.customerName);
+    setClientMobile(item.customerMobile || "");
     setDsrStaff(item.staffCode);
     setDsrDate(item.date);
     updateDsrServices(item.services);
@@ -619,6 +631,20 @@ export const PosPanel: React.FC<PosPanelProps> = ({
     setServicesLog(updatedServicesLog);
     saveState("rose_servicesLog", updatedServicesLog);
 
+    // 3.5. Log to Customer Pamper report if Name and Mobile are provided
+    if (clientName && clientName.toLowerCase() !== "walk-in" && clientMobile.trim()) {
+      const newPamperItem: CustomerPamper = {
+        id: `cp-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+        name: clientName.trim(),
+        mobile: clientMobile.trim(),
+        pamperChoose: dsrServices.map(s => s.service).join(", ") || "Services Checkout",
+        date: dateStr
+      };
+      const updatedPamper = [newPamperItem, ...customerPamper];
+      setCustomerPamper(updatedPamper);
+      saveState("rose_customerPamper", updatedPamper);
+    }
+
     // 4. Remove from active ongoing queue if unlinked
     if (activeOngoingId) {
       const updatedOngoing = ongoingServices.filter(item => item.id !== activeOngoingId);
@@ -632,6 +658,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
     // Reset checkout states
     updateDsrServices([]);
     setClientName("Walk-in");
+    setClientMobile("");
     setGcashRef("");
     setBankRef("");
     // Clear cash count bills
@@ -900,13 +927,13 @@ export const PosPanel: React.FC<PosPanelProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* Left Column: Catalog selection board */}
           <div className="lg:col-span-7 flex flex-col gap-4">
-            <div className="flex flex-wrap gap-1.5 bg-surface-container-low p-1.5 rounded-xl border border-outline">
+            <div className="flex overflow-x-auto no-scrollbar gap-1.5 bg-surface-container-low p-1.5 rounded-xl border border-outline whitespace-nowrap">
               {(['ALL', 'Hair', 'Nails', 'Aesthetic', 'Other', 'Products', 'Supplies'] as const).map(cat => (
                 <button
                   key={cat}
                   type="button"
                   onClick={() => setPosCategory(cat)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-150 cursor-pointer ${posCategory === cat
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-150 cursor-pointer shrink-0 ${posCategory === cat
                     ? 'bg-primary text-white shadow-sm'
                     : 'text-on-surface-variant hover:text-primary hover:bg-white'
                     }`}
@@ -1070,6 +1097,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                       onClick={() => {
                         setActiveOngoingId(null);
                         setClientName("Walk-in");
+                        setClientMobile("");
                         updateDsrServices([]);
                       }}
                       className="text-red-500 hover:text-red-700 text-xs font-bold cursor-pointer"
@@ -1080,7 +1108,7 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                 )}
 
                 {/* Client info grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
                   <div className="flex flex-col gap-1">
                     <label className="text-[10px] font-bold text-on-surface-variant">Date</label>
                     <input
@@ -1113,6 +1141,16 @@ export const PosPanel: React.FC<PosPanelProps> = ({
                       value={clientName}
                       onChange={(e) => setClientName(e.target.value)}
                       className="bg-white border border-outline px-3 py-2 rounded-lg text-xs font-semibold outline-none text-on-surface"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[10px] font-bold text-on-surface-variant">Mobile #</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. 0917-123-4567"
+                      value={clientMobile}
+                      onChange={(e) => setClientMobile(e.target.value)}
+                      className="bg-white border border-outline px-3 py-2 rounded-lg text-xs font-semibold outline-none text-on-surface font-mono"
                     />
                   </div>
                 </div>

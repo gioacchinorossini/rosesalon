@@ -8,6 +8,7 @@ interface QueuePanelProps {
   ongoingServices: Array<{
     id: string;
     customerName: string;
+    customerMobile?: string;
     services: Array<{ id: string; service: string; price: number; commissionRate?: number }>;
     staffCode: string;
     startTime: string; // ISO string
@@ -16,6 +17,7 @@ interface QueuePanelProps {
   setOngoingServices: React.Dispatch<React.SetStateAction<Array<{
     id: string;
     customerName: string;
+    customerMobile?: string;
     services: Array<{ id: string; service: string; price: number; commissionRate?: number }>;
     staffCode: string;
     startTime: string;
@@ -183,7 +185,7 @@ export const QueuePanel: React.FC<QueuePanelProps> = ({
     <div className="flex flex-col gap-6 animate-fadeIn">
       {/* Header section */}
       <div className="border-b border-outline pb-4 flex flex-col gap-2">
-        <h2 className="text-xl font-bold text-on-surface">Queue Board</h2>
+        <h2 className="text-xl font-bold text-on-surface">Queue</h2>
         <p className="text-xs text-on-surface-variant">
           Monitor and manage active, in-chair treatment sessions currently operating in the salon.
         </p>
@@ -333,7 +335,7 @@ export const QueuePanel: React.FC<QueuePanelProps> = ({
             {/* Service Catalog Selection */}
             <div className="flex flex-col gap-2 border border-outline/10 p-3 rounded-2xl bg-surface-container-low">
               <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider block">Add Services</label>
-              
+
               {/* Category tabs */}
               <div className="flex flex-wrap gap-1 border-b border-outline/10 pb-2">
                 {(['ALL', 'Hair', 'Nails', 'Aesthetic', 'Other'] as const).map(cat => (
@@ -341,9 +343,8 @@ export const QueuePanel: React.FC<QueuePanelProps> = ({
                     key={cat}
                     type="button"
                     onClick={() => setSelectedCategory(cat)}
-                    className={`px-2 py-1 rounded text-[9px] font-black uppercase transition ${
-                      selectedCategory === cat ? 'bg-primary text-white' : 'text-on-surface-variant bg-white hover:text-primary'
-                    }`}
+                    className={`px-2 py-1 rounded text-[9px] font-black uppercase transition ${selectedCategory === cat ? 'bg-primary text-white' : 'text-on-surface-variant bg-white hover:text-primary'
+                      }`}
                   >
                     {cat}
                   </button>
@@ -368,11 +369,10 @@ export const QueuePanel: React.FC<QueuePanelProps> = ({
                       key={item.id}
                       type="button"
                       onClick={() => handleToggleService(item)}
-                      className={`flex justify-between items-center text-left text-[10px] font-semibold p-2 rounded-lg border transition ${
-                        isChecked
+                      className={`flex justify-between items-center text-left text-[10px] font-semibold p-2 rounded-lg border transition ${isChecked
                           ? 'border-primary/50 bg-primary/5 text-primary'
                           : 'border-outline/15 bg-white text-on-surface hover:border-primary/30'
-                      }`}
+                        }`}
                     >
                       <span className="truncate pr-1">{item.name}</span>
                       <span className="font-mono font-bold shrink-0">₱{item.price.toLocaleString()}</span>
@@ -440,10 +440,10 @@ export const QueuePanel: React.FC<QueuePanelProps> = ({
               {staffs.filter(s => s.status === 'Active').map(s => {
                 const isSelected = s.code === selectedStaff;
                 const activeOngoingCount = ongoingServices.filter(os => os.staffCode === s.code).length;
-                
+
                 // Initials for avatar
                 const initials = s.name.substring(0, 2).toUpperCase();
-                
+
                 return (
                   <button
                     key={s.code}
@@ -452,16 +452,14 @@ export const QueuePanel: React.FC<QueuePanelProps> = ({
                       setSelectedStaff(s.code);
                       setIsStylistPopupOpen(false);
                     }}
-                    className={`flex items-center justify-between p-3 rounded-2xl border transition text-left cursor-pointer ${
-                      isSelected 
-                        ? 'border-primary bg-primary/5 hover:bg-primary/10' 
+                    className={`flex items-center justify-between p-3 rounded-2xl border transition text-left cursor-pointer ${isSelected
+                        ? 'border-primary bg-primary/5 hover:bg-primary/10'
                         : 'border-outline/50 hover:border-primary/50 hover:bg-surface-container-low'
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xs font-black shrink-0 ${
-                        isSelected ? 'bg-primary text-white' : 'bg-secondary/10 text-secondary'
-                      }`}>
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xs font-black shrink-0 ${isSelected ? 'bg-primary text-white' : 'bg-secondary/10 text-secondary'
+                        }`}>
                         {initials}
                       </div>
                       <div>

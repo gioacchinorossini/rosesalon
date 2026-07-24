@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Icons } from "./Icons";
 
-type ActivePanel = 'dashboard' | 'salesLedger' | 'pos' | 'services' | 'payslips' | 'payments' | 'bookings' | 'supplies' | 'staffs' | 'servicesLog' | 'queue' | 'stocks';
+type ActivePanel = 'dashboard' | 'salesLedger' | 'pos' | 'services' | 'payslips' | 'payments' | 'bookings' | 'supplies' | 'staffs' | 'servicesLog' | 'queue' | 'stocks' | 'customerReport';
 
 interface SidebarProps {
   activePanel: ActivePanel;
@@ -35,21 +35,37 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const [staffDropdownOpen, setStaffDropdownOpen] = useState(
     activePanel === 'staffs' || activePanel === 'payslips'
   );
+  const [reportsDropdownOpen, setReportsDropdownOpen] = useState(
+    activePanel === 'servicesLog' || activePanel === 'salesLedger' || activePanel === 'payments' || activePanel === 'customerReport'
+  );
 
-  // Auto-expand staff dropdown when either panel is programmatically activated
+  // Auto-expand dropdowns when sub-panels are programmatically activated
   useEffect(() => {
     if (activePanel === 'staffs' || activePanel === 'payslips') {
       setStaffDropdownOpen(true);
+    }
+    if (activePanel === 'servicesLog' || activePanel === 'salesLedger' || activePanel === 'payments' || activePanel === 'customerReport') {
+      setReportsDropdownOpen(true);
     }
   }, [activePanel]);
 
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: Icons.dashboard },
-    { id: 'queue', label: 'Queue Board', icon: Icons.list },
-    { id: 'pos', label: 'Checkout Counter', icon: Icons.cart },
+    { id: 'queue', label: 'Queue', icon: Icons.list },
+    { id: 'pos', label: 'POS', icon: Icons.cart },
     // { id: 'bookings', label: 'Bookings', icon: Icons.calendar },
-    { id: 'servicesLog', label: 'Daily Sales Log', icon: Icons.pos },
-    { id: 'salesLedger', label: 'Sales Logs', icon: Icons.salesLedger },
+    {
+      id: 'reports_group',
+      label: 'Reports',
+      icon: Icons.salesLedger,
+      isDropdown: true,
+      subItems: [
+        { id: 'servicesLog', label: 'Daily Sales Log', icon: Icons.pos },
+        { id: 'salesLedger', label: 'Sales Logs', icon: Icons.salesLedger },
+        { id: 'payments', label: 'Payment History', icon: Icons.payments },
+        { id: 'customerReport', label: 'Customer Report', icon: Icons.bookings }
+      ]
+    },
     {
       id: 'staffs_group',
       label: 'Staffs',
@@ -60,7 +76,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
         { id: 'payslips', label: 'Staff Payslips', icon: Icons.payslip }
       ]
     },
-    { id: 'payments', label: 'Payment History', icon: Icons.payments },
     { id: 'supplies', label: 'Supplies & Inventory', icon: Icons.supplies },
     { id: 'stocks', label: 'Stocks & Retail', icon: Icons.grid },
     { id: 'services', label: 'Service List', icon: Icons.services }
@@ -113,11 +128,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
             if (item.isDropdown) {
               const hasActiveSubItem = item.subItems?.some(sub => activePanel === sub.id);
               const Icon = item.icon;
+              const isOpen = item.id === 'staffs_group' ? staffDropdownOpen : reportsDropdownOpen;
               return (
                 <div key={item.id} className="flex flex-col">
                   <button
                     type="button"
-                    onClick={() => setStaffDropdownOpen(!staffDropdownOpen)}
+                    onClick={() => {
+                      if (item.id === 'staffs_group') {
+                        setStaffDropdownOpen(!staffDropdownOpen);
+                      } else if (item.id === 'reports_group') {
+                        setReportsDropdownOpen(!reportsDropdownOpen);
+                      }
+                    }}
                     title={item.label}
                     className={`flex items-center justify-between rounded-xl transition-all duration-155 text-left font-semibold text-xs w-full group relative cursor-pointer ${isCollapsed ? 'justify-center px-0 py-3' : 'px-5 py-3'
                       } ${hasActiveSubItem
@@ -135,7 +157,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 20 20"
                         fill="currentColor"
-                        className={`w-4 h-4 transition-transform duration-155 ${staffDropdownOpen ? 'transform rotate-180' : ''}`}
+                        className={`w-4 h-4 transition-transform duration-155 ${isOpen ? 'transform rotate-180' : ''}`}
                       >
                         <path fillRule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
                       </svg>
@@ -143,7 +165,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   </button>
 
                   {/* Submenu items */}
-                  {staffDropdownOpen && (
+                  {isOpen && (
                     <div className={`flex flex-col gap-1 mt-1 animate-fadeIn ${isCollapsed ? 'pl-0 ml-0 border-none' : 'pl-6 ml-7 border-l border-outline/20'
                       }`}>
                       {item.subItems?.map(sub => {
